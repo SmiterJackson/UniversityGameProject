@@ -51,12 +51,14 @@ namespace drawable
 		// SETS / GETS
 		std::unordered_map<unsigned int, sf::Sprite>& GetSpritesMap();
 		const std::unordered_map<unsigned int, sf::Sprite>& GetConstSpritesMap();
+
 		std::unordered_map<unsigned int, Animation>& GetAnimationsMap();
 		const std::unordered_map<unsigned int, Animation>& GetConsAnimationstMap();
 		
 		// Os sets aceitam os prórpios tipos de estrutura já preenchidos bem como um vector com os valores do tipo base
 		void SetSpritesMap(const std::unordered_map<unsigned int, sf::Sprite>& map);
 		void SetSpritesMap(const std::vector<std::pair<unsigned int, sf::IntRect>>& mapValues);
+
 		void SetAnimationsMap(const std::unordered_map<unsigned int, Animation>& map);
 		void SetAnimationsMap(const std::vector<std::pair<unsigned int, Animation>>& mapValues);
 		void SetAnimationsMap(const std::vector<std::pair<unsigned int, AnimationDataType>>& mapValues);
@@ -100,75 +102,3 @@ namespace drawable
 		unsigned int lastUsedAnimation;
 	};
 }
-
-/*
-Classe bem próxima da Drawble, o diferencial seria ter intrinsecamente Animações no lugar de sprites,
-	  para ter uma ou múltiplas animações derivadas de uma única estrutura
-class Animated : protected BaseDrawable {
-public:
-	Animated();
-	Animated(sf::Texture& texture, bool FacecRight = true);
-	Animated(std::string& fileName, bool FacecRight = true);
-	Animated(sf::Texture& texture, std::unordered_map<unsigned int, Animation>& animationMap, bool FacecRight = true);
-	Animated(sf::Texture& texture, std::unordered_map<unsigned int, Animation>::value_type*& animationValuesPair, bool FacecRight = true);
-	Animated(sf::Texture& texture, std::pair<unsigned int, AnimationDataType>*& animationConstructorMap, unsigned int Size, bool FacecRight = true);
-	Animated(std::string& fileName, std::pair<unsigned int, AnimationDataType>*& animationConstructorMap, unsigned int Size, bool FacecRight = true);
-	~Animated();
-
-	// SETS / GETS
-
-
-	// OPERATORS OVERLOADS
-
-
-protected:
-
-};
-
-
-
-class SingleSpriteDrawble : public Drawable
-{
-public:
-	SingleSpriteDrawble();
-	SingleSpriteDrawble(sf::Texture& texture);
-	SingleSpriteDrawble(std::string fileName);
-	SingleSpriteDrawble(sf::Texture& texture, sf::Sprite& sprite);
-	SingleSpriteDrawble(std::string fileName, sf::Sprite& sprite);
-	~SingleSpriteDrawble();
-
-	sf::Sprite& GetSprite() { return sprite; };
-	const sf::Sprite& GetConstSprite() { return sprite; };
-	void SetSprite(sf::Sprite& newSprite) { sprite = newSprite; };
-
-	void SelfPrint(sf::RenderWindow& Window);
-
-protected:
-	sf::Sprite sprite;
-};
-
-typedef std::unordered_map<int, sf::Sprite> IntToSpriteMap;
-typedef std::unordered_map<int, sf::IntRect> IntToSpritesCutsMap;
-class MultipleSpriteDrawble : public Drawable
-{
-public:
-	MultipleSpriteDrawble();
-	MultipleSpriteDrawble(sf::Texture& Texture, IntToSpriteMap& sprites);
-	MultipleSpriteDrawble(std::string FileName, IntToSpriteMap& sprites);
-	MultipleSpriteDrawble(sf::Texture& Texture, IntToSpritesCutsMap::value_type* multiPairs);
-	MultipleSpriteDrawble(std::string FileName, IntToSpritesCutsMap::value_type* multiPairs);
-	MultipleSpriteDrawble(sf::Texture& Texture, IntToSpriteMap::value_type* multiPairs, sf::IntRect* spritesCuts);
-	MultipleSpriteDrawble(std::string FileName, IntToSpriteMap::value_type* multiPairs, sf::IntRect* spritesCuts);
-	
-	~MultipleSpriteDrawble();
-	
-	IntToSpriteMap& GetSpritesMap() { return sprites; };
-	const IntToSpriteMap& GetConstSpritesMap() { return sprites; };
-	void SetSpritesMap(IntToSpriteMap& newSprite) { sprites = newSprite; };
-
-	void SelfPrint(sf::RenderWindow& Window);
-	void SelfPrint(sf::RenderWindow& Window, int*& spritesKeys);
-
-protected:
-	IntToSpriteMap sprites;
-};*/

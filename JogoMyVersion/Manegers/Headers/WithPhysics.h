@@ -23,5 +23,3 @@ namespace WithPhysics
 
 	// outros ...
 }
-
-float WithPhysics::Movable::global_gravity = 1.0f;
