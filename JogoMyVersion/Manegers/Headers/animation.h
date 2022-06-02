@@ -16,7 +16,7 @@ public:
 class Animation {
 public:
     Animation();
-    Animation(AnimationDataType& Data);
+    Animation(const AnimationDataType& Data);
     ~Animation();
 
     void Initialize(const AnimationDataType& Data);

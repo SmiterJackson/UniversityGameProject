@@ -7,11 +7,11 @@ BaseDrawable::BaseDrawable() :
 	texture(), faceRight(true)
 {
 };
-BaseDrawable::BaseDrawable(sf::Texture& texture, bool FacecRight) :
+BaseDrawable::BaseDrawable(const sf::Texture& texture, bool FacecRight) :
 	texture(texture), faceRight(FacecRight)
 {
 };
-BaseDrawable::BaseDrawable(std::string fileName, bool FacecRight) :
+BaseDrawable::BaseDrawable(const std::string fileName, bool FacecRight) :
 	texture(), faceRight(FacecRight)
 {
 	texture.loadFromFile(fileName);
@@ -21,48 +21,76 @@ BaseDrawable::~BaseDrawable()
 };
 
 
-
-Drawable::Drawable() :
-	BaseDrawable(), intToSprite_map()
+Printable::Printable() :
+	BaseDrawable(), intToSprite_map(), intToAnimation_map(), lastUsedAnimation(0)
 {
 };
-Drawable::Drawable(sf::Texture& texture, bool FacecRight) :
-	BaseDrawable(texture, FacecRight), intToSprite_map()
+Printable::Printable(const sf::Texture& texture, const bool FacecRight = true):
+	BaseDrawable(texture, FacecRight), intToSprite_map(), intToAnimation_map(), lastUsedAnimation(0)
 {};
-Drawable::Drawable(std::string& fileName, bool FacecRight) :
-	BaseDrawable(fileName, FacecRight), intToSprite_map()
+Printable::Printable(const std::string& fileName, const bool FacecRight = true) :
+	BaseDrawable(texture, FacecRight), intToSprite_map(), intToAnimation_map(), lastUsedAnimation(0)
 {};
-Drawable::Drawable(sf::Texture& texture, std::unordered_map<unsigned int, sf::Sprite>& spriteMap, bool FacecRight) :
-	BaseDrawable(texture, FacecRight), intToSprite_map(spriteMap)
+Printable::Printable(const sf::Texture& texture, const std::unordered_map<unsigned int, sf::Sprite>& spriteMap, const std::unordered_map<unsigned int, Animation>& animationMap, bool FacecRight) :
+	BaseDrawable(texture, FacecRight), intToSprite_map(spriteMap), intToAnimation_map(animationMap), lastUsedAnimation(0)
 {};
-Drawable::Drawable(sf::Texture& texture, std::unordered_map<unsigned int, sf::Sprite>::value_type*& spriteValuesMap, bool FacecRight) :
-	BaseDrawable(texture, FacecRight), intToSprite_map(spriteValuesMap, spriteValuesMap + 1 + sizeof(spriteValuesMap))
+Printable::Printable(const std::string& fileName, const std::unordered_map<unsigned int, sf::Sprite>& spriteMap, const std::unordered_map<unsigned int, Animation>& animationMap, bool FacecRight) :
+	BaseDrawable(fileName, FacecRight), intToSprite_map(spriteMap), intToAnimation_map(animationMap), lastUsedAnimation(0)
 {};
-Drawable::Drawable(sf::Texture& texture, std::pair<unsigned int, sf::IntRect>*& spriteCuts, unsigned int Size, bool FacecRight) :
-	BaseDrawable(texture, FacecRight), intToSprite_map()
-{
-	if (spriteCuts != nullptr)
-	{
-		for (unsigned int i = 0; i < Size; ++i)
-			this->intToSprite_map.insert(std::pair<unsigned int, sf::Sprite>(spriteCuts[i].first, sf::Sprite(this->texture, spriteCuts[i].second)));
-	}
-};
-Drawable::Drawable(std::string& fileName, std::pair<unsigned int, sf::IntRect>*& spriteCuts, unsigned int Size, bool FacecRight) :
-	BaseDrawable(fileName, FacecRight), intToSprite_map()
-{
-	if (spriteCuts != nullptr)
-	{
-		for (unsigned int i = 0; i < Size; ++i)
-			this->intToSprite_map.insert(std::pair<unsigned int, sf::Sprite>(spriteCuts[i].first, sf::Sprite(this->texture, spriteCuts[i].second)));
-	}
-};
-Drawable::~Drawable()
+Printable::Printable(const sf::Texture& texture, const std::vector<std::pair<unsigned int, sf::IntRect>>& spriteMap, std::vector<std::pair<unsigned int, AnimationDataType>>& animationMap, bool FacecRight) :
+	BaseDrawable(texture, FacecRight), intToSprite_map(spriteMap.cbegin(), spriteMap.cend()), intToAnimation_map(animationMap.cbegin(), animationMap.cend()), lastUsedAnimation(0)
+{};
+Printable::Printable(const std::string& fileName, const std::vector<std::pair<unsigned int, sf::IntRect>>& spriteMap, std::vector<std::pair<unsigned int, AnimationDataType>>& animationMap, bool FacecRight) :
+	BaseDrawable(fileName, FacecRight), intToSprite_map(spriteMap.cbegin(), spriteMap.cend()), intToAnimation_map(animationMap.cbegin(), animationMap.cend()), lastUsedAnimation(0)
+{};
+Printable::~Printable()
 {
 };
 
+// Sets / Gets - Drawable
+std::unordered_map<unsigned int, sf::Sprite>& Printable::GetSpritesMap() 
+{ 
+	return this->intToSprite_map; 
+};
+const std::unordered_map<unsigned int, sf::Sprite>& Printable::GetConstSpritesMap() 
+{ 
+	return this->intToSprite_map; 
+};
+void Printable::SetSpritesMap(const std::unordered_map<unsigned int, sf::Sprite>& map)
+{ 
+	this->intToSprite_map = map; 
+};
+void Printable::SetSpritesMap(const std::vector<std::pair<unsigned int, sf::IntRect>>& mapValues)
+{
+	for (unsigned int i = 0; i < mapValues.size(); i++)
+		intToSprite_map[mapValues[i].first] = sf::Sprite(this->texture, mapValues[i].second);
+};
+
+std::unordered_map<unsigned int, Animation>& Printable::GetAnimationsMap() 
+{ 
+	return this->intToAnimation_map; 
+};
+const std::unordered_map<unsigned int, Animation>& Printable::GetConsAnimationstMap()
+{
+	return this->intToAnimation_map; 
+};
+void Printable::SetAnimationsMap(const std::unordered_map<unsigned int, Animation>& map)
+{
+	this->intToAnimation_map = map;
+};
+void Printable::SetAnimationsMap(const std::vector<std::pair<unsigned int, Animation>>& mapValues)
+{
+	for (unsigned int i = 0; i < mapValues.size(); i++)
+		intToAnimation_map[mapValues[i].first] = mapValues[i].second;
+};
+void Printable::SetAnimationsMap(const std::vector<std::pair<unsigned int, AnimationDataType>>& mapValues)
+{
+	for (unsigned int i = 0; i < mapValues.size(); i++)
+		intToAnimation_map[mapValues[i].first] = Animation(mapValues[i].second);
+};
 
 
-Animated::Animated() :
+/*Animated::Animated() :
 	BaseDrawable(), intToAnimation_map(), lastUsedAnimation(0)
 {
 };
@@ -98,9 +126,7 @@ Animated::Animated(std::string& fileName, std::pair<unsigned int, AnimationDataT
 };
 Animated::~Animated()
 {
-};
-
-
+};*/
 /*SingleSpriteDrawble::SingleSpriteDrawble() :
 	BaseDrawable(), sprite()
 {

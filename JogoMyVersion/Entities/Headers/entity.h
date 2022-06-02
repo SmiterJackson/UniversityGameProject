@@ -3,9 +3,11 @@
 #include "stdafx.h"
 #include "instance.h"
 #include "../Manegers/Headers/drawble.h"
+#include "../Manegers/Headers/WithPhysics.h"
 using namespace drawable;
+using namespace WithPhysics;
 
-class Entity : public Instance {
+class Entity : public Instance, public Movable {
 public:
 	Entity();
 	Entity(sf::Texture& texture, bool facingRight = true);
@@ -18,7 +20,7 @@ public:
 	void SetEntityBody(sf::RectangleShape& newPosition) { this->body = newPosition; };
 	
 	// FUNCTIONS
-	void Execute();
+	virtual void Execute() = 0;
 	void SelfPrintAll(sf::RenderWindow& window, float timeDiff);
 	void SelfPrintSelected(sf::RenderWindow& window, unsigned int animationKey, float timeDiff);
 
@@ -26,7 +28,9 @@ protected:
 	sf::RectangleShape body;
 };
 
-class AnimatedEntity : public Entity, public Animated {
+
+
+/*class AnimatedEntity : public Entity, public Animated {
 public:
 	AnimatedEntity();
 	AnimatedEntity(sf::Texture& texture);
@@ -47,8 +51,7 @@ public:
 
 protected:
 	float velocity;
-};
-
+};*/
 // Versão ainda não utilizada
 
 /*

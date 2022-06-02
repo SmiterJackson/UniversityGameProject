@@ -2,6 +2,7 @@
 
 #include "stdafx.h"
 #include "animation.h"
+using namespace std;
 
 namespace drawable
 {
@@ -10,120 +11,123 @@ namespace drawable
 	{
 	public:
 		BaseDrawable();
-		BaseDrawable(sf::Texture& texture, bool FacecRight = true);
-		BaseDrawable(std::string fileName, bool FacecRight = true);
+		BaseDrawable(const sf::Texture& texture, bool FacecRight = true);
+		BaseDrawable(const std::string fileName, bool FacecRight = true);
 		~BaseDrawable();
 
-		const sf::Texture& GetConstTexture() { return this->texture; };
 		sf::Texture& GetTexture() { return this->texture; };
-		void SetTexture(sf::Texture& texture) { this->texture = texture; };
-		void SetTexture(std::string& fileName) { this->texture.loadFromFile(fileName); };
+		const sf::Texture& GetConstTexture() { return this->texture; };
+		void SetTexture(const sf::Texture& texture) { this->texture = texture; };
+		void SetTexture(const std::string& fileName) { this->texture.loadFromFile(fileName); };
 
 		const bool Get_isLookingRight() { return this->faceRight; };
 		void Get_isLookingRight(bool newState) { this->faceRight = newState; };
 		void InvertOrientation() { this->faceRight = !this->faceRight; };
 
-		virtual void SelfPrintAll() {};
-		virtual void SelfPrintSelected() {};
+		virtual void SelfPrintAll() = 0;
+		virtual void SelfPrintSelected() = 0;
 
 	public:
 		sf::Texture texture;
 		bool faceRight;
 	};
 
-	// Classe simples para desenhar com um único ou múltiplos sprites, uma única dada estrutura/textura
-	class Drawable : protected BaseDrawable {
+	// Classe para definir uma textura, recortes da textura, ou ela como um todo, para imprimilas, e/ou definir animações para os mesmo recortes.
+	class Printable : protected BaseDrawable {
 	public:
-		Drawable();
-		Drawable(sf::Texture& texture, bool FacecRight = true);
-		Drawable(std::string& fileName, bool FacecRight = true);
-		Drawable(sf::Texture& texture, std::unordered_map<unsigned int, sf::Sprite>& spriteMap, bool FacecRight = true);
-		Drawable(sf::Texture& texture, std::unordered_map<unsigned int, sf::Sprite>::value_type*& spriteValuesPair, bool FacecRight = true);
-		Drawable(sf::Texture& texture, std::pair<unsigned int, sf::IntRect>*& spriteCuts, unsigned int Size, bool FacecRight = true);
-		Drawable(std::string& fileName, std::pair<unsigned int, sf::IntRect>*& spriteCuts, unsigned int Size, bool FacecRight = true);
-		~Drawable();
+		Printable();
+		Printable(const sf::Texture& texture, const bool FacecRight = true);
+		Printable(const std::string& fileName, const bool FacecRight = true);
+		Printable(const sf::Texture& texture, const std::unordered_map<unsigned int, sf::Sprite>& spriteMap, const std::unordered_map<unsigned int, Animation>& animationMap, bool FacecRight = true);
+		Printable(const std::string& fileName, const std::unordered_map<unsigned int, sf::Sprite>& spriteMap, const std::unordered_map<unsigned int, Animation>& animationMap, bool FacecRight = true);
+		Printable(const sf::Texture& texture, const std::vector<std::pair<unsigned int, sf::IntRect>>& spriteMap, std::vector<std::pair<unsigned int, AnimationDataType>>& animationMap, bool FacecRight = true);
+		Printable(const std::string& fileName, const std::vector<std::pair<unsigned int, sf::IntRect>>& spriteMap, std::vector<std::pair<unsigned int, AnimationDataType>>& animationMap, bool FacecRight = true);
+		~Printable();
+
+		// FUNCTIONS
+		virtual void SelfPrintAll() = 0;
+		virtual void SelfPrintSelected() = 0;
 
 		// SETS / GETS
-		std::unordered_map<unsigned int, sf::Sprite>& GetMap() { return this->intToSprite_map; };
-		const std::unordered_map<unsigned int, sf::Sprite>& GetConstMap() { return this->intToSprite_map; };
-		void SetMap(std::unordered_map<unsigned int, sf::Sprite>& map) { intToSprite_map = map; };
-		void SetMap(std::pair<unsigned int, sf::IntRect>*& map, unsigned int pairsNum) { for (unsigned int i = 0; i < pairsNum; i++)
-																							intToSprite_map[map->first] = sf::Sprite(this->texture, map->second);
-																					   };
+		std::unordered_map<unsigned int, sf::Sprite>& GetSpritesMap();
+		const std::unordered_map<unsigned int, sf::Sprite>& GetConstSpritesMap();
+		std::unordered_map<unsigned int, Animation>& GetAnimationsMap();
+		const std::unordered_map<unsigned int, Animation>& GetConsAnimationstMap();
+		
+		// Os sets aceitam os prórpios tipos de estrutura já preenchidos bem como um vector com os valores do tipo base
+		void SetSpritesMap(const std::unordered_map<unsigned int, sf::Sprite>& map);
+		void SetSpritesMap(const std::vector<std::pair<unsigned int, sf::IntRect>>& mapValues);
+		void SetAnimationsMap(const std::unordered_map<unsigned int, Animation>& map);
+		void SetAnimationsMap(const std::vector<std::pair<unsigned int, Animation>>& mapValues);
+		void SetAnimationsMap(const std::vector<std::pair<unsigned int, AnimationDataType>>& mapValues);
 
 		// OPERATORS OVERLOADS
-		void operator+ (std::pair<unsigned int, sf::Sprite>& newItem)
+		void operator+ (const std::pair<unsigned int, sf::Sprite>& newItem)
 		{
 			intToSprite_map.insert(newItem);
 		};
-		void operator+= (std::unordered_map<unsigned int, sf::Sprite>& extention)
+		void operator+= (const std::unordered_map<unsigned int, sf::Sprite>& extention)
 		{
 			std::unordered_map<unsigned int, sf::Sprite>::const_iterator c_it;
 			for (c_it = extention.cbegin(); c_it != extention.cend(); ++c_it)
 				intToSprite_map.insert(*c_it);
 		};
-		void operator+= (std::pair<unsigned int, sf::Sprite>*& extention)
+		void operator+= (const std::vector<std::pair<unsigned int, sf::IntRect>>& extention)
 		{
-			unsigned int size = 1 + sizeof(extention);
-
-			for (unsigned int i = 0; i < size; ++i)
-				intToSprite_map.insert(extention[i]);
+			for (unsigned int i = 0; i < extention.size(); ++i)
+				intToSprite_map[extention[i].first] = sf::Sprite(this->texture, extention[i].second);
 		};
 
-	protected:
-		std::unordered_map<unsigned int, sf::Sprite> intToSprite_map;
-	};
-
-	/*Classe bem próxima da Drawble, o diferencial seria ter intrinsecamente Animações no lugar de sprites,
-	  para ter uma ou múltiplas animações derivadas de uma única estrutura*/
-	class Animated : protected BaseDrawable {
-	public:
-		Animated();
-		Animated(sf::Texture& texture, bool FacecRight = true);
-		Animated(std::string& fileName, bool FacecRight = true);
-		Animated(sf::Texture& texture, std::unordered_map<unsigned int, Animation>& animationMap, bool FacecRight = true);
-		Animated(sf::Texture& texture, std::unordered_map<unsigned int, Animation>::value_type*& animationValuesPair, bool FacecRight = true);
-		Animated(sf::Texture& texture, std::pair<unsigned int, AnimationDataType>*& animationConstructorMap, unsigned int Size, bool FacecRight = true);
-		Animated(std::string& fileName, std::pair<unsigned int, AnimationDataType>*& animationConstructorMap, unsigned int Size, bool FacecRight = true);
-		~Animated();
-
-		// SETS / GETS
-		std::unordered_map<unsigned int, Animation>& GetMap() { return this->intToAnimation_map; };
-		const std::unordered_map<unsigned int, Animation>& GetConstMap() { return this->intToAnimation_map; };
-		void SetMap(std::unordered_map<unsigned int, Animation>& map) { intToAnimation_map = map; };
-		void SetMap(std::pair<unsigned int, Animation>*& map, unsigned int pairsNum) { for (unsigned int i = 0; i < pairsNum; i++)
-																							intToAnimation_map[map->first] = map->second;
-																					 };
-		void SetMap(std::pair<unsigned int, AnimationDataType>*& map, unsigned int pairsNum) {	for (unsigned int i = 0; i < pairsNum; i++)
-																									intToAnimation_map[map->first] = Animation(map->second);
-																							 };
-
-		// OPERATORS OVERLOADS
-		void operator+ (std::pair<unsigned int, Animation>& newItem) 
+		void operator+ (const std::pair<unsigned int, Animation>& newItem)
 		{
 			intToAnimation_map.insert(newItem);
 		};
-		void operator+= (std::unordered_map<unsigned int, Animation>& extention)
+		void operator+= (const std::unordered_map<unsigned int, Animation>& extention)
 		{
 			std::unordered_map<unsigned int, Animation>::const_iterator c_it;
 			for (c_it = extention.cbegin(); c_it != extention.cend(); ++c_it)
 				intToAnimation_map.insert(*c_it);
 		};
-		void operator+= (std::pair<unsigned int, Animation>*& extention)
+		void operator+= (const std::vector<std::pair<unsigned int, AnimationDataType>>& extention)
 		{
-			unsigned int size = 1 + sizeof(extention);
-
-			for (unsigned int i = 0; i < size; ++i)
-				intToAnimation_map.insert(extention[i]);
+			for (unsigned int i = 0; i < extention.size(); ++i)
+				intToAnimation_map[extention[i].first] = Animation(extention[i].second);
 		};
 
 	protected:
+		std::unordered_map<unsigned int, sf::Sprite> intToSprite_map;
 		std::unordered_map<unsigned int, Animation> intToAnimation_map;
 		unsigned int lastUsedAnimation;
 	};
 }
 
-/*class SingleSpriteDrawble : public Drawable
+/*
+Classe bem próxima da Drawble, o diferencial seria ter intrinsecamente Animações no lugar de sprites,
+	  para ter uma ou múltiplas animações derivadas de uma única estrutura
+class Animated : protected BaseDrawable {
+public:
+	Animated();
+	Animated(sf::Texture& texture, bool FacecRight = true);
+	Animated(std::string& fileName, bool FacecRight = true);
+	Animated(sf::Texture& texture, std::unordered_map<unsigned int, Animation>& animationMap, bool FacecRight = true);
+	Animated(sf::Texture& texture, std::unordered_map<unsigned int, Animation>::value_type*& animationValuesPair, bool FacecRight = true);
+	Animated(sf::Texture& texture, std::pair<unsigned int, AnimationDataType>*& animationConstructorMap, unsigned int Size, bool FacecRight = true);
+	Animated(std::string& fileName, std::pair<unsigned int, AnimationDataType>*& animationConstructorMap, unsigned int Size, bool FacecRight = true);
+	~Animated();
+
+	// SETS / GETS
+
+
+	// OPERATORS OVERLOADS
+
+
+protected:
+
+};
+
+
+
+class SingleSpriteDrawble : public Drawable
 {
 public:
 	SingleSpriteDrawble();

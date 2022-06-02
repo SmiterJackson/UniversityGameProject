@@ -18,7 +18,7 @@ Animation::Animation() :
     img_token(), start(0), end(0), row(0), current(0), time(0.0), switchTime(0.0)
 {
 }
-Animation::Animation(AnimationDataType& Data) :
+Animation::Animation(const AnimationDataType& Data) :
     img_token(), start(Data.start), end(Data.end), row(Data.row), current(0), time(0.0), switchTime(Data.switchTime)
 {
     current = start;

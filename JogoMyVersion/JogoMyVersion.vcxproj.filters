@@ -33,10 +33,13 @@
     <ClCompile Include="Entities\Implementations\animatedEntity.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Manegers\Implementations\inputHandler.cpp">
+    <ClCompile Include="Manegers\Implementations\WithPhysics.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Manegers\Implementations\drawable.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Stages\Implementations\baseStage.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -56,11 +59,20 @@
     <ClInclude Include="Entities\Headers\animatedEntity.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Manegers\Headers\inputHandler.h">
+    <ClInclude Include="Manegers\Headers\WithPhysics.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Manegers\Headers\drawble.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Lists\Headers\myList.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Stages\Headers\baseStage.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Dependecies\Stages\Stage1.data" />
   </ItemGroup>
 </Project>

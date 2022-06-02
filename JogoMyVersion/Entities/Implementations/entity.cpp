@@ -4,25 +4,21 @@
 #include "../Headers/entity.h"
 
 Entity::Entity() :
-	Instance(), body(), right()
+	Instance(), body()
 {};
 Entity::Entity(sf::Texture& texture, bool facingRight) :
-	Instance(), body(), right(facingRight)
+	Instance(), body()
 {
 	this->body.setTexture(texture);
 };
 Entity::Entity(sf::Texture& texture, sf::RectangleShape& Body, bool facingRight) :
-	Instance(), body(), right(facingRight)
+	Instance(), body()
 {
 	this->body.setTexture(texture);
 };
 Entity::~Entity()
 {};
 
-void Entity::Execute() 
-{
-	
-};
 void Entity::SelfPrintAll(sf::RenderWindow& window, float timeDiff) 
 {
 	

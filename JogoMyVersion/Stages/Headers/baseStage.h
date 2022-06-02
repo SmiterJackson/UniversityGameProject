@@ -6,7 +6,7 @@
 #include "../Entities/Headers/instance.h"
 #include "../Manegers/Headers/inputHandler.h"
 
-class BaseStage : public Instance, public InputHandler, public Drawable {
+class BaseStage : public Instance, public InputHandler, public Printable {
 public:
 	BaseStage();
 	~BaseStage();

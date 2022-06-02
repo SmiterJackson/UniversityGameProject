@@ -160,7 +160,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Manegers\Implementations\animation.cpp" />
     <ClCompile Include="Manegers\Implementations\drawable.cpp" />
-    <ClCompile Include="Manegers\Implementations\inputHandler.cpp" />
+    <ClCompile Include="Manegers\Implementations\WithPhysics.cpp" />
     <ClCompile Include="Stages\Implementations\baseStage.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -171,7 +171,7 @@
     <ClInclude Include="Main\stdafx.h" />
     <ClInclude Include="Manegers\Headers\animation.h" />
     <ClInclude Include="Manegers\Headers\drawble.h" />
-    <ClInclude Include="Manegers\Headers\inputHandler.h" />
+    <ClInclude Include="Manegers\Headers\WithPhysics.h" />
     <ClInclude Include="Stages\Headers\baseStage.h" />
   </ItemGroup>
   <ItemGroup>
