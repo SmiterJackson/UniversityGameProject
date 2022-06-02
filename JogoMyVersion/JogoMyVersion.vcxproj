@@ -153,6 +153,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Entities\Characters\Implementations\Hero.cpp" />
     <ClCompile Include="Entities\Implementations\entity.cpp" />
     <ClCompile Include="Entities\Implementations\instance.cpp" />
     <ClCompile Include="Main\stdafx.cpp" />
@@ -163,6 +164,7 @@
     <ClCompile Include="Stages\Implementations\baseStage.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Entities\Characters\Headers\Hero.h" />
     <ClInclude Include="Entities\Headers\entity.h" />
     <ClInclude Include="Entities\Headers\instance.h" />
     <ClInclude Include="Lists\Headers\myList.h" />

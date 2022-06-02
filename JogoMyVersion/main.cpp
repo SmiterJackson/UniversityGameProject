@@ -5,51 +5,45 @@
 #include "Manegers/Headers/animation.h"
 #include "Entities/Headers/entity.h"
 #include "Manegers/Headers/drawble.h"
-#include "Entities/Headers/animatedEntity.h"
 #include "Lists/Headers/myList.h"
+#include "Entities/Characters/Headers/Hero.h"
 
-#define PLAYER1_SHEET std::string("JogoMyVersion/Resources/Images/Sprites/Players/Player_1/player_1_sheet.png")
+#define PLAYER1_SHEET std::string("JogoMyVersion\\Resources\\images\\sprites\\Characters\\gunner_green.png")
+#define PLAYER_SIZE 48.0f
 
 int main()
 {
     sf::RenderWindow window(sf::VideoMode(1400, 850), "Janela do Jogo");
     window.setVerticalSyncEnabled(true);
+    window.setKeyRepeatEnabled(false);
 
-    float fator = 3.0f;
+    float fator = 4.0f;
     float timediff = 0.0f;
     int animacao = 0;
     bool direita = true;
 
-    //{
-    //    std::vector<std::string> ints = { {"Eduardo"}, {"Leonardo"}, {"Gabriel"}, {"Juvenal"} };
-    //    MyList<std::string> intList;
-    //    intList.Push_back(std::string("Gabriele"));
-    //    intList.Pop_back();
-    //    intList += ints;
-    //}
-    
-
     sf::Texture texture;
     texture.loadFromFile(PLAYER1_SHEET);
-    sf::RectangleShape rect(sf::Vector2f(135.0f * fator, 135.0f * fator));
-    std::pair<unsigned int, AnimationDataType> AnimationsConstructors[] =  {{0, {0, 10, 0, 135, 0.20f}},
-                                                                            {1, {0, 9, 1, 135, 0.20f}},
-                                                                            {2, {0, 6, 2, 135, 0.20f}},
-                                                                            {3, {6, 10, 2, 135, 0.20f}},
-                                                                            {4, {0, 5, 3, 135, 0.20f}},
-                                                                            {5, {5, 9, 3, 135, 0.20f}},
-                                                                            {6, {0, 3, 4, 135, 0.20f}},
-                                                                            {7, {3, 5, 4, 135, 0.20f}},
-                                                                            {8, {4, 6, 4, 135, 0.20f}}};
+
+    sf::RectangleShape rect(sf::Vector2f(PLAYER_SIZE * fator, PLAYER_SIZE * fator));
     rect.setPosition(sf::Vector2f(350.0f, 200.0f));
-    AnimatedEntity hero(texture, AnimationsConstructors, 9, rect);
+
+    std::vector<std::pair<unsigned int, AnimationDataType>> AnimationsConstructors =  {{Hero::animations::none,   {0, 0, 0, 0, 1.00f}} ,
+                                                                                       {Hero::animations::Idle,   {0, 4, 2, 48, 0.20f, true} },
+                                                                                       {Hero::animations::Crouch, {5, 7, 2, 48, 0.20f} },
+                                                                                       {Hero::animations::Jump,   {6, 7, 1, 48, 0.20f} },
+                                                                                       {Hero::animations::Run,    {0, 5, 1, 48, 0.20f, true} },
+                                                                                       {Hero::animations::Death,  {0, 7, 0, 48, 0.20f} }};
+    VecOfPair_key_cutOfSprite sprites{};
+    
+    Hero hero(rect, PLAYER1_SHEET, sprites, AnimationsConstructors, 5, true, true);
 
     sf::Clock clock;
     while(window.isOpen())
     {
         timediff = clock.restart().asSeconds();
 
-        sf::Event event;
+        /*sf::Event event;
         while(window.pollEvent(event))
         {
             switch (event.type)
@@ -93,11 +87,13 @@ int main()
             default:
                 break;
             }
-        }
+        }*/
 
         window.clear(sf::Color(100U, 100U, 100U));
 
-        hero.SelfPrintSelected(window, animacao, timediff);
+        hero.Execute();
+        hero.SetElapsedTime(timediff);
+        hero.SelfPrintSelected(window);
 
         window.display();
     }

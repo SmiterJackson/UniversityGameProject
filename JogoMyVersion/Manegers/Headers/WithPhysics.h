@@ -7,7 +7,7 @@ namespace WithPhysics
 	class Movable
 	{
 	public:
-		Movable(const float _horizontal_acc = 0.0f, const float _vertical_acc = 0.0f, const bool _have_ground = false);
+		Movable(const bool _have_ground = false, const float _horizontal_acc = 0.0f, const float _vertical_acc = 0.0f);
 		~Movable();
 
 		const float GetVerticalACC() { return this->vertical_acc; };
@@ -31,17 +31,17 @@ namespace WithPhysics
 
 	class Slipery {
 	public:
-		Slipery(const float _coefficient = 1.0f);
+		Slipery(const float _coefficient = 0.95f);
 		~Slipery();
 
-		const float GetSliperyCoefficient() { return this->coefficient; };
-		void GetSliperyCoefficient(const float new_coefficient) { this->coefficient = new_coefficient; };
+		const float GetSliperyCoefficient() { return this->friction_coefficient; };
+		void GetSliperyCoefficient(const float new_coefficient) { this->friction_coefficient = new_coefficient; };
 
 	public:
 		static float global_friction;
 
 	protected:
-		float coefficient;
+		float friction_coefficient;
 	};
 	// outros ...
 }

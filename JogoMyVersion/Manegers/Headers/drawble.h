@@ -24,31 +24,31 @@ namespace drawable
 		void Get_isLookingRight(const bool newState) { this->faceRight = newState; };
 		void InvertOrientation() { this->faceRight = !this->faceRight; };
 
-		virtual void SelfPrintAll() = 0;
-		virtual void SelfPrintSelected() = 0;
+		virtual void SelfPrintAll(sf::RenderWindow& window) = 0;
+		virtual void SelfPrintSelected(sf::RenderWindow& window) = 0;
 
 	public:
 		sf::Texture texture;
 		bool faceRight;
 	};
 
-	typedef const std::vector<std::pair<unsigned int, sf::IntRect>> VecOfPair_key_cutOfSprite;
-	typedef const std::vector<std::pair<unsigned int, AnimationDataType>> VecOfPair_key_AnimationDataType;
+	typedef std::vector<std::pair<unsigned int, sf::IntRect>> VecOfPair_key_cutOfSprite;
+	typedef std::vector<std::pair<unsigned int, AnimationDataType>> VecOfPair_key_AnimationDataType;
 	// Classe para definir uma textura, recortes da textura, ou ela como um todo, para imprimilas, e/ou definir animações para os mesmo recortes.
-	class Printable : protected BaseDrawable {
+	class Drawable_Animated : protected BaseDrawable {
 	public:
-		Printable();
-		Printable(const sf::Texture& texture, const bool FacesRight = true);
-		Printable(const std::string& fileName, const bool FacesRight = true);
-		Printable(const sf::Texture& texture, VecOfPair_key_cutOfSprite& spriteMap, VecOfPair_key_AnimationDataType& animationMap, const bool FacesRight = true);
-		Printable(const std::string& fileName, VecOfPair_key_cutOfSprite& spriteMap, VecOfPair_key_AnimationDataType& animationMap, const bool FacesRight = true);
-		Printable(const sf::Texture& texture, const std::unordered_map<unsigned int, sf::Sprite>& spriteMap, const std::unordered_map<unsigned int, Animation>& animationMap, const bool FacesRight = true);
-		Printable(const std::string& fileName, const std::unordered_map<unsigned int, sf::Sprite>& spriteMap, const std::unordered_map<unsigned int, Animation>& animationMap, const bool FacesRight = true);
-		~Printable();
+		Drawable_Animated();
+		Drawable_Animated(const sf::Texture& texture, const bool FacesRight = true);
+		Drawable_Animated(const std::string& fileName, const bool FacesRight = true);
+		Drawable_Animated(const sf::Texture& texture, const VecOfPair_key_cutOfSprite& spriteMap, const VecOfPair_key_AnimationDataType& animationMap, const bool FacesRight = true);
+		Drawable_Animated(const std::string& fileName, const VecOfPair_key_cutOfSprite& spriteMap, const VecOfPair_key_AnimationDataType& animationMap, const bool FacesRight = true);
+		Drawable_Animated(const sf::Texture& texture, const std::unordered_map<unsigned int, sf::Sprite>& spriteMap, const std::unordered_map<unsigned int, Animation>& animationMap, const bool FacesRight = true);
+		Drawable_Animated(const std::string& fileName, const std::unordered_map<unsigned int, sf::Sprite>& spriteMap, const std::unordered_map<unsigned int, Animation>& animationMap, const bool FacesRight = true);
+		~Drawable_Animated();
 
 		// FUNCTIONS
-		virtual void SelfPrintAll() = 0;
-		virtual void SelfPrintSelected() = 0;
+		virtual void SelfPrintAll(sf::RenderWindow& window) = 0;
+		virtual void SelfPrintSelected(sf::RenderWindow& window) = 0;
 
 		// SETS / GETS
 		std::unordered_map<unsigned int, sf::Sprite>& GetSpritesMap();
@@ -66,7 +66,7 @@ namespace drawable
 		void SetAnimationsMap(const VecOfPair_key_AnimationDataType& mapValues);
 
 		// OPERATORS OVERLOADS
-		void operator+ (const std::pair<unsigned int, sf::Sprite>& newItem)
+		void operator+ (const std::unordered_map<unsigned int, sf::Sprite>::value_type& newItem)
 		{
 			intToSprite_map.insert(newItem);
 		};
@@ -76,13 +76,13 @@ namespace drawable
 			for (c_it = extention.cbegin(); c_it != extention.cend(); ++c_it)
 				intToSprite_map.insert(*c_it);
 		};
-		void operator+= (const VecOfPair_key_cutOfSprite& extention)
+		void operator+= (const std::vector<std::pair<unsigned int, sf::IntRect>>& extention)
 		{
 			for (unsigned int i = 0; i < extention.size(); ++i)
 				intToSprite_map[extention[i].first] = sf::Sprite(this->texture, extention[i].second);
 		};
 
-		void operator+ (const std::pair<unsigned int, Animation>& newItem)
+		void operator+ (const std::unordered_map<unsigned int, Animation>::value_type& newItem)
 		{
 			intToAnimation_map.insert(newItem);
 		};

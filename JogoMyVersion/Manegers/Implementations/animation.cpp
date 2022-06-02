@@ -3,29 +3,26 @@
 #include "../Headers/animation.h"
 
 AnimationDataType::AnimationDataType():
-    start(0), end(0), row(0), coefficient(0), switchTime(0)
-{
-};
-AnimationDataType::AnimationDataType(unsigned int Start, unsigned int End, unsigned int Row, unsigned int Coefficient, float SwitchTime):
-    start(Start), end(End), row(Row), coefficient(Coefficient), switchTime(SwitchTime)
-{
-};
+    start(0), end(0), row(0), coefficient(0), switchTime(0), repeatable(false)
+{};
+AnimationDataType::AnimationDataType(unsigned int Start, unsigned int End, unsigned int Row, unsigned int Coefficient, float SwitchTime, bool _repeatable):
+    start(Start), end(End), row(Row), coefficient(Coefficient), switchTime(SwitchTime), repeatable(_repeatable)
+{};
 AnimationDataType::~AnimationDataType()
 {
 };
 
 Animation::Animation() :
-    img_token(), start(0), end(0), row(0), current(0), time(0.0), switchTime(0.0)
-{
-}
+    img_token(), start(0), end(0), row(0), current(0), time(0.0), switchTime(0.0), repeatable(false)
+{};
 Animation::Animation(const AnimationDataType& Data) :
-    img_token(), start(Data.start), end(Data.end), row(Data.row), current(0), time(0.0), switchTime(Data.switchTime)
+    img_token(), start(Data.start), end(Data.end), row(Data.row), current(0), time(0.0), switchTime(Data.switchTime), repeatable(Data.repeatable)
 {
     current = start;
 
     img_token.width = Data.coefficient;
     img_token.height = Data.coefficient;
-}
+};
 Animation::~Animation()
 {
 }
@@ -42,18 +39,27 @@ void Animation::Initialize(const AnimationDataType& Data)
     img_token.width = Data.coefficient;
     img_token.height = Data.coefficient;
 }
-
+void Animation::ResetAnimation()
+{
+    this->current = 0;
+};
 const sf::IntRect& Animation::update(float timeDiff, bool right)
 {
     time += timeDiff;
 
+    // Caso o lapso de tempo seja igual ou maior que o previsto, definido na criação da animação, alterna o recorte da animação
     if (time >= switchTime)
     {
         time -= switchTime;
-        current++;
+        
+        if (current < end)  // alterna até no máximo a última imagem da uma animação dada
+            current++;
 
-        if (current >= end)
-            current = start;
+        if (repeatable) // Caso seja animação de loop como 'Idle', repete o loop
+        {
+            if (current >= end)
+                current = start;
+        }
     }
 
     img_token.top = row * img_token.height;

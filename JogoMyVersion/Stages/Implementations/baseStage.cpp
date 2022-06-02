@@ -2,8 +2,8 @@
 
 #include "../Headers/baseStage.h"
 
-/*BaseStage::BaseStage() :
-	Instance(), InputHandler(), BaseDrawable(), contextWindow(nullptr)
+BaseStage::BaseStage() :
+	DrawableEntity(), contextWindow(nullptr)
 {
 };
 BaseStage::~BaseStage()
@@ -18,4 +18,4 @@ void BaseStage::UpdateInput()
 };
 void BaseStage::SelfPrint()
 {
-};*/
+};

@@ -29,25 +29,31 @@ namespace Entities
 	};
 
 	// Herdando a Entidade base, essa se diferencia por ser desenhável
-	class DrawableEntity : public Entity, public Printable {
+	class DrawableEntity : public Entity, public Drawable_Animated {
 	public:
 		DrawableEntity();
-		DrawableEntity(const sf::Texture& texture, const bool FacesRight = true, const bool _have_ground = false);
-		DrawableEntity(const std::string& fileName, const bool FacesRight = true, const bool _have_ground = false);
-		DrawableEntity(const sf::Texture& texture, VecOfPair_key_cutOfSprite& spriteMap, VecOfPair_key_AnimationDataType& animationMap, 
+		DrawableEntity(const sf::RectangleShape& Body, const sf::Texture& texture, const bool FacesRight = true, const bool _have_ground = false);
+		DrawableEntity(const sf::RectangleShape& Body, const std::string& fileName, const bool FacesRight = true, const bool _have_ground = false);
+		DrawableEntity(const sf::RectangleShape& Body, const sf::Texture& texture, const VecOfPair_key_cutOfSprite& spriteMap, const VecOfPair_key_AnimationDataType& animationMap,
 						const bool FacesRight = true, const bool _have_ground = false);
-		DrawableEntity(const std::string& fileName, VecOfPair_key_cutOfSprite& spriteMap, VecOfPair_key_AnimationDataType& animationMap,
+		DrawableEntity(const sf::RectangleShape& Body, const std::string& fileName, const VecOfPair_key_cutOfSprite& spriteMap, const VecOfPair_key_AnimationDataType& animationMap,
 						const bool FacesRight = true, const bool _have_ground = false);
-		DrawableEntity(const sf::Texture& texture, const std::unordered_map<unsigned int, sf::Sprite>& spriteMap, const std::unordered_map<unsigned int, Animation>& animationMap,
+		DrawableEntity(const sf::RectangleShape& Body, const sf::Texture& texture, const std::unordered_map<unsigned int, sf::Sprite>& spriteMap, const std::unordered_map<unsigned int, Animation>& animationMap,
 						const bool FacesRight = true, const bool _have_ground = false);
-		DrawableEntity(const std::string& fileName, const std::unordered_map<unsigned int, sf::Sprite>& spriteMap, const std::unordered_map<unsigned int, Animation>& animationMap,
+		DrawableEntity(const sf::RectangleShape& Body, const std::string& fileName, const std::unordered_map<unsigned int, sf::Sprite>& spriteMap, const std::unordered_map<unsigned int, Animation>& animationMap,
 						const bool FacesRight = true, const bool _have_ground = false);
 		~DrawableEntity();
 
+		const float GetElapsedTime() { return elapsed_time; };
+		void SetElapsedTime(const float _elapsed_time) { this->elapsed_time = _elapsed_time; };
+
 		// FUNCTIONS
 		virtual void Execute() = 0;
-		virtual void SelfPrintAll() = 0;
-		virtual void SelfPrintSelected() = 0;
+		virtual void SelfPrintAll(sf::RenderWindow& window) = 0;
+		virtual void SelfPrintSelected(sf::RenderWindow& window) = 0;
+
+	protected:
+		float elapsed_time;
 	};
 
 	// Herdando a Entidade desenhável, essa contém variável e funções para controlar a vida de uma entidade "viva"
@@ -55,16 +61,16 @@ namespace Entities
 	{
 	public:
 		LivingEntity();
-		LivingEntity(const sf::Texture& texture, const unsigned int _life_count, const bool FacesRight = true, const bool _have_ground = false);
-		LivingEntity(const std::string& fileName, const unsigned int _life_count, const bool FacesRight = true, const bool _have_ground = false);
-		LivingEntity(const sf::Texture& texture, VecOfPair_key_cutOfSprite& spriteMap, VecOfPair_key_AnimationDataType& animationMap,
-					const unsigned int _life_count, const bool FacesRight = true, const bool _have_ground = false);
-		LivingEntity(const std::string& fileName, VecOfPair_key_cutOfSprite& spriteMap, VecOfPair_key_AnimationDataType& animationMap,
-					const unsigned int _life_count, const bool FacesRight = true, const bool _have_ground = false);
-		LivingEntity(const sf::Texture& texture, const std::unordered_map<unsigned int, sf::Sprite>& spriteMap, const std::unordered_map<unsigned int, Animation>& animationMap,
-					const unsigned int _life_count, const bool FacesRight = true, const bool _have_ground = false);
-		LivingEntity(const std::string& fileName, const std::unordered_map<unsigned int, sf::Sprite>& spriteMap, const std::unordered_map<unsigned int, Animation>& animationMap,
-					const unsigned int _life_count, const bool FacesRight = true, const bool _have_ground = false);
+		LivingEntity(const sf::RectangleShape& Body, const sf::Texture& texture, const unsigned int _life_count, const bool FacesRight = true, const bool _have_ground = false);
+		LivingEntity(const sf::RectangleShape& Body, const std::string& fileName, const unsigned int _life_count, const bool FacesRight = true, const bool _have_ground = false);
+		LivingEntity(const sf::RectangleShape& Body, const sf::Texture& texture, const VecOfPair_key_cutOfSprite& spriteMap, const VecOfPair_key_AnimationDataType& animationMap,
+						const unsigned int _life_count, const bool FacesRight = true, const bool _have_ground = false);
+		LivingEntity(const sf::RectangleShape& Body, const std::string& fileName, const VecOfPair_key_cutOfSprite& spriteMap, const VecOfPair_key_AnimationDataType& animationMap,
+						const unsigned int _life_count, const bool FacesRight = true, const bool _have_ground = false);
+		LivingEntity(const sf::RectangleShape& Body, const sf::Texture& texture, const std::unordered_map<unsigned int, sf::Sprite>& spriteMap, const std::unordered_map<unsigned int, Animation>& animationMap,
+						const unsigned int _life_count, const bool FacesRight = true, const bool _have_ground = false);
+		LivingEntity(const sf::RectangleShape& Body, const std::string& fileName, const std::unordered_map<unsigned int, sf::Sprite>& spriteMap, const std::unordered_map<unsigned int, Animation>& animationMap,
+						const unsigned int _life_count, const bool FacesRight = true, const bool _have_ground = false);
 		~LivingEntity();
 
 		const unsigned int Getlife_count() { return this->life_count; };
@@ -72,8 +78,8 @@ namespace Entities
 
 		void Damaged();
 		virtual void Execute() = 0;
-		virtual void SelfPrintAll() = 0;
-		virtual void SelfPrintSelected() = 0;
+		virtual void SelfPrintAll(sf::RenderWindow& window) = 0;
+		virtual void SelfPrintSelected(sf::RenderWindow& window) = 0;
 
 	protected:
 		unsigned int life_count;
