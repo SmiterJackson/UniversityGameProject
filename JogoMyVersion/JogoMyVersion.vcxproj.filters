@@ -30,9 +30,6 @@
     <ClCompile Include="Entities\Implementations\entity.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Entities\Implementations\animatedEntity.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Manegers\Implementations\WithPhysics.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -54,9 +51,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Entities\Headers\entity.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Entities\Headers\animatedEntity.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Manegers\Headers\WithPhysics.h">

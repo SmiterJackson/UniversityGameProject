@@ -11,8 +11,8 @@ namespace drawable
 	{
 	public:
 		BaseDrawable();
-		BaseDrawable(const sf::Texture& texture, bool FacecRight = true);
-		BaseDrawable(const std::string fileName, bool FacecRight = true);
+		BaseDrawable(const sf::Texture& texture, const bool FacesRight = true);
+		BaseDrawable(const std::string fileName, const bool FacesRight = true);
 		~BaseDrawable();
 
 		sf::Texture& GetTexture() { return this->texture; };
@@ -21,7 +21,7 @@ namespace drawable
 		void SetTexture(const std::string& fileName) { this->texture.loadFromFile(fileName); };
 
 		const bool Get_isLookingRight() { return this->faceRight; };
-		void Get_isLookingRight(bool newState) { this->faceRight = newState; };
+		void Get_isLookingRight(const bool newState) { this->faceRight = newState; };
 		void InvertOrientation() { this->faceRight = !this->faceRight; };
 
 		virtual void SelfPrintAll() = 0;
@@ -32,16 +32,18 @@ namespace drawable
 		bool faceRight;
 	};
 
+	typedef const std::vector<std::pair<unsigned int, sf::IntRect>> VecOfPair_key_cutOfSprite;
+	typedef const std::vector<std::pair<unsigned int, AnimationDataType>> VecOfPair_key_AnimationDataType;
 	// Classe para definir uma textura, recortes da textura, ou ela como um todo, para imprimilas, e/ou definir animações para os mesmo recortes.
 	class Printable : protected BaseDrawable {
 	public:
 		Printable();
-		Printable(const sf::Texture& texture, const bool FacecRight = true);
-		Printable(const std::string& fileName, const bool FacecRight = true);
-		Printable(const sf::Texture& texture, const std::unordered_map<unsigned int, sf::Sprite>& spriteMap, const std::unordered_map<unsigned int, Animation>& animationMap, bool FacecRight = true);
-		Printable(const std::string& fileName, const std::unordered_map<unsigned int, sf::Sprite>& spriteMap, const std::unordered_map<unsigned int, Animation>& animationMap, bool FacecRight = true);
-		Printable(const sf::Texture& texture, const std::vector<std::pair<unsigned int, sf::IntRect>>& spriteMap, std::vector<std::pair<unsigned int, AnimationDataType>>& animationMap, bool FacecRight = true);
-		Printable(const std::string& fileName, const std::vector<std::pair<unsigned int, sf::IntRect>>& spriteMap, std::vector<std::pair<unsigned int, AnimationDataType>>& animationMap, bool FacecRight = true);
+		Printable(const sf::Texture& texture, const bool FacesRight = true);
+		Printable(const std::string& fileName, const bool FacesRight = true);
+		Printable(const sf::Texture& texture, VecOfPair_key_cutOfSprite& spriteMap, VecOfPair_key_AnimationDataType& animationMap, const bool FacesRight = true);
+		Printable(const std::string& fileName, VecOfPair_key_cutOfSprite& spriteMap, VecOfPair_key_AnimationDataType& animationMap, const bool FacesRight = true);
+		Printable(const sf::Texture& texture, const std::unordered_map<unsigned int, sf::Sprite>& spriteMap, const std::unordered_map<unsigned int, Animation>& animationMap, const bool FacesRight = true);
+		Printable(const std::string& fileName, const std::unordered_map<unsigned int, sf::Sprite>& spriteMap, const std::unordered_map<unsigned int, Animation>& animationMap, const bool FacesRight = true);
 		~Printable();
 
 		// FUNCTIONS
@@ -57,11 +59,11 @@ namespace drawable
 		
 		// Os sets aceitam os prórpios tipos de estrutura já preenchidos bem como um vector com os valores do tipo base
 		void SetSpritesMap(const std::unordered_map<unsigned int, sf::Sprite>& map);
-		void SetSpritesMap(const std::vector<std::pair<unsigned int, sf::IntRect>>& mapValues);
+		void SetSpritesMap(const VecOfPair_key_cutOfSprite& mapValues);
 
 		void SetAnimationsMap(const std::unordered_map<unsigned int, Animation>& map);
 		void SetAnimationsMap(const std::vector<std::pair<unsigned int, Animation>>& mapValues);
-		void SetAnimationsMap(const std::vector<std::pair<unsigned int, AnimationDataType>>& mapValues);
+		void SetAnimationsMap(const VecOfPair_key_AnimationDataType& mapValues);
 
 		// OPERATORS OVERLOADS
 		void operator+ (const std::pair<unsigned int, sf::Sprite>& newItem)
@@ -74,7 +76,7 @@ namespace drawable
 			for (c_it = extention.cbegin(); c_it != extention.cend(); ++c_it)
 				intToSprite_map.insert(*c_it);
 		};
-		void operator+= (const std::vector<std::pair<unsigned int, sf::IntRect>>& extention)
+		void operator+= (const VecOfPair_key_cutOfSprite& extention)
 		{
 			for (unsigned int i = 0; i < extention.size(); ++i)
 				intToSprite_map[extention[i].first] = sf::Sprite(this->texture, extention[i].second);
@@ -90,7 +92,7 @@ namespace drawable
 			for (c_it = extention.cbegin(); c_it != extention.cend(); ++c_it)
 				intToAnimation_map.insert(*c_it);
 		};
-		void operator+= (const std::vector<std::pair<unsigned int, AnimationDataType>>& extention)
+		void operator+= (const VecOfPair_key_AnimationDataType& extention)
 		{
 			for (unsigned int i = 0; i < extention.size(); ++i)
 				intToAnimation_map[extention[i].first] = Animation(extention[i].second);
