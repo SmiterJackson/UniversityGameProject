@@ -17,7 +17,7 @@ int main()
     window.setVerticalSyncEnabled(true);
     window.setKeyRepeatEnabled(false);
 
-    float fator = 6.0f;
+    float fator = 4.0f;
     float timediff = 0.0f;
     int animacao = 0;
     bool direita = true;
@@ -26,7 +26,8 @@ int main()
     texture.loadFromFile(PLAYER1_SHEET);
 
     sf::RectangleShape rect(sf::Vector2f(PLAYER_SIZE * fator, PLAYER_SIZE * fator));
-    rect.setPosition(sf::Vector2f(350.0f, 200.0f));
+    //rect.setScale(sf::Vector2f(fator, fator));
+    rect.move(sf::Vector2f(350.0f, 200.0f));
 
     std::vector<std::pair<unsigned int, AnimationDataType>> AnimationsConstructors =  {{Hero::animations::none,   {0, 0, 0, 0, 1.00f}} ,
                                                                                        {Hero::animations::Idle,   {0, 4, 2, 48, 0.20f, true} },
@@ -37,13 +38,15 @@ int main()
     VecOfPair_key_cutOfSprite sprites{};
     
     Hero hero(rect, PLAYER1_SHEET, sprites, AnimationsConstructors, 5, true, true);
+    sf::Vector2i pos;
+    sf::FloatRect bounds;
 
     sf::Clock clock;
     while(window.isOpen())
     {
         timediff = clock.restart().asSeconds();
 
-        /*sf::Event event;
+        sf::Event event;
         while(window.pollEvent(event))
         {
             switch (event.type)
@@ -61,33 +64,22 @@ int main()
                 std::cout << "Redimensionado !" << std::endl;
                 break;
             case sf::Event::KeyPressed:
-                if (event.key.code == sf::Keyboard::A) {
-                    animacao++;
-                    if (animacao >= 8)
-                        animacao = 0;
-                }
-                else if (event.key.code == sf::Keyboard::D) {
-                    animacao--;
-                    if (animacao <= 0)
-                        animacao = 8;
-                }
                 std::cout << "Foi tocado um botao do teclado!" << std::endl;
                 break;
             case sf::Event::KeyReleased:
                 std::cout << "Foi solto um botao do teclado!" << std::endl;
                 break;
             case sf::Event::MouseButtonPressed:
-                direita = false;
+                    hero.Died();
                 std::cout << "Foi tocado um botao do mouse!" << std::endl;
                 break;
             case sf::Event::MouseButtonReleased:
-                direita = true;
                 std::cout << "Foi solto um botao do mouse!" << std::endl;
                 break;
             default:
                 break;
             }
-        }*/
+        }
 
         window.clear(sf::Color(100U, 100U, 100U));
 

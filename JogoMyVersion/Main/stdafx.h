@@ -9,6 +9,7 @@
 #include <map>
 #include <array>
 #include <unordered_map>
+#include <fstream>
 
 //SFML
 #include "SFML/Window.hpp"

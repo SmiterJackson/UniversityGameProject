@@ -23,6 +23,7 @@ namespace Entities
 
 		// FUNCTIONS
 		virtual void Execute() = 0;
+		virtual void Initialize() = 0;
 
 	protected:
 		sf::RectangleShape body;
@@ -49,6 +50,7 @@ namespace Entities
 
 		// FUNCTIONS
 		virtual void Execute() = 0;
+		virtual void Initialize() = 0;
 		virtual void SelfPrintAll(sf::RenderWindow& window) = 0;
 		virtual void SelfPrintSelected(sf::RenderWindow& window) = 0;
 
@@ -78,10 +80,12 @@ namespace Entities
 
 		void Damaged();
 		virtual void Execute() = 0;
+		virtual void Initialize() = 0;
 		virtual void SelfPrintAll(sf::RenderWindow& window) = 0;
 		virtual void SelfPrintSelected(sf::RenderWindow& window) = 0;
 
 	protected:
 		unsigned int life_count;
+		bool alive;
 	};
 }

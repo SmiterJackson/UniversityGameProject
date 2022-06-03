@@ -2,6 +2,7 @@
 using namespace sf;
 
 #define HERO_HORIZONTAL_ACCELERETION 1.0f
+#define HERO_MAX_HORIZONTAL_DESACCELERETION HERO_HORIZONTAL_ACCELERETION
 #define HERO_MAX_HORIZONTAL_ACCELERETION 10.0f
 #define HERO_VERTICAL_ACCELERETION 36.0f
 #define HERO_VERTICAL_DESACCELERETION (HERO_VERTICAL_ACCELERETION/18)
@@ -10,48 +11,58 @@ using namespace sf;
 Hero::Hero() :
 	LivingEntity(), Slipery(), next_animation(Idle)
 {
-	this->body.setTexture(&this->texture);
+	Initialize();
 };
 Hero::Hero(const sf::RectangleShape& Body, const sf::Texture& texture, const unsigned int _life_count, const bool FacesRight, const bool _have_ground) :
 	LivingEntity(Body, texture, _life_count, FacesRight, _have_ground), Slipery(), next_animation(Idle)
 {
-	this->body.setTexture(&this->texture);
+	Initialize();
 };
 Hero::Hero(const sf::RectangleShape& Body, const std::string& fileName, const unsigned int _life_count, const bool FacesRight, const bool _have_ground) :
 	LivingEntity(Body, fileName, _life_count, FacesRight, _have_ground), Slipery(), next_animation(Idle)
 {
-	this->body.setTexture(&this->texture);
+	Initialize();
 };
 Hero::Hero(const sf::RectangleShape& Body, const sf::Texture& texture, const VecOfPair_key_cutOfSprite& spriteMap, const std::vector<std::pair<unsigned int, AnimationDataType>>& animationMap,
 			const unsigned int _life_count, const bool FacesRight, const bool _have_ground) :
 	LivingEntity(Body, texture, spriteMap, animationMap, _life_count, FacesRight, _have_ground), Slipery(), next_animation(Idle)
 {
-	this->body.setTexture(&this->texture);
+	Initialize();
 };
 Hero::Hero(const sf::RectangleShape& Body, const std::string& fileName, const VecOfPair_key_cutOfSprite& spriteMap, const std::vector<std::pair<unsigned int, AnimationDataType>>& animationMap,
 			const unsigned int _life_count, const bool FacesRight, const bool _have_ground) :
 	LivingEntity(Body, fileName, spriteMap, animationMap, _life_count, FacesRight, _have_ground), Slipery(), next_animation(Idle)
 {
-	this->body.setTexture(&this->texture);
+	Initialize();
 };
 Hero::Hero(const sf::RectangleShape& Body, const sf::Texture& texture, const std::unordered_map<unsigned int, sf::Sprite>& spriteMap, const std::unordered_map<unsigned int, Animation>& animationMap,
 			const unsigned int _life_count, const bool FacesRight, const bool _have_ground) :
 	LivingEntity(Body, texture, spriteMap, animationMap, _life_count, FacesRight, _have_ground), Slipery(), next_animation(Idle)
 {
-	this->body.setTexture(&this->texture);
+	Initialize();
 };
 Hero::Hero(const sf::RectangleShape& Body, const std::string& fileName, const std::unordered_map<unsigned int, sf::Sprite>& spriteMap, const std::unordered_map<unsigned int, Animation>& animationMap,
 			const unsigned int _life_count, const bool FacesRight, const bool _have_ground) :
 	LivingEntity(Body, fileName, spriteMap, animationMap, _life_count, FacesRight, _have_ground), Slipery(), next_animation(Idle)
 {
-	this->body.setTexture(&this->texture);
+	Initialize();
 };
 Hero::~Hero()
 {};
 
+void Hero::Initialize()
+{
+	this->body.setTexture(&this->texture);
+	this->body.setOrigin((this->body.getSize() / 2.0f));
+	this->friction_coefficient = 0.75f;
+};
 void Hero::Execute()
 {	
-	// Caso ambas as direções estejam clicadas ignora a situação
+	if (!this->alive) {
+		Died();
+		return;
+	}
+
 	bool isA_pressed = Keyboard::isKeyPressed(Keyboard::A), isD_pressed = Keyboard::isKeyPressed(Keyboard::D);
 
 	if((!isA_pressed && isD_pressed) || (isA_pressed && !isD_pressed))
@@ -74,15 +85,17 @@ void Hero::Execute()
 	else {
 		if (this->horizontal_acc >= -0.1f || this->horizontal_acc <= 0.1f)
 		{
-			this->horizontal_acc = 0.0f;
+			//this->horizontal_acc = 0.0f;
 
 			if (this->have_ground)
 				this->next_animation = Idle;
 		}
-		else if (this->horizontal_acc > 0.0f)
-			this->horizontal_acc -= HERO_HORIZONTAL_ACCELERETION;
-		else
-			this->horizontal_acc += HERO_HORIZONTAL_ACCELERETION;
+
+		if (this->horizontal_acc > 0.0f)
+			this->horizontal_acc -= HERO_MAX_HORIZONTAL_DESACCELERETION;
+
+		if (this->horizontal_acc < 0.0f)
+			this->horizontal_acc += HERO_MAX_HORIZONTAL_DESACCELERETION;
 	}
 
 	if(this->have_ground && Keyboard::isKeyPressed(Keyboard::S))
@@ -108,12 +121,21 @@ void Hero::Execute()
 };
 void Hero::Died()
 {
-	this->horizontal_acc = 0.0f;
+	this->alive = false;
+
+	if (this->horizontal_acc >= -0.1f || this->horizontal_acc <= 0.1f)
+		this->horizontal_acc = 0.0f;
+
+	if (this->horizontal_acc > 0.0f)
+		this->horizontal_acc -= HERO_MAX_HORIZONTAL_DESACCELERETION;
+
+	if (this->horizontal_acc < 0.0f)
+		this->horizontal_acc += HERO_MAX_HORIZONTAL_DESACCELERETION;
 
 	if (!this->have_ground && this->vertical_acc > HERO_MAX_FALL_VELOCITY)
-	this->vertical_acc -= HERO_VERTICAL_DESACCELERETION;
+		this->vertical_acc -= HERO_VERTICAL_DESACCELERETION;
 	else
-	this->vertical_acc = 0.0f;
+		this->vertical_acc = 0.0f;
 
 	this->next_animation = Death;
 	this->body.move(sf::Vector2f(this->horizontal_acc, this->vertical_acc));

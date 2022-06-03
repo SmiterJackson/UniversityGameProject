@@ -17,6 +17,7 @@ public:
 		const unsigned int _life_count, const bool FacesRight = true, const bool _have_ground = false);
 	~Hero();
 	
+	void Initialize();
 	void Execute();
 	void Died();
 	void SelfPrintAll(sf::RenderWindow& window);
