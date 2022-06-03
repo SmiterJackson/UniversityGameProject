@@ -42,7 +42,7 @@ int main()
 
     sf::IntRect tiles_textureCur = sf::IntRect(2 * TILE_SIZE, 0, TILE_SIZE, TILE_SIZE);
     
-    std::vector<std::pair<unsigned int, AnimationDataType>> AnimationsConstructors =  {{Hero::animations::Idle,   {0, 4, 2, 48, 0.20f, true} },
+    std::vector<std::pair<unsigned int, AnimaData>> AnimationsConstructors =  {{Hero::animations::Idle,   {0, 4, 2, 48, 0.20f, true} },
                                                                                        {Hero::animations::Crouch, {5, 7, 2, 48, 0.20f} },
                                                                                        {Hero::animations::Jump,   {6, 7, 1, 48, 0.20f} },
                                                                                        {Hero::animations::Run,    {0, 5, 1, 48, 0.20f, true} },

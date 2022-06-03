@@ -16,17 +16,9 @@ namespace entities
 		Entity(const sf::RectangleShape& Body, const bool _have_ground = false);
 		~Entity();
 
-		// SETS/ GETS
-		sf::RectangleShape& GetRectShape() { return this->body; };
-		const sf::RectangleShape& GetConstRectShape() { return this->body; };
-		void SetEntityBody(const sf::RectangleShape& newPosition) { this->body = newPosition; };
-
 		// FUNCTIONS
 		virtual void Execute() = 0;
 		virtual void Initialize() = 0;
-
-	protected:
-		sf::RectangleShape body;
 	};
 
 	// Herdando a Entidade base, essa se diferencia por ser desenhável

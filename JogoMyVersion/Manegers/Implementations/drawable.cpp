@@ -20,86 +20,104 @@ BaseDrawable::~BaseDrawable()
 };
 
 
-Drawable_Animated::Drawable_Animated() :
-	BaseDrawable(), intToSprite_map(), intToAnimation_map(), lastUsedAnimation(0)
-{
-};
-Drawable_Animated::Drawable_Animated(const sf::Texture& texture, const bool FacesRight):
-	BaseDrawable(texture, FacesRight), intToSprite_map(), intToAnimation_map(), lastUsedAnimation(0)
+WithAnimation::WithAnimation() :
+	animationVec()
 {};
-Drawable_Animated::Drawable_Animated(const std::string& fileName, const bool FacesRight) :
-	BaseDrawable(fileName, FacesRight), intToSprite_map(), intToAnimation_map(), lastUsedAnimation(0)
+WithAnimation::WithAnimation(const std::vector<Animation>& _animationMap) :
+	animationVec(_animationMap)
 {};
-Drawable_Animated::Drawable_Animated(const sf::Texture& texture, const VecOfPair_key_cutOfSprite& spriteMap, const VecOfPair_key_AnimationDataType& animationMap, const bool FacesRight) :
-	BaseDrawable(texture, FacesRight), intToSprite_map(), intToAnimation_map(), lastUsedAnimation(0)
+WithAnimation::WithAnimation(const VecAnimaValues& _animationMap) :
+	animationVec()
 {
-	unsigned int i = 0;
-	for(i = 0; i < spriteMap.size(); i++)
-		intToSprite_map[spriteMap[i].first] = sf::Sprite(this->texture, spriteMap[i].second);
+	size_t diff = this->animationVec.capacity() - this->animationVec.size();
+	this->animationVec.reserve(diff + _animationMap.size());
 
-	for (i = 0; i < animationMap.size(); ++i)
-		intToAnimation_map[animationMap[i].first] = Animation(animationMap[i].second);
+	for (unsigned int i = 0; i < _animationMap.size(); ++i)
+		this->animationVec.emplace_back(_animationMap[i]);
 };
-Drawable_Animated::Drawable_Animated(const std::string& fileName, const VecOfPair_key_cutOfSprite& spriteMap, const VecOfPair_key_AnimationDataType& animationMap, const bool FacesRight) :
-	BaseDrawable(fileName, FacesRight), intToSprite_map(), intToAnimation_map(), lastUsedAnimation(0)
-{
-	unsigned int i = 0;
-	for (i = 0; i < spriteMap.size(); i++)
-		intToSprite_map[spriteMap[i].first] = sf::Sprite(this->texture, spriteMap[i].second);
-
-	for (i = 0; i < animationMap.size(); ++i)
-		intToAnimation_map[animationMap[i].first] = Animation(animationMap[i].second);
-};
-Drawable_Animated::Drawable_Animated(const sf::Texture& texture, const std::unordered_map<unsigned int, sf::Sprite>& spriteMap, const std::unordered_map<unsigned int, Animation>& animationMap, const bool FacesRight) :
-	BaseDrawable(texture, FacesRight), intToSprite_map(spriteMap), intToAnimation_map(animationMap), lastUsedAnimation(0)
+WithAnimation::~WithAnimation()
 {};
-Drawable_Animated::Drawable_Animated(const std::string& fileName, const std::unordered_map<unsigned int, sf::Sprite>& spriteMap, const std::unordered_map<unsigned int, Animation>& animationMap, const bool FacesRight) :
-	BaseDrawable(fileName, FacesRight), intToSprite_map(spriteMap), intToAnimation_map(animationMap), lastUsedAnimation(0)
+
+
+SingleSpriteDrawable::SingleSpriteDrawable() :
+	BaseDrawable(), WithAnimation(), sprite()
+{
+	sprite.setTexture(this->texture);
+};
+SingleSpriteDrawable::SingleSpriteDrawable(const sf::Sprite& _sprite, const sf::Texture& texture, const bool FacesRight) :
+	BaseDrawable(texture, FacesRight), WithAnimation(), sprite(_sprite)
+{
+	sprite.setTexture(this->texture);
+};
+SingleSpriteDrawable::SingleSpriteDrawable(const sf::Sprite& _sprite, const std::string texture_fileName, const bool FacesRight) :
+	BaseDrawable(texture_fileName, FacesRight), WithAnimation(), sprite(_sprite)
+{
+	sprite.setTexture(this->texture);
+};
+SingleSpriteDrawable::~SingleSpriteDrawable()
 {};
-Drawable_Animated::~Drawable_Animated()
-{
-};
 
-// Sets / Gets - Drawable
-std::unordered_map<unsigned int, sf::Sprite>& Drawable_Animated::GetSpritesMap() 
-{ 
-	return this->intToSprite_map; 
-};
-const std::unordered_map<unsigned int, sf::Sprite>& Drawable_Animated::GetConstSpritesMap() 
-{ 
-	return this->intToSprite_map; 
-};
 
-std::unordered_map<unsigned int, Animation>& Drawable_Animated::GetAnimationsMap()
+MultipleSpriteDrawable::MultipleSpriteDrawable() :
+	BaseDrawable(), WithAnimation(), spritesVec()
+{};
+MultipleSpriteDrawable::MultipleSpriteDrawable(const std::vector<sf::Sprite>& _spritesVec, const sf::Texture& texture, const bool FacesRight) :
+	BaseDrawable(texture, FacesRight), WithAnimation(), spritesVec(_spritesVec)
 {
-	return this->intToAnimation_map;
-};
-const std::unordered_map<unsigned int, Animation>& Drawable_Animated::GetConsAnimationstMap()
-{
-	return this->intToAnimation_map;
-};
+	sf::FloatRect rect;
 
-void Drawable_Animated::SetSpritesMap(const std::unordered_map<unsigned int, sf::Sprite>& map)
-{ 
-	this->intToSprite_map = map; 
+	for(unsigned int i = 0; i < spritesVec.size(); ++i)
+	{
+		spritesVec[i].setTexture(this->texture);
+		rect = this->spritesVec[i].getGlobalBounds();
+		spritesVec[i].setOrigin((rect.width - rect.left) / 2.0f, (rect.height - rect.top) / 2.0f);
+	}
 };
-void Drawable_Animated::SetSpritesMap(const VecOfPair_key_cutOfSprite& mapValues)
+MultipleSpriteDrawable::MultipleSpriteDrawable(const std::vector<sf::IntRect>& _spritesVecValues, const std::string texture_fileName, const bool FacesRight) :
+	BaseDrawable(texture_fileName, FacesRight), WithAnimation(), spritesVec()
 {
-	for (unsigned int i = 0; i < mapValues.size(); i++)
-		intToSprite_map[mapValues[i].first] = sf::Sprite(this->texture, mapValues[i].second);
-};
+	sf::FloatRect rect;
+	size_t diff = this->spritesVec.capacity() - this->spritesVec.size();
+	this->spritesVec.reserve(diff + _spritesVecValues.size());
 
-void Drawable_Animated::SetAnimationsMap(const std::unordered_map<unsigned int, Animation>& map)
-{
-	this->intToAnimation_map = map;
+	for (unsigned int i = 0; i < _spritesVecValues.size(); ++i)
+	{
+		this->spritesVec.emplace_back(this->texture, _spritesVecValues[i]);
+		rect = this->spritesVec[i].getGlobalBounds();
+		this->spritesVec[i].setOrigin((rect.width - rect.left) / 2.0f, (rect.height - rect.top) / 2.0f);
+	}
 };
-void Drawable_Animated::SetAnimationsMap(const std::vector<std::pair<unsigned int, Animation>>& mapValues)
+MultipleSpriteDrawable::~MultipleSpriteDrawable()
+{};
+
+
+SingleRectangleDrawable::SingleRectangleDrawable() :
+	BaseDrawable(), WithAnimation(), body()
 {
-	for (unsigned int i = 0; i < mapValues.size(); i++)
-		intToAnimation_map[mapValues[i].first] = mapValues[i].second;
+	this->body.setTexture(&this->texture);
+	this->body.setOrigin(this->body.getSize() / 2.0f);
 };
-void Drawable_Animated::SetAnimationsMap(const VecOfPair_key_AnimationDataType& mapValues)
+SingleRectangleDrawable::SingleRectangleDrawable(const sf::RectangleShape& _body, const sf::Texture& texture, const bool FacesRight) :
+	BaseDrawable(texture, FacesRight), WithAnimation(), body(_body)
 {
-	for (unsigned int i = 0; i < mapValues.size(); i++)
-		intToAnimation_map[mapValues[i].first] = Animation(mapValues[i].second);
+	this->body.setTexture(&this->texture);
+	this->body.setOrigin(this->body.getSize() / 2.0f);
 };
+SingleRectangleDrawable::SingleRectangleDrawable(const sf::RectangleShape& _body, const std::string texture_fileName, const bool FacesRight) :
+	BaseDrawable(texture_fileName, FacesRight), WithAnimation(), body(_body)
+{
+	this->body.setTexture(&this->texture);
+	this->body.setOrigin(this->body.getSize() / 2.0f);
+};
+SingleRectangleDrawable::~SingleRectangleDrawable()
+{};
+
+
+MultipleRectangleDrawable::MultipleRectangleDrawable() :
+	BaseDrawable(), WithAnimation(), bodiesVec()
+{};
+MultipleRectangleDrawable::MultipleRectangleDrawable(const std::vector<sf::RectangleShape>& _bodiesVec, const sf::Texture& texture, const bool FacesRight) :
+	BaseDrawable(texture, FacesRight), WithAnimation(), bodiesVec(_bodiesVec)
+{};
+MultipleRectangleDrawable::~MultipleRectangleDrawable()
+{};

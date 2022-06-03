@@ -2,20 +2,20 @@
 
 #include "../Headers/animation.h"
 
-AnimationDataType::AnimationDataType():
+AnimaData::AnimaData():
     start(0), end(0), row(0), coefficient(0), switchTime(0), repeatable(false)
 {};
-AnimationDataType::AnimationDataType(unsigned int Start, unsigned int End, unsigned int Row, unsigned int Coefficient, float SwitchTime, bool _repeatable):
+AnimaData::AnimaData(unsigned int Start, unsigned int End, unsigned int Row, unsigned int Coefficient, float SwitchTime, bool _repeatable):
     start(Start), end(End), row(Row), coefficient(Coefficient), switchTime(SwitchTime), repeatable(_repeatable)
 {};
-AnimationDataType::~AnimationDataType()
+AnimaData::~AnimaData()
 {
 };
 
 Animation::Animation() :
     img_token(), start(0), end(0), row(0), current(0), time(0.0), switchTime(0.0), repeatable(false)
 {};
-Animation::Animation(const AnimationDataType& Data) :
+Animation::Animation(const AnimaData& Data) :
     img_token(), start(Data.start), end(Data.end), row(Data.row), current(0), time(0.0), switchTime(Data.switchTime), repeatable(Data.repeatable)
 {
     current = start;
@@ -27,7 +27,7 @@ Animation::~Animation()
 {
 }
 
-void Animation::Initialize(const AnimationDataType& Data)
+void Animation::Initialize(const AnimaData& Data)
 {
     this->start = Data.start;
     this->end = Data.end;

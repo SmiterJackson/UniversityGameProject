@@ -2,11 +2,11 @@
 
 #include "stdafx.cpp"
 
-class AnimationDataType {
+class AnimaData {
 public:
-    AnimationDataType();
-    AnimationDataType(unsigned int _start, unsigned int _end, unsigned int _row, unsigned int _coefficient, float _switchTime, bool _repeatable = false);
-    ~AnimationDataType();
+    AnimaData();
+    AnimaData(unsigned int _start, unsigned int _end, unsigned int _row, unsigned int _coefficient, float _switchTime, bool _repeatable = false);
+    ~AnimaData();
 
 public:
     unsigned int start, end, row, coefficient;
@@ -17,28 +17,42 @@ public:
 class Animation {
 public:
     Animation();
-    Animation(const AnimationDataType& Data);
+    Animation(const AnimaData& Data);
     ~Animation();
 
-    void Initialize(const AnimationDataType& Data);
+    void Initialize(const AnimaData& Data);
     void ResetAnimation();
     const sf::IntRect& update(float timeDiff, bool right = true);
 
-    Animation operator= (const Animation& animation)
+    Animation operator= (const Animation& other)
     {
-        if(&animation != this)
+        if(&other != this)
         {
-            this->img_token = animation.img_token;
-            this->start = animation.start;
-            this->end = animation.end;
-            this->row = animation.row;
-            this->current = animation.current;
-            this->time = animation.time;
-            this->switchTime = animation.switchTime;
-            this->repeatable = animation.repeatable;
+            this->img_token = other.img_token;
+            this->start = other.start;
+            this->end = other.end;
+            this->row = other.row;
+            this->current = other.current;
+            this->time = other.time;
+            this->switchTime = other.switchTime;
+            this->repeatable = other.repeatable;
         }
 
         return *this;
+    }
+    const bool operator== (const Animation& other)
+    {
+        if (&other == this)
+            return true;
+
+        return false;
+    }
+    const bool operator!= (const Animation& other)
+    {
+        if (&other != this)
+            return true;
+
+        return false;
     }
 
 private:

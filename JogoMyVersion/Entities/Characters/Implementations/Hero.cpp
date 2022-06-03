@@ -24,13 +24,13 @@ Hero::Hero(const sf::RectangleShape& Body, const std::string& fileName, const un
 {
 	Initialize();
 };
-Hero::Hero(const sf::RectangleShape& Body, const sf::Texture& texture, const VecOfPair_key_cutOfSprite& spriteMap, const std::vector<std::pair<unsigned int, AnimationDataType>>& animationMap,
+Hero::Hero(const sf::RectangleShape& Body, const sf::Texture& texture, const VecOfPair_key_cutOfSprite& spriteMap, const std::vector<std::pair<unsigned int, AnimaData>>& animationMap,
 	const unsigned int _life_count, const bool FacesRight, const bool _have_ground) :
 	LivingEntity(Body, texture, spriteMap, animationMap, _life_count, FacesRight, _have_ground), Slipery(), invec_time(HERO_INVENCIBILITY_FRAMES_TIME), invenc_frames(false)
 {
 	Initialize();
 };
-Hero::Hero(const sf::RectangleShape& Body, const std::string& fileName, const VecOfPair_key_cutOfSprite& spriteMap, const std::vector<std::pair<unsigned int, AnimationDataType>>& animationMap,
+Hero::Hero(const sf::RectangleShape& Body, const std::string& fileName, const VecOfPair_key_cutOfSprite& spriteMap, const std::vector<std::pair<unsigned int, AnimaData>>& animationMap,
 	const unsigned int _life_count, const bool FacesRight, const bool _have_ground) :
 	LivingEntity(Body, fileName, spriteMap, animationMap, _life_count, FacesRight, _have_ground), Slipery(), invec_time(HERO_INVENCIBILITY_FRAMES_TIME), invenc_frames(false)
 {
