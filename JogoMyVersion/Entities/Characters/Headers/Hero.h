@@ -19,11 +19,14 @@ public:
 	
 	void Initialize();
 	void Execute();
+	void Damaged();
 	void Died();
 	void SelfPrintAll(sf::RenderWindow& window);
 	void SelfPrintSelected(sf::RenderWindow& window);
 
 public:
-	enum animations { none = 0, Idle, Run, Crouch, Jump, Death };
-	unsigned int next_animation;
+	enum animations { Idle, Run, Crouch, Jump, Death };
+	const float invec_time;
+	float invec_current_timer;
+	bool invenc_frames;
 };

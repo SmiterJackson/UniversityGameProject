@@ -69,7 +69,7 @@ const sf::IntRect& Animation::update(float timeDiff, bool right)
         // lê o recorte da textura da esquerda à direita
         img_token.left = current * img_token.width;
         img_token.width = abs(img_token.width);
-
+        
         return img_token;
     }
     // lê o recorte da textura da direita à esquerda (invertida)

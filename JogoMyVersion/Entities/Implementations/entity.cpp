@@ -15,29 +15,29 @@ Entity::~Entity()
 
 
 DrawableEntity::DrawableEntity() :
-	Entity(), Drawable_Animated(), elapsed_time(0.0f)
+	Entity(), Drawable_Animated(), next_animation(0), elapsed_time(0.0f)
 {};
 DrawableEntity::DrawableEntity(const sf::RectangleShape& Body, const sf::Texture& texture, const bool FacesRight, const bool _have_ground) :
-	Entity(Body, _have_ground), Drawable_Animated(texture, FacesRight), elapsed_time(0.0f)
+	Entity(Body, _have_ground), Drawable_Animated(texture, FacesRight), next_animation(0), elapsed_time(0.0f)
 {};
 DrawableEntity::DrawableEntity(const sf::RectangleShape& Body, const std::string& fileName, const bool FacesRight, const bool _have_ground) :
-	Entity(Body, _have_ground), Drawable_Animated(fileName, FacesRight), elapsed_time(0.0f)
+	Entity(Body, _have_ground), Drawable_Animated(fileName, FacesRight), next_animation(0), elapsed_time(0.0f)
 {};
 DrawableEntity::DrawableEntity(const sf::RectangleShape& Body, const sf::Texture& texture, const VecOfPair_key_cutOfSprite& spriteMap,
-								const VecOfPair_key_AnimationDataType& animationMap, const bool FacesRight, const bool _have_ground) :
-	Entity(Body, _have_ground), Drawable_Animated(texture, spriteMap, animationMap, FacesRight), elapsed_time(0.0f)
+	const VecOfPair_key_AnimationDataType& animationMap, const bool FacesRight, const bool _have_ground) :
+	Entity(Body, _have_ground), Drawable_Animated(texture, spriteMap, animationMap, FacesRight), next_animation(0), elapsed_time(0.0f)
 {};
 DrawableEntity::DrawableEntity(const sf::RectangleShape& Body, const std::string& fileName, const VecOfPair_key_cutOfSprite& spriteMap,
-								const VecOfPair_key_AnimationDataType& animationMap, const bool FacesRight, const bool _have_ground) :
-	Entity(Body, _have_ground), Drawable_Animated(fileName, spriteMap, animationMap, FacesRight), elapsed_time(0.0f)
+	const VecOfPair_key_AnimationDataType& animationMap, const bool FacesRight, const bool _have_ground) :
+	Entity(Body, _have_ground), Drawable_Animated(fileName, spriteMap, animationMap, FacesRight), next_animation(0), elapsed_time(0.0f)
 {};
 DrawableEntity::DrawableEntity(const sf::RectangleShape& Body, const sf::Texture& texture, const std::unordered_map<unsigned int, sf::Sprite>& spriteMap,
-								const std::unordered_map<unsigned int, Animation>& animationMap, const bool FacesRight, const bool _have_ground) :
-	Entity(Body, _have_ground), Drawable_Animated(texture, spriteMap, animationMap, FacesRight), elapsed_time(0.0f)
+	const std::unordered_map<unsigned int, Animation>& animationMap, const bool FacesRight, const bool _have_ground) :
+	Entity(Body, _have_ground), Drawable_Animated(texture, spriteMap, animationMap, FacesRight), next_animation(0), elapsed_time(0.0f)
 {};
 DrawableEntity::DrawableEntity(const sf::RectangleShape& Body, const std::string& fileName, const std::unordered_map<unsigned int, sf::Sprite>& spriteMap,
-								const std::unordered_map<unsigned int, Animation>& animationMap, const bool FacesRight, const bool _have_ground) :
-	Entity(Body, _have_ground), Drawable_Animated(fileName, spriteMap, animationMap, FacesRight), elapsed_time(0.0f)
+	const std::unordered_map<unsigned int, Animation>& animationMap, const bool FacesRight, const bool _have_ground) :
+	Entity(Body, _have_ground), Drawable_Animated(fileName, spriteMap, animationMap, FacesRight), next_animation(0), elapsed_time(0.0f)
 {};
 DrawableEntity::~DrawableEntity()
 {};
@@ -73,5 +73,5 @@ LivingEntity::~LivingEntity()
 
 void LivingEntity::Damaged()
 {
-	--this->life_count;
+	--(this->life_count);
 };

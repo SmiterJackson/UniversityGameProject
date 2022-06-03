@@ -55,6 +55,7 @@ namespace Entities
 		virtual void SelfPrintSelected(sf::RenderWindow& window) = 0;
 
 	protected:
+		unsigned int next_animation;
 		float elapsed_time;
 	};
 
@@ -78,7 +79,7 @@ namespace Entities
 		const unsigned int Getlife_count() { return this->life_count; };
 		void Setlife_count(const unsigned int _life_count) { this->life_count = _life_count; };
 
-		void Damaged();
+		virtual void Damaged();
 		virtual void Execute() = 0;
 		virtual void Initialize() = 0;
 		virtual void SelfPrintAll(sf::RenderWindow& window) = 0;

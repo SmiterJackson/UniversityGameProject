@@ -28,7 +28,7 @@ Drawable_Animated::Drawable_Animated(const sf::Texture& texture, const bool Face
 	BaseDrawable(texture, FacesRight), intToSprite_map(), intToAnimation_map(), lastUsedAnimation(0)
 {};
 Drawable_Animated::Drawable_Animated(const std::string& fileName, const bool FacesRight) :
-	BaseDrawable(texture, FacesRight), intToSprite_map(), intToAnimation_map(), lastUsedAnimation(0)
+	BaseDrawable(fileName, FacesRight), intToSprite_map(), intToAnimation_map(), lastUsedAnimation(0)
 {};
 Drawable_Animated::Drawable_Animated(const sf::Texture& texture, const VecOfPair_key_cutOfSprite& spriteMap, const VecOfPair_key_AnimationDataType& animationMap, const bool FacesRight) :
 	BaseDrawable(texture, FacesRight), intToSprite_map(), intToAnimation_map(), lastUsedAnimation(0)

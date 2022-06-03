@@ -156,9 +156,11 @@
     <ClCompile Include="Entities\Characters\Implementations\Hero.cpp" />
     <ClCompile Include="Entities\Implementations\entity.cpp" />
     <ClCompile Include="Entities\Implementations\instance.cpp" />
+    <ClCompile Include="Entities\Obstacles\Implementations\Obstacles.cpp" />
     <ClCompile Include="Main\stdafx.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Manegers\Implementations\animation.cpp" />
+    <ClCompile Include="Manegers\Implementations\Collider.cpp" />
     <ClCompile Include="Manegers\Implementations\drawable.cpp" />
     <ClCompile Include="Manegers\Implementations\WithPhysics.cpp" />
     <ClCompile Include="Stages\Implementations\baseStage.cpp" />
@@ -167,9 +169,11 @@
     <ClInclude Include="Entities\Characters\Headers\Hero.h" />
     <ClInclude Include="Entities\Headers\entity.h" />
     <ClInclude Include="Entities\Headers\instance.h" />
+    <ClInclude Include="Entities\Obstacles\Headers\Obstacles.h" />
     <ClInclude Include="Lists\Headers\myList.h" />
     <ClInclude Include="Main\stdafx.h" />
     <ClInclude Include="Manegers\Headers\animation.h" />
+    <ClInclude Include="Manegers\Headers\Collider.h" />
     <ClInclude Include="Manegers\Headers\drawble.h" />
     <ClInclude Include="Manegers\Headers\WithPhysics.h" />
     <ClInclude Include="Stages\Headers\baseStage.h" />

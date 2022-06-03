@@ -4,8 +4,9 @@
 #include "../Lists/Headers/myList.h"
 #include "../Entities/Headers/entity.h"
 #include "../Entities/Headers/instance.h"
+using namespace Entities;
 
-class BaseStage : public Entities::DrawableEntity {
+class BaseStage : public DrawableEntity {
 public:
 	BaseStage();
 	BaseStage(const std::string& fileName, sf::RenderWindow* contextWindow = nullptr);

@@ -37,11 +37,24 @@ namespace WithPhysics
 		const float GetSliperyCoefficient() { return this->friction_coefficient; };
 		void GetSliperyCoefficient(const float new_coefficient) { this->friction_coefficient = new_coefficient; };
 
-	public:
-		static float global_friction;
-
 	protected:
 		float friction_coefficient;
+	};
+
+	class ForcesAtDirect
+	{
+	public:
+		ForcesAtDirect(const float _surface_acceler = 0.0f, const bool dir_is_right = true);
+		~ForcesAtDirect();
+
+		const float GetSurfaceAcceleration() { return this->surface_acceler; };
+		void SetSurfaceAcceleration(const float _surface_acceler) { this->surface_acceler = _surface_acceler; };
+
+		void InvertDirection();
+
+	protected:
+		float surface_acceler;
+		bool dir_is_right;
 	};
 	// outros ...
 }
