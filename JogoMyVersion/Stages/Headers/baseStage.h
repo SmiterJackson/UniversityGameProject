@@ -4,7 +4,7 @@
 #include "../Lists/Headers/myList.h"
 #include "../Entities/Headers/entity.h"
 #include "../Entities/Headers/instance.h"
-using namespace Entities;
+using namespace entities;
 
 class BaseStage : public DrawableEntity {
 public:

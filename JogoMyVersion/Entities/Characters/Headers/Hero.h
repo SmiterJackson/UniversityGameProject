@@ -2,7 +2,7 @@
 
 #include "../Entities/Headers/entity.h"
 
-class Hero : public Entities::LivingEntity, public Slipery{
+class Hero : public entities::LivingEntity, public Slipery{
 public:
 	Hero();
 	Hero(const sf::RectangleShape& Body, const sf::Texture& texture, const unsigned int _life_count, const bool FacesRight = true, const bool _have_ground = false);

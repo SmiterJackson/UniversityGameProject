@@ -2,7 +2,7 @@
 
 #include "stdafx.h"
 #include "../Headers/entity.h"
-using namespace Entities;
+using namespace entities;
 
 Entity::Entity(const bool _have_ground) :
 	Instance(), Movable(_have_ground), body()

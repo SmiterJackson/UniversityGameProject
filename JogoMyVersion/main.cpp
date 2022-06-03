@@ -51,16 +51,16 @@ int main()
     rect.move(sf::Vector2f(350.0f, 200.0f));
     Hero hero(rect, PLAYER1_SHEET, sprites, AnimationsConstructors, 5, true, true);
 
-    std::vector<obstacles::StaticObstacle> obs = {  {tiles_rect[0], TILE_SHEET, tiles_textureCur}, 
-                                                    {tiles_rect[1], TILE_SHEET, tiles_textureCur}, 
-                                                    {tiles_rect[2], TILE_SHEET, tiles_textureCur}, 
-                                                    {tiles_rect[3], TILE_SHEET, tiles_textureCur}, 
-                                                    {tiles_rect[4], TILE_SHEET, tiles_textureCur}, 
-                                                    {tiles_rect[5], TILE_SHEET, tiles_textureCur}, 
-                                                    {tiles_rect[6], TILE_SHEET, tiles_textureCur}, 
-                                                    {tiles_rect[7], TILE_SHEET, tiles_textureCur}, 
-                                                    {tiles_rect[8], TILE_SHEET, tiles_textureCur}, 
-                                                    {tiles_rect[9], TILE_SHEET, tiles_textureCur} };
+    std::vector<obstacles::BaseObstacle> obs = {{tiles_rect[0], TILE_SHEET, tiles_textureCur}, 
+                                            {tiles_rect[1], TILE_SHEET, tiles_textureCur}, 
+                                            {tiles_rect[2], TILE_SHEET, tiles_textureCur}, 
+                                            {tiles_rect[3], TILE_SHEET, tiles_textureCur}, 
+                                            {tiles_rect[4], TILE_SHEET, tiles_textureCur}, 
+                                            {tiles_rect[5], TILE_SHEET, tiles_textureCur}, 
+                                            {tiles_rect[6], TILE_SHEET, tiles_textureCur}, 
+                                            {tiles_rect[7], TILE_SHEET, tiles_textureCur}, 
+                                            {tiles_rect[8], TILE_SHEET, tiles_textureCur}, 
+                                            {tiles_rect[9], TILE_SHEET, tiles_textureCur}};
 
     for (i = 0; i < obs.size(); ++i)
         obs[i].GetRectShape().move(sf::Vector2f(100.0f + (i * TILE_SIZE * fator), 400.0f));

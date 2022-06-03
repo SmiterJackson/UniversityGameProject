@@ -7,7 +7,7 @@
 using namespace drawable;
 using namespace WithPhysics;
 
-namespace Entities
+namespace entities
 {
 	// Estrutura base para uma entidade, cuja tem as variáveis para se movimentar, é uma instancia no no jogo, e contém um "corpo"
 	class Entity : public Instance, public Movable {
