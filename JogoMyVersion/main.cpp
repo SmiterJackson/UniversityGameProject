@@ -17,7 +17,7 @@ int main()
     window.setVerticalSyncEnabled(true);
     window.setKeyRepeatEnabled(false);
 
-    float fator = 4.0f;
+    float fator = 6.0f;
     float timediff = 0.0f;
     int animacao = 0;
     bool direita = true;

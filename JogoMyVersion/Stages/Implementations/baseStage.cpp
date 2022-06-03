@@ -2,7 +2,7 @@
 
 #include "../Headers/baseStage.h"
 
-BaseStage::BaseStage() :
+/*BaseStage::BaseStage() :
 	DrawableEntity(), contextWindow(nullptr)
 {
 };
@@ -18,4 +18,4 @@ void BaseStage::UpdateInput()
 };
 void BaseStage::SelfPrint()
 {
-};
+};*/

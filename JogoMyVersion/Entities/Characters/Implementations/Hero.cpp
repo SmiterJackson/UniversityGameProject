@@ -3,9 +3,9 @@ using namespace sf;
 
 #define HERO_HORIZONTAL_ACCELERETION 1.0f
 #define HERO_MAX_HORIZONTAL_ACCELERETION 10.0f
-#define HERO_VERTICAL_ACCELERETION 20.0f
-#define HERO_VERTICAL_DESACCELERETION (HERO_VERTICAL_ACCELERETION/2)
-#define HERO_MAX_FALL_VELOCITY -(HERO_VERTICAL_ACCELERETION/2)
+#define HERO_VERTICAL_ACCELERETION 36.0f
+#define HERO_VERTICAL_DESACCELERETION (HERO_VERTICAL_ACCELERETION/18)
+#define HERO_MAX_FALL_VELOCITY (HERO_VERTICAL_ACCELERETION/2)
 
 Hero::Hero() :
 	LivingEntity(), Slipery(), next_animation(Idle)
@@ -50,17 +50,20 @@ Hero::~Hero()
 {};
 
 void Hero::Execute()
-{
-	if(!(Keyboard::isKeyPressed(Keyboard::A) && Keyboard::isKeyPressed(Keyboard::D))) // Caso ambas as direções estejam clicadas ignora a situação
+{	
+	// Caso ambas as direções estejam clicadas ignora a situação
+	bool isA_pressed = Keyboard::isKeyPressed(Keyboard::A), isD_pressed = Keyboard::isKeyPressed(Keyboard::D);
+
+	if((!isA_pressed && isD_pressed) || (isA_pressed && !isD_pressed))
 	{
-		if (Keyboard::isKeyPressed(Keyboard::A) && this->horizontal_acc > -HERO_MAX_HORIZONTAL_ACCELERETION)
+		if (isA_pressed && this->horizontal_acc > -HERO_MAX_HORIZONTAL_ACCELERETION)
 		{
 			this->faceRight = false;
 			if(this->have_ground)
 				this->next_animation = Run;
 			this->horizontal_acc -= HERO_HORIZONTAL_ACCELERETION;
 		}
-		if (Keyboard::isKeyPressed(Keyboard::D) && this->horizontal_acc < HERO_MAX_HORIZONTAL_ACCELERETION)
+		if (isD_pressed && this->horizontal_acc < HERO_MAX_HORIZONTAL_ACCELERETION)
 		{
 			this->faceRight = true;
 			if (this->have_ground)
@@ -72,10 +75,10 @@ void Hero::Execute()
 		if (this->horizontal_acc >= -0.1f || this->horizontal_acc <= 0.1f)
 		{
 			this->horizontal_acc = 0.0f;
+
 			if (this->have_ground)
 				this->next_animation = Idle;
 		}
-			
 		else if (this->horizontal_acc > 0.0f)
 			this->horizontal_acc -= HERO_HORIZONTAL_ACCELERETION;
 		else
@@ -89,11 +92,14 @@ void Hero::Execute()
 
 	if (this->have_ground && Keyboard::isKeyPressed(Keyboard::W)) // Caso esteja no chão e pule, acelera para cima
 	{
+		this->have_ground = false;
 		this->next_animation = Jump;
-		this->vertical_acc = HERO_VERTICAL_ACCELERETION;
+		this->vertical_acc = -HERO_VERTICAL_ACCELERETION;
 	}
-	else if (!this->have_ground && this->vertical_acc > HERO_MAX_FALL_VELOCITY) // Caso esteja no ar começa a desacelerar e cair 
-		this->vertical_acc -= HERO_VERTICAL_DESACCELERETION;
+
+	if (!this->have_ground)
+		if(this->vertical_acc < HERO_MAX_FALL_VELOCITY)
+			this->vertical_acc += HERO_VERTICAL_DESACCELERETION;
 	else
 		this->vertical_acc = 0.0f;
 

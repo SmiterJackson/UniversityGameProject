@@ -31,7 +31,7 @@ namespace WithPhysics
 
 	class Slipery {
 	public:
-		Slipery(const float _coefficient = 0.95f);
+		Slipery(const float _coefficient = 1.0f);
 		~Slipery();
 
 		const float GetSliperyCoefficient() { return this->friction_coefficient; };
