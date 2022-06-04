@@ -3,7 +3,7 @@
 //#include "Header/stdafx.h"
 #include "stdafx.cpp"
 #include "Manegers/Headers/animation.h"
-#include "Entities/Headers/entity.h"
+#include "Entities/BaseEntities/Headers/entity.h"
 #include "Manegers/Headers/drawble.h"
 #include "Lists/Headers/myList.h"
 #include "Entities/Characters/Headers/Hero.h"

@@ -155,8 +155,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Entities\Characters\Implementations\hero.cpp" />
-    <ClCompile Include="Entities\Implementations\entity.cpp" />
-    <ClCompile Include="Entities\Implementations\instance.cpp" />
+    <ClCompile Include="Entities\BaseEntities\Implementations\entity.cpp" />
+    <ClCompile Include="Entities\BaseEntities\Implementations\instance.cpp" />
     <ClCompile Include="Entities\Obstacles\Implementations\obstacles.cpp" />
     <ClCompile Include="Main\stdafx.cpp" />
     <ClCompile Include="main.cpp" />
@@ -168,8 +168,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Entities\Characters\Headers\hero.h" />
-    <ClInclude Include="Entities\Headers\entity.h" />
-    <ClInclude Include="Entities\Headers\instance.h" />
+    <ClInclude Include="Entities\BaseEntities\Headers\entity.h" />
+    <ClInclude Include="Entities\BaseEntities\Headers\instance.h" />
     <ClInclude Include="Entities\Obstacles\Headers\obstacles.h" />
     <ClInclude Include="Lists\Headers\myList.h" />
     <ClInclude Include="Main\stdafx.h" />

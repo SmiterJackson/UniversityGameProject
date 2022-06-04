@@ -24,10 +24,10 @@
     <ClCompile Include="Manegers\Implementations\animation.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Entities\Implementations\instance.cpp">
+    <ClCompile Include="Entities\BaseEntities\Implementations\instance.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Entities\Implementations\entity.cpp">
+    <ClCompile Include="Entities\BaseEntities\Implementations\entity.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Manegers\Implementations\caracteristics.cpp">
@@ -56,10 +56,10 @@
     <ClInclude Include="Manegers\Headers\animation.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Entities\Headers\instance.h">
+    <ClInclude Include="Entities\BaseEntities\Headers\instance.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Entities\Headers\entity.h">
+    <ClInclude Include="Entities\BaseEntities\Headers\entity.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Manegers\Headers\caracteristics.h">
