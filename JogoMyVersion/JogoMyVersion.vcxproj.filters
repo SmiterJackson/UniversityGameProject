@@ -30,7 +30,7 @@
     <ClCompile Include="Entities\Implementations\entity.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Manegers\Implementations\WithPhysics.cpp">
+    <ClCompile Include="Manegers\Implementations\caracteristics.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Manegers\Implementations\drawable.cpp">
@@ -39,13 +39,13 @@
     <ClCompile Include="Stages\Implementations\baseStage.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Entities\Characters\Implementations\Hero.cpp">
+    <ClCompile Include="Entities\Characters\Implementations\hero.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Manegers\Implementations\Collider.cpp">
+    <ClCompile Include="Manegers\Implementations\collider.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Entities\Obstacles\Implementations\Obstacles.cpp">
+    <ClCompile Include="Entities\Obstacles\Implementations\obstacles.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -62,7 +62,7 @@
     <ClInclude Include="Entities\Headers\entity.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Manegers\Headers\WithPhysics.h">
+    <ClInclude Include="Manegers\Headers\caracteristics.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Manegers\Headers\drawble.h">
@@ -74,13 +74,13 @@
     <ClInclude Include="Stages\Headers\baseStage.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Entities\Characters\Headers\Hero.h">
+    <ClInclude Include="Entities\Characters\Headers\hero.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Manegers\Headers\Collider.h">
+    <ClInclude Include="Manegers\Headers\collider.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Entities\Obstacles\Headers\Obstacles.h">
+    <ClInclude Include="Entities\Obstacles\Headers\obstacles.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

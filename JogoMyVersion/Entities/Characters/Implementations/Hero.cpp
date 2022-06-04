@@ -10,41 +10,41 @@ using namespace sf;
 #define HERO_INVENCIBILITY_FRAMES_TIME 3.0f
 
 Hero::Hero() :
-	LivingEntity(), Slipery(), invec_time(HERO_INVENCIBILITY_FRAMES_TIME), invenc_frames(false)
+	LivingEntity(), SingleRectangleDrawable(), Slipery(), invec_current_timer(0.0f), invenc_frames(false)
 {
 	Initialize();
 };
-Hero::Hero(const sf::RectangleShape& Body, const sf::Texture& texture, const unsigned int _life_count, const bool FacesRight, const bool _have_ground) :
-	LivingEntity(Body, texture, _life_count, FacesRight, _have_ground), Slipery(), invec_time(HERO_INVENCIBILITY_FRAMES_TIME), invenc_frames(false)
+Hero::Hero(const sf::RectangleShape& _body, const sf::Texture& texture, const unsigned int _life_count, const bool FacesRight, const bool _have_ground) :
+	LivingEntity(_life_count, _have_ground), SingleRectangleDrawable(_body, texture, FacesRight), Slipery(), invec_current_timer(0.0f), invenc_frames(false)
 {
 	Initialize();
 };
-Hero::Hero(const sf::RectangleShape& Body, const std::string& fileName, const unsigned int _life_count, const bool FacesRight, const bool _have_ground) :
-	LivingEntity(Body, fileName, _life_count, FacesRight, _have_ground), Slipery(), invec_time(HERO_INVENCIBILITY_FRAMES_TIME), invenc_frames(false)
+Hero::Hero(const sf::RectangleShape& _body, const std::string& fileName, const unsigned int _life_count, const bool FacesRight, const bool _have_ground) :
+	LivingEntity(_life_count, _have_ground), SingleRectangleDrawable(_body, fileName, FacesRight), Slipery(), invec_current_timer(0.0f), invenc_frames(false)
 {
 	Initialize();
 };
-Hero::Hero(const sf::RectangleShape& Body, const sf::Texture& texture, const VecOfPair_key_cutOfSprite& spriteMap, const std::vector<std::pair<unsigned int, AnimaData>>& animationMap,
-	const unsigned int _life_count, const bool FacesRight, const bool _have_ground) :
-	LivingEntity(Body, texture, spriteMap, animationMap, _life_count, FacesRight, _have_ground), Slipery(), invec_time(HERO_INVENCIBILITY_FRAMES_TIME), invenc_frames(false)
+Hero::Hero(const sf::RectangleShape& _body, const sf::Texture& texture, const std::vector<Animation>& _animationMap, const unsigned int _life_count,
+	const bool FacesRight, const bool _have_ground) :
+	LivingEntity(_life_count, _have_ground), SingleRectangleDrawable(_body, texture, _animationMap, FacesRight), Slipery(), invec_current_timer(0.0f), invenc_frames(false)
 {
 	Initialize();
 };
-Hero::Hero(const sf::RectangleShape& Body, const std::string& fileName, const VecOfPair_key_cutOfSprite& spriteMap, const std::vector<std::pair<unsigned int, AnimaData>>& animationMap,
-	const unsigned int _life_count, const bool FacesRight, const bool _have_ground) :
-	LivingEntity(Body, fileName, spriteMap, animationMap, _life_count, FacesRight, _have_ground), Slipery(), invec_time(HERO_INVENCIBILITY_FRAMES_TIME), invenc_frames(false)
+Hero::Hero(const sf::RectangleShape& _body, const std::string& fileName, const std::vector<Animation>& _animationMap, const unsigned int _life_count,
+	const bool FacesRight, const bool _have_ground) :
+	LivingEntity(_life_count, _have_ground), SingleRectangleDrawable(_body, fileName, _animationMap, FacesRight), Slipery(), invec_current_timer(0.0f), invenc_frames(false)
 {
 	Initialize();
 };
-Hero::Hero(const sf::RectangleShape& Body, const sf::Texture& texture, const std::unordered_map<unsigned int, sf::Sprite>& spriteMap, const std::unordered_map<unsigned int, Animation>& animationMap,
-	const unsigned int _life_count, const bool FacesRight, const bool _have_ground) :
-	LivingEntity(Body, texture, spriteMap, animationMap, _life_count, FacesRight, _have_ground), Slipery(), invec_time(HERO_INVENCIBILITY_FRAMES_TIME), invenc_frames(false)
+Hero::Hero(const sf::RectangleShape& _body, const sf::Texture& texture, const VecAnimaValues& _animationMap, const unsigned int _life_count,
+	const bool FacesRight, const bool _have_ground) :
+	LivingEntity(_life_count, _have_ground), SingleRectangleDrawable(_body, texture, _animationMap, FacesRight), Slipery(), invec_current_timer(0.0f), invenc_frames(false)
 {
 	Initialize();
 };
-Hero::Hero(const sf::RectangleShape& Body, const std::string& fileName, const std::unordered_map<unsigned int, sf::Sprite>& spriteMap, const std::unordered_map<unsigned int, Animation>& animationMap,
-	const unsigned int _life_count, const bool FacesRight, const bool _have_ground) :
-	LivingEntity(Body, fileName, spriteMap, animationMap, _life_count, FacesRight, _have_ground), Slipery(), invec_time(HERO_INVENCIBILITY_FRAMES_TIME), invenc_frames(false)
+Hero::Hero(const sf::RectangleShape& _body, const std::string& fileName, const VecAnimaValues& _animationMap, const unsigned int _life_count,
+	const bool FacesRight, const bool _have_ground) :
+	LivingEntity(_life_count, _have_ground), SingleRectangleDrawable(_body, fileName, _animationMap, FacesRight), Slipery(), invec_current_timer(0.0f), invenc_frames(false)
 {
 	Initialize();
 };
@@ -53,10 +53,10 @@ Hero::~Hero()
 
 void Hero::Initialize()
 {
-	this->next_animation = Idle;
+	this->next_ani = Idle;
 	this->body.setTexture(&this->texture);
 	this->body.setOrigin((this->body.getSize() / 2.0f));
-	this->friction_coefficient = 0.75f;
+	this->friction_coefficient = 0.95f;
 	this->invec_current_timer = 0.0f;
 };
 void Hero::Execute()
@@ -74,14 +74,14 @@ void Hero::Execute()
 		{
 			this->faceRight = false;
 			if(this->have_ground)
-				this->next_animation = Run;
+				this->next_ani = Run;
 			this->horizontal_acc -= HERO_HORIZONTAL_ACCELERETION;
 		}
 		if (isD_pressed && this->horizontal_acc < HERO_MAX_HORIZONTAL_ACCELERETION)
 		{
 			this->faceRight = true;
 			if (this->have_ground)
-				this->next_animation = Run;
+				this->next_ani = Run;
 			this->horizontal_acc += HERO_HORIZONTAL_ACCELERETION;
 		}
 	}
@@ -91,7 +91,7 @@ void Hero::Execute()
 			//this->horizontal_acc = 0.0f;
 
 			if (this->have_ground)
-				this->next_animation = Idle;
+				this->next_ani = Idle;
 		}
 
 		if (this->horizontal_acc > 0.0f)
@@ -103,13 +103,13 @@ void Hero::Execute()
 
 	if(this->have_ground && Keyboard::isKeyPressed(Keyboard::S))
 	{
-		this->next_animation = Crouch;
+		this->next_ani = Crouch;
 	}
 
 	if (this->have_ground && Keyboard::isKeyPressed(Keyboard::W)) // Caso esteja no chão e pule, acelera para cima
 	{
 		this->have_ground = false;
-		this->next_animation = Jump;
+		this->next_ani = Jump;
 		this->vertical_acc = -HERO_VERTICAL_ACCELERETION;
 	}
 
@@ -135,7 +135,7 @@ void Hero::Damaged()
 	{
 		--(this->life_count);
 		this->invenc_frames = true;
-		this->invec_current_timer = this->invec_time;
+		this->invec_current_timer = HERO_INVENCIBILITY_FRAMES_TIME;
 	}
 	
 	if (this->invec_current_timer > 0.0f)
@@ -163,17 +163,15 @@ void Hero::Died()
 	else
 		this->vertical_acc = 0.0f;
 
-	this->next_animation = Death;
+	this->next_ani = Death;
 	this->body.move(sf::Vector2f(this->horizontal_acc, this->vertical_acc));
 };
-void Hero::SelfPrintAll(sf::RenderWindow& window)
-{};
-void Hero::SelfPrintSelected(sf::RenderWindow& window) 
+void Hero::SelfPrint(sf::RenderWindow& window)
 {
-	if (this->lastUsedAnimation != this->next_animation)
-		this->intToAnimation_map[this->lastUsedAnimation].ResetAnimation();
+	if (this->lastUsedAni != this->next_ani)
+		this->animationVec[this->lastUsedAni].ResetAnimation();
 
-	this->lastUsedAnimation = this->next_animation;
-	this->body.setTextureRect(this->intToAnimation_map[this->next_animation].update(this->elapsed_time, this->faceRight));
+	this->lastUsedAni = this->next_ani;
+	this->body.setTextureRect(this->animationVec[this->next_ani].update(this->elapsed_time, this->faceRight));
 	window.draw(this->body);
 };

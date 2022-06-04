@@ -29,38 +29,30 @@ int main()
     texture.loadFromFile(PLAYER1_SHEET);
 
     sf::RectangleShape rect(sf::Vector2f(PLAYER_SIZE * fator, PLAYER_SIZE * fator));
-    sf::RectangleShape tiles_rect[] = { sf::RectangleShape(sf::Vector2f(TILE_SIZE * fator, TILE_SIZE * fator)),
-                                        sf::RectangleShape(sf::Vector2f(TILE_SIZE * fator, TILE_SIZE * fator)),
-                                        sf::RectangleShape(sf::Vector2f(TILE_SIZE * fator, TILE_SIZE * fator)),
-                                        sf::RectangleShape(sf::Vector2f(TILE_SIZE * fator, TILE_SIZE * fator)),
-                                        sf::RectangleShape(sf::Vector2f(TILE_SIZE * fator, TILE_SIZE * fator)),
-                                        sf::RectangleShape(sf::Vector2f(TILE_SIZE * fator, TILE_SIZE * fator)),
-                                        sf::RectangleShape(sf::Vector2f(TILE_SIZE * fator, TILE_SIZE * fator)),
-                                        sf::RectangleShape(sf::Vector2f(TILE_SIZE * fator, TILE_SIZE * fator)),
-                                        sf::RectangleShape(sf::Vector2f(TILE_SIZE * fator, TILE_SIZE * fator)),
-                                        sf::RectangleShape(sf::Vector2f(TILE_SIZE * fator, TILE_SIZE * fator))};
+    sf::Vector2f tiles_cut(sf::Vector2f(TILE_SIZE * fator, TILE_SIZE * fator));
 
-    sf::IntRect tiles_textureCur = sf::IntRect(2 * TILE_SIZE, 0, TILE_SIZE, TILE_SIZE);
+    sf::IntRect tiles_textureCur(2 * TILE_SIZE, 0, TILE_SIZE, TILE_SIZE);
     
-    std::vector<std::pair<unsigned int, AnimaData>> AnimationsConstructors =  {{Hero::animations::Idle,   {0, 4, 2, 48, 0.20f, true} },
-                                                                                       {Hero::animations::Crouch, {5, 7, 2, 48, 0.20f} },
-                                                                                       {Hero::animations::Jump,   {6, 7, 1, 48, 0.20f} },
-                                                                                       {Hero::animations::Run,    {0, 5, 1, 48, 0.20f, true} },
-                                                                                       {Hero::animations::Death,  {0, 7, 0, 48, 0.20f} }};
-    VecOfPair_key_cutOfSprite sprites{};
+    VecAnimaValues AnimationsConstructors =  {{0, 4, 2, 48, 0.20f, true},
+                                              {0, 5, 1, 48, 0.20f, true},
+                                              {5, 7, 2, 48, 0.20f},
+                                              {6, 7, 1, 48, 0.20f},
+                                              {0, 7, 0, 48, 0.20f}};
+    
     rect.move(sf::Vector2f(350.0f, 200.0f));
-    Hero hero(rect, PLAYER1_SHEET, sprites, AnimationsConstructors, 5, true, true);
+    Hero hero(rect, PLAYER1_SHEET, AnimationsConstructors, 3, true, true);
 
-    std::vector<obstacles::BaseObstacle> obs = {{tiles_rect[0], TILE_SHEET, tiles_textureCur}, 
-                                            {tiles_rect[1], TILE_SHEET, tiles_textureCur}, 
-                                            {tiles_rect[2], TILE_SHEET, tiles_textureCur}, 
-                                            {tiles_rect[3], TILE_SHEET, tiles_textureCur}, 
-                                            {tiles_rect[4], TILE_SHEET, tiles_textureCur}, 
-                                            {tiles_rect[5], TILE_SHEET, tiles_textureCur}, 
-                                            {tiles_rect[6], TILE_SHEET, tiles_textureCur}, 
-                                            {tiles_rect[7], TILE_SHEET, tiles_textureCur}, 
-                                            {tiles_rect[8], TILE_SHEET, tiles_textureCur}, 
-                                            {tiles_rect[9], TILE_SHEET, tiles_textureCur}};
+    std::vector<obstacles::StaticObstacle> obs;
+    obs.emplace_back(sf::RectangleShape(tiles_cut), TILE_SHEET, sf::IntRect(2 * TILE_SIZE, 0, TILE_SIZE, TILE_SIZE));
+    obs.emplace_back(sf::RectangleShape(tiles_cut), TILE_SHEET, sf::IntRect(2 * TILE_SIZE, 0, TILE_SIZE, TILE_SIZE));
+    obs.emplace_back(sf::RectangleShape(tiles_cut), TILE_SHEET, sf::IntRect(2 * TILE_SIZE, 0, TILE_SIZE, TILE_SIZE));
+    obs.emplace_back(sf::RectangleShape(tiles_cut), TILE_SHEET, sf::IntRect(2 * TILE_SIZE, 0, TILE_SIZE, TILE_SIZE));
+    obs.emplace_back(sf::RectangleShape(tiles_cut), TILE_SHEET, sf::IntRect(2 * TILE_SIZE, 0, TILE_SIZE, TILE_SIZE));
+    obs.emplace_back(sf::RectangleShape(tiles_cut), TILE_SHEET, sf::IntRect(2 * TILE_SIZE, 0, TILE_SIZE, TILE_SIZE));
+    obs.emplace_back(sf::RectangleShape(tiles_cut), TILE_SHEET, sf::IntRect(2 * TILE_SIZE, 0, TILE_SIZE, TILE_SIZE));
+    obs.emplace_back(sf::RectangleShape(tiles_cut), TILE_SHEET, sf::IntRect(2 * TILE_SIZE, 0, TILE_SIZE, TILE_SIZE));
+    obs.emplace_back(sf::RectangleShape(tiles_cut), TILE_SHEET, sf::IntRect(2 * TILE_SIZE, 0, TILE_SIZE, TILE_SIZE));
+    obs.emplace_back(sf::RectangleShape(tiles_cut), TILE_SHEET, sf::IntRect(2 * TILE_SIZE, 0, TILE_SIZE, TILE_SIZE));
 
     for (i = 0; i < obs.size(); ++i)
         obs[i].GetRectShape().move(sf::Vector2f(100.0f + (i * TILE_SIZE * fator), 400.0f));
@@ -108,11 +100,11 @@ int main()
         window.clear(sf::Color(100U, 100U, 100U));
 
         for (i = 0; i < obs.size(); ++i)
-            obs[i].SelfPrintSelected(window);
+            obs.at(i).SelfPrint(window);
 
         hero.Execute();
         hero.SetElapsedTime(timediff);
-        hero.SelfPrintSelected(window);
+        hero.SelfPrint(window);
 
         window.display();
     }

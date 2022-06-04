@@ -21,13 +21,13 @@ BaseDrawable::~BaseDrawable()
 
 
 WithAnimation::WithAnimation() :
-	animationVec()
+	animationVec(), next_ani(0), lastUsedAni(0), elapsed_time(0.0f)
 {};
 WithAnimation::WithAnimation(const std::vector<Animation>& _animationMap) :
-	animationVec(_animationMap)
+	animationVec(_animationMap), next_ani(0), lastUsedAni(0), elapsed_time(0.0f)
 {};
 WithAnimation::WithAnimation(const VecAnimaValues& _animationMap) :
-	animationVec()
+	animationVec(), next_ani(0), lastUsedAni(0), elapsed_time(0.0f)
 {
 	size_t diff = this->animationVec.capacity() - this->animationVec.size();
 	this->animationVec.reserve(diff + _animationMap.size());
@@ -66,7 +66,7 @@ MultipleSpriteDrawable::MultipleSpriteDrawable(const std::vector<sf::Sprite>& _s
 {
 	sf::FloatRect rect;
 
-	for(unsigned int i = 0; i < spritesVec.size(); ++i)
+	for (unsigned int i = 0; i < spritesVec.size(); ++i)
 	{
 		spritesVec[i].setTexture(this->texture);
 		rect = this->spritesVec[i].getGlobalBounds();
@@ -105,6 +105,30 @@ SingleRectangleDrawable::SingleRectangleDrawable(const sf::RectangleShape& _body
 };
 SingleRectangleDrawable::SingleRectangleDrawable(const sf::RectangleShape& _body, const std::string texture_fileName, const bool FacesRight) :
 	BaseDrawable(texture_fileName, FacesRight), WithAnimation(), body(_body)
+{
+	this->body.setTexture(&this->texture);
+	this->body.setOrigin(this->body.getSize() / 2.0f);
+};
+SingleRectangleDrawable::SingleRectangleDrawable(const sf::RectangleShape& _body, const sf::Texture& texture, const VecAnimaValues& _animationMap, const bool FacesRight) :
+	BaseDrawable(texture, FacesRight), WithAnimation(_animationMap), body(_body)
+{
+	this->body.setTexture(&this->texture);
+	this->body.setOrigin(this->body.getSize() / 2.0f);
+};
+SingleRectangleDrawable::SingleRectangleDrawable(const sf::RectangleShape& _body, const std::string texture_fileName, const VecAnimaValues& _animationMap, const bool FacesRight) :
+	BaseDrawable(texture_fileName, FacesRight), WithAnimation(_animationMap), body(_body)
+{
+	this->body.setTexture(&this->texture);
+	this->body.setOrigin(this->body.getSize() / 2.0f);
+};
+SingleRectangleDrawable::SingleRectangleDrawable(const sf::RectangleShape& _body, const sf::Texture& texture, const std::vector<Animation>& _animationMap, const bool FacesRight) :
+	BaseDrawable(texture, FacesRight), WithAnimation(_animationMap), body(_body)
+{
+	this->body.setTexture(&this->texture);
+	this->body.setOrigin(this->body.getSize() / 2.0f);
+};
+SingleRectangleDrawable::SingleRectangleDrawable(const sf::RectangleShape& _body, const std::string texture_fileName, const std::vector<Animation>& _animationMap, const bool FacesRight) :
+	BaseDrawable(texture_fileName, FacesRight), WithAnimation(_animationMap), body(_body)
 {
 	this->body.setTexture(&this->texture);
 	this->body.setOrigin(this->body.getSize() / 2.0f);

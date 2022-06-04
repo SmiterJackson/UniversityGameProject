@@ -2,83 +2,42 @@
 
 #include "stdafx.h"
 #include "instance.h"
-#include "../Manegers/Headers/drawble.h"
-#include "../Manegers/Headers/WithPhysics.h"
-using namespace drawable;
-using namespace WithPhysics;
+#include "../Manegers/Headers/caracteristics.h"
+using namespace caracteristics;
 
 namespace entities
 {
-	// Estrutura base para uma entidade, cuja tem as variáveis para se movimentar, é uma instancia no no jogo, e contém um "corpo"
-	class Entity : public Instance, public Movable {
-	public:
-		Entity(const bool _have_ground = false);
-		Entity(const sf::RectangleShape& Body, const bool _have_ground = false);
-		~Entity();
-
-		// FUNCTIONS
-		virtual void Execute() = 0;
-		virtual void Initialize() = 0;
-	};
-
-	// Herdando a Entidade base, essa se diferencia por ser desenhável
-	class DrawableEntity : public Entity, public Drawable_Animated {
-	public:
-		DrawableEntity();
-		DrawableEntity(const sf::RectangleShape& Body, const sf::Texture& texture, const bool FacesRight = true, const bool _have_ground = false);
-		DrawableEntity(const sf::RectangleShape& Body, const std::string& fileName, const bool FacesRight = true, const bool _have_ground = false);
-		DrawableEntity(const sf::RectangleShape& Body, const sf::Texture& texture, const VecOfPair_key_cutOfSprite& spriteMap, const VecOfPair_key_AnimationDataType& animationMap,
-						const bool FacesRight = true, const bool _have_ground = false);
-		DrawableEntity(const sf::RectangleShape& Body, const std::string& fileName, const VecOfPair_key_cutOfSprite& spriteMap, const VecOfPair_key_AnimationDataType& animationMap,
-						const bool FacesRight = true, const bool _have_ground = false);
-		DrawableEntity(const sf::RectangleShape& Body, const sf::Texture& texture, const std::unordered_map<unsigned int, sf::Sprite>& spriteMap, const std::unordered_map<unsigned int, Animation>& animationMap,
-						const bool FacesRight = true, const bool _have_ground = false);
-		DrawableEntity(const sf::RectangleShape& Body, const std::string& fileName, const std::unordered_map<unsigned int, sf::Sprite>& spriteMap, const std::unordered_map<unsigned int, Animation>& animationMap,
-						const bool FacesRight = true, const bool _have_ground = false);
-		~DrawableEntity();
-
-		const float GetElapsedTime() { return elapsed_time; };
-		void SetElapsedTime(const float _elapsed_time) { this->elapsed_time = _elapsed_time; };
-
-		// FUNCTIONS
-		virtual void Execute() = 0;
-		virtual void Initialize() = 0;
-		virtual void SelfPrintAll(sf::RenderWindow& window) = 0;
-		virtual void SelfPrintSelected(sf::RenderWindow& window) = 0;
-
-	protected:
-		unsigned int next_animation;
-		float elapsed_time;
-	};
-
-	// Herdando a Entidade desenhável, essa contém variável e funções para controlar a vida de uma entidade "viva"
-	class LivingEntity : public DrawableEntity
+	// Estrutura base para uma entidade, cuja tem as variáveis para se movimentar, é uma instancia no no jogo
+	class BaseEntity : public Instance 
 	{
 	public:
-		LivingEntity();
-		LivingEntity(const sf::RectangleShape& Body, const sf::Texture& texture, const unsigned int _life_count, const bool FacesRight = true, const bool _have_ground = false);
-		LivingEntity(const sf::RectangleShape& Body, const std::string& fileName, const unsigned int _life_count, const bool FacesRight = true, const bool _have_ground = false);
-		LivingEntity(const sf::RectangleShape& Body, const sf::Texture& texture, const VecOfPair_key_cutOfSprite& spriteMap, const VecOfPair_key_AnimationDataType& animationMap,
-						const unsigned int _life_count, const bool FacesRight = true, const bool _have_ground = false);
-		LivingEntity(const sf::RectangleShape& Body, const std::string& fileName, const VecOfPair_key_cutOfSprite& spriteMap, const VecOfPair_key_AnimationDataType& animationMap,
-						const unsigned int _life_count, const bool FacesRight = true, const bool _have_ground = false);
-		LivingEntity(const sf::RectangleShape& Body, const sf::Texture& texture, const std::unordered_map<unsigned int, sf::Sprite>& spriteMap, const std::unordered_map<unsigned int, Animation>& animationMap,
-						const unsigned int _life_count, const bool FacesRight = true, const bool _have_ground = false);
-		LivingEntity(const sf::RectangleShape& Body, const std::string& fileName, const std::unordered_map<unsigned int, sf::Sprite>& spriteMap, const std::unordered_map<unsigned int, Animation>& animationMap,
-						const unsigned int _life_count, const bool FacesRight = true, const bool _have_ground = false);
-		~LivingEntity();
+		BaseEntity();
+		~BaseEntity();
 
-		const unsigned int Getlife_count() { return this->life_count; };
-		void Setlife_count(const unsigned int _life_count) { this->life_count = _life_count; };
-
-		virtual void Damaged();
+		// FUNCTIONS
 		virtual void Execute() = 0;
 		virtual void Initialize() = 0;
-		virtual void SelfPrintAll(sf::RenderWindow& window) = 0;
-		virtual void SelfPrintSelected(sf::RenderWindow& window) = 0;
+	};
 
-	protected:
-		unsigned int life_count;
-		bool alive;
+	class MovableEntity : public BaseEntity, public Movable
+	{
+	public:
+		MovableEntity(const bool _have_ground = false);
+		~MovableEntity();
+
+		// FUNCTIONS
+		virtual void Execute() = 0;
+		virtual void Initialize() = 0;
+	};
+
+	class LivingEntity : public MovableEntity, public IsAlive 
+	{
+	public:
+		LivingEntity(const unsigned int _life_count = 0, const bool _have_ground = false);
+		~LivingEntity();
+
+		// FUNCTIONS
+		virtual void Execute() = 0;
+		virtual void Initialize() = 0;
 	};
 }

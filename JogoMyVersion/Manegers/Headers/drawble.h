@@ -22,7 +22,7 @@ namespace drawable
 
 		void InvertTextureOrientation() { this->faceRight = !this->faceRight; };
 
-		virtual void SelfPrint(const sf::RenderWindow& window) = 0;
+		virtual void SelfPrint(sf::RenderWindow& window) = 0;
 
 	public:
 		sf::Texture texture;
@@ -40,6 +40,9 @@ namespace drawable
 
 		const std::vector<Animation>& GetConstAnimationMap() { return this->animationVec; };
 		void SetAnimationMap(const std::vector<Animation>& _animationMap) { this->animationVec = _animationMap; };
+
+		const float GetElapsedTime() { return elapsed_time; };
+		void SetElapsedTime(const float _elapsed_time) { this->elapsed_time = _elapsed_time; };
 
 		void operator+= (const std::vector<Animation>& _animationMap)
 		{
@@ -60,6 +63,8 @@ namespace drawable
 
 	protected:
 		std::vector<Animation> animationVec;
+		unsigned int next_ani, lastUsedAni;
+		float elapsed_time;
 	};
 
 	class SingleSpriteDrawable : public BaseDrawable, public WithAnimation
@@ -74,7 +79,7 @@ namespace drawable
 		const sf::Sprite& GetConstSprite() { return this->sprite; };
 		void SetSprite(const sf::Sprite& _sprite) { this->sprite = _sprite; };
 
-		virtual void SelfPrint(const sf::RenderWindow& window) = 0;
+		virtual void SelfPrint(sf::RenderWindow& window) = 0;
 
 	protected:
 		sf::Sprite sprite;
@@ -92,7 +97,7 @@ namespace drawable
 		const std::vector<sf::Sprite>& GetConstSpriteVec() { return this->spritesVec; };
 		void SetSpriteVec(const std::vector<sf::Sprite>& _spritesVec) { this->spritesVec = _spritesVec; };
 
-		virtual void SelfPrint(const sf::RenderWindow& window) = 0;
+		virtual void SelfPrint(sf::RenderWindow& window) = 0;
 
 		void operator+=(const sf::Sprite& sprite)
 		{
@@ -100,7 +105,7 @@ namespace drawable
 		}
 		void operator+=(const sf::IntRect& spriteValue)
 		{
-			spritesVec.emplace_back(spriteValue);
+			spritesVec.emplace_back(this->texture, spriteValue);
 		}
 
 	protected:
@@ -113,13 +118,17 @@ namespace drawable
 		SingleRectangleDrawable();
 		SingleRectangleDrawable(const sf::RectangleShape& body, const sf::Texture& texture, const bool FacesRight = true);
 		SingleRectangleDrawable(const sf::RectangleShape& body, const std::string texture_fileName, const bool FacesRight = true);
+		SingleRectangleDrawable(const sf::RectangleShape& body, const sf::Texture& texture, const VecAnimaValues& _animationMap, const bool FacesRight = true);
+		SingleRectangleDrawable(const sf::RectangleShape& body, const std::string texture_fileName, const VecAnimaValues& _animationMap, const bool FacesRight = true);
+		SingleRectangleDrawable(const sf::RectangleShape& body, const sf::Texture& texture, const std::vector<Animation>& _animationMap, const bool FacesRight = true);
+		SingleRectangleDrawable(const sf::RectangleShape& body, const std::string texture_fileName, const std::vector<Animation>& _animationMap, const bool FacesRight = true);
 		~SingleRectangleDrawable();
 
 		sf::RectangleShape& GetRectShape() { return this->body; };
 		const sf::RectangleShape& GetConstRectShape() { return this->body; };
 		void SetEntityBody(const sf::RectangleShape& newPosition) { this->body = newPosition; };
 
-		virtual void SelfPrint(const sf::RenderWindow& window) = 0;
+		virtual void SelfPrint(sf::RenderWindow& window) = 0;
 
 	protected:
 		sf::RectangleShape body;
@@ -136,7 +145,7 @@ namespace drawable
 		const std::vector<sf::RectangleShape>& GetConstRectShape() { return this->bodiesVec; };
 		void SetEntityBody(const std::vector<sf::RectangleShape>& _bodiesVec) { this->bodiesVec = _bodiesVec; };
 
-		virtual void SelfPrint(const sf::RenderWindow& window) = 0;
+		virtual void SelfPrint(sf::RenderWindow& window) = 0;
 
 		void operator+=(const sf::RectangleShape& sprite)
 		{

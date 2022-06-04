@@ -6,7 +6,7 @@
 #include "../Entities/Headers/instance.h"
 using namespace entities;
 
-class BaseStage : public DrawableEntity {
+class BaseStage  {
 public:
 	BaseStage();
 	BaseStage(const std::string& fileName, sf::RenderWindow* contextWindow = nullptr);
