@@ -4,8 +4,11 @@
 #include "../Lists/Headers/myList.h"
 #include "../Entities/Headers/entity.h"
 #include "../Entities/Headers/instance.h"
+#include "../Entities/Obstacles/Headers/Obstacles.h"
 using namespace entities;
+using namespace obstacles;
 
+// Para inicializar qualquer estrutura em vector, map ou list, utilize a função Initialize atravez do vector para todo item nele. 
 class BaseStage  {
 public:
 	BaseStage();
@@ -20,7 +23,7 @@ public:
 
 protected:
 	sf::RenderWindow* contextWindow;
-	//MyList<Entities::DrawableEntity*> myEntities;
+	MyList<DrawableEntity*> myEntities;
 
-	std::vector<sf::RectangleShape> hitableBounds;
+	std::vector<BaseObstacle> hitableBounds;
 };

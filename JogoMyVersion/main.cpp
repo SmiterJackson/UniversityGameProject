@@ -11,9 +11,11 @@
 
 #define PLAYER1_SHEET std::string("JogoMyVersion\\Resources\\images\\sprites\\Characters\\gunner_green.png")
 #define TILE_SHEET std::string("JogoMyVersion\\Resources\\images\\backgrounds\\Tiles\\IndustrialTile_sheet.png")
-#define PLAYER_SIZE 48.0f
-#define TILE_SIZE 32.0f
+#define PLAYER_SIZE 48
+#define TILE_SIZE 32
+using namespace obstacles;
 
+// Por algum motivo desconhecido a estrutura vector está constantemente desconectando o ponteira da estrutura base drawable dos objetos
 int main()
 {
     sf::RenderWindow window(sf::VideoMode(1400, 850), "Janela do Jogo");
@@ -28,8 +30,11 @@ int main()
     sf::Texture texture;
     texture.loadFromFile(PLAYER1_SHEET);
 
-    sf::RectangleShape rect(sf::Vector2f(PLAYER_SIZE * fator, PLAYER_SIZE * fator));
-    sf::Vector2f tiles_cut(sf::Vector2f(TILE_SIZE * fator, TILE_SIZE * fator));
+    sf::RectangleShape rect(sf::Vector2f(PLAYER_SIZE, PLAYER_SIZE));
+    rect.setScale(fator, fator);
+    sf::RectangleShape tiles_rect(sf::Vector2f(TILE_SIZE, TILE_SIZE));
+    tiles_rect.scale(fator, fator);
+
 
     sf::IntRect tiles_textureCur(2 * TILE_SIZE, 0, TILE_SIZE, TILE_SIZE);
     
@@ -42,21 +47,21 @@ int main()
     rect.move(sf::Vector2f(350.0f, 200.0f));
     Hero hero(rect, PLAYER1_SHEET, AnimationsConstructors, 3, true, true);
 
-    std::vector<obstacles::StaticObstacle> obs;
-    obs.emplace_back(sf::RectangleShape(tiles_cut), TILE_SHEET, sf::IntRect(2 * TILE_SIZE, 0, TILE_SIZE, TILE_SIZE));
-    obs.emplace_back(sf::RectangleShape(tiles_cut), TILE_SHEET, sf::IntRect(2 * TILE_SIZE, 0, TILE_SIZE, TILE_SIZE));
-    obs.emplace_back(sf::RectangleShape(tiles_cut), TILE_SHEET, sf::IntRect(2 * TILE_SIZE, 0, TILE_SIZE, TILE_SIZE));
-    obs.emplace_back(sf::RectangleShape(tiles_cut), TILE_SHEET, sf::IntRect(2 * TILE_SIZE, 0, TILE_SIZE, TILE_SIZE));
-    obs.emplace_back(sf::RectangleShape(tiles_cut), TILE_SHEET, sf::IntRect(2 * TILE_SIZE, 0, TILE_SIZE, TILE_SIZE));
-    obs.emplace_back(sf::RectangleShape(tiles_cut), TILE_SHEET, sf::IntRect(2 * TILE_SIZE, 0, TILE_SIZE, TILE_SIZE));
-    obs.emplace_back(sf::RectangleShape(tiles_cut), TILE_SHEET, sf::IntRect(2 * TILE_SIZE, 0, TILE_SIZE, TILE_SIZE));
-    obs.emplace_back(sf::RectangleShape(tiles_cut), TILE_SHEET, sf::IntRect(2 * TILE_SIZE, 0, TILE_SIZE, TILE_SIZE));
-    obs.emplace_back(sf::RectangleShape(tiles_cut), TILE_SHEET, sf::IntRect(2 * TILE_SIZE, 0, TILE_SIZE, TILE_SIZE));
-    obs.emplace_back(sf::RectangleShape(tiles_cut), TILE_SHEET, sf::IntRect(2 * TILE_SIZE, 0, TILE_SIZE, TILE_SIZE));
+    std::vector<StaticObstacle> obs = { {StaticObstacle(tiles_rect, TILE_SHEET, tiles_textureCur)},
+                                        {StaticObstacle(tiles_rect, TILE_SHEET, tiles_textureCur)}, 
+                                        {StaticObstacle(tiles_rect, TILE_SHEET, tiles_textureCur)}, 
+                                        {StaticObstacle(tiles_rect, TILE_SHEET, tiles_textureCur)}, 
+                                        {StaticObstacle(tiles_rect, TILE_SHEET, tiles_textureCur)}, 
+                                        {StaticObstacle(tiles_rect, TILE_SHEET, tiles_textureCur)}, 
+                                        {StaticObstacle(tiles_rect, TILE_SHEET, tiles_textureCur)}, 
+                                        {StaticObstacle(tiles_rect, TILE_SHEET, tiles_textureCur)}, 
+                                        {StaticObstacle(tiles_rect, TILE_SHEET, tiles_textureCur)}, 
+                                        {StaticObstacle(tiles_rect, TILE_SHEET, tiles_textureCur)}};
 
-    for (i = 0; i < obs.size(); ++i)
+    for (i = 0; i < obs.size(); ++i) {
         obs[i].GetRectShape().move(sf::Vector2f(100.0f + (i * TILE_SIZE * fator), 400.0f));
-        
+        obs[i].Execute();
+    }
 
     sf::Clock clock;
     while(window.isOpen())
@@ -100,8 +105,8 @@ int main()
         window.clear(sf::Color(100U, 100U, 100U));
 
         for (i = 0; i < obs.size(); ++i)
-            obs.at(i).SelfPrint(window);
-
+            obs[i].SelfPrint(window);
+            
         hero.Execute();
         hero.SetElapsedTime(timediff);
         hero.SelfPrint(window);

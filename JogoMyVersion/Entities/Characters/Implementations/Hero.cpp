@@ -15,36 +15,36 @@ Hero::Hero() :
 	Initialize();
 };
 Hero::Hero(const sf::RectangleShape& _body, const sf::Texture& texture, const unsigned int _life_count, const bool FacesRight, const bool _have_ground) :
-	LivingEntity(_life_count, _have_ground), SingleRectangleDrawable(_body, texture, FacesRight), Slipery(), invec_current_timer(0.0f), invenc_frames(false)
+	LivingEntity(_life_count, _have_ground, &body), SingleRectangleDrawable(_body, texture, FacesRight), Slipery(), invec_current_timer(0.0f), invenc_frames(false)
 {
 	Initialize();
 };
 Hero::Hero(const sf::RectangleShape& _body, const std::string& fileName, const unsigned int _life_count, const bool FacesRight, const bool _have_ground) :
-	LivingEntity(_life_count, _have_ground), SingleRectangleDrawable(_body, fileName, FacesRight), Slipery(), invec_current_timer(0.0f), invenc_frames(false)
+	LivingEntity(_life_count, _have_ground, &body), SingleRectangleDrawable(_body, fileName, FacesRight), Slipery(), invec_current_timer(0.0f), invenc_frames(false)
 {
 	Initialize();
 };
 Hero::Hero(const sf::RectangleShape& _body, const sf::Texture& texture, const std::vector<Animation>& _animationMap, const unsigned int _life_count,
 	const bool FacesRight, const bool _have_ground) :
-	LivingEntity(_life_count, _have_ground), SingleRectangleDrawable(_body, texture, _animationMap, FacesRight), Slipery(), invec_current_timer(0.0f), invenc_frames(false)
+	LivingEntity(_life_count, _have_ground, &body), SingleRectangleDrawable(_body, texture, _animationMap, FacesRight), Slipery(), invec_current_timer(0.0f), invenc_frames(false)
 {
 	Initialize();
 };
 Hero::Hero(const sf::RectangleShape& _body, const std::string& fileName, const std::vector<Animation>& _animationMap, const unsigned int _life_count,
 	const bool FacesRight, const bool _have_ground) :
-	LivingEntity(_life_count, _have_ground), SingleRectangleDrawable(_body, fileName, _animationMap, FacesRight), Slipery(), invec_current_timer(0.0f), invenc_frames(false)
+	LivingEntity(_life_count, _have_ground, &body), SingleRectangleDrawable(_body, fileName, _animationMap, FacesRight), Slipery(), invec_current_timer(0.0f), invenc_frames(false)
 {
 	Initialize();
 };
 Hero::Hero(const sf::RectangleShape& _body, const sf::Texture& texture, const VecAnimaValues& _animationMap, const unsigned int _life_count,
 	const bool FacesRight, const bool _have_ground) :
-	LivingEntity(_life_count, _have_ground), SingleRectangleDrawable(_body, texture, _animationMap, FacesRight), Slipery(), invec_current_timer(0.0f), invenc_frames(false)
+	LivingEntity(_life_count, _have_ground, &body), SingleRectangleDrawable(_body, texture, _animationMap, FacesRight), Slipery(), invec_current_timer(0.0f), invenc_frames(false)
 {
 	Initialize();
 };
 Hero::Hero(const sf::RectangleShape& _body, const std::string& fileName, const VecAnimaValues& _animationMap, const unsigned int _life_count,
 	const bool FacesRight, const bool _have_ground) :
-	LivingEntity(_life_count, _have_ground), SingleRectangleDrawable(_body, fileName, _animationMap, FacesRight), Slipery(), invec_current_timer(0.0f), invenc_frames(false)
+	LivingEntity(_life_count, _have_ground, &body), SingleRectangleDrawable(_body, fileName, _animationMap, FacesRight), Slipery(), invec_current_timer(0.0f), invenc_frames(false)
 {
 	Initialize();
 };

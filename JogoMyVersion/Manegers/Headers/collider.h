@@ -2,15 +2,34 @@
 
 #include "stdafx.h"
 #include "../Entities/Headers/entity.h"
+#include "../Manegers/Headers/drawble.h"
 
-class CollisionManager {
-public:
-	CollisionManager();
-	//CollisionManager(std::vector<entities::DrawableEntity*>& _entities);
-	~CollisionManager();
+namespace collision 
+{
+	class Collidable
+	{
+	public:
+		Collidable(sf::RectangleShape* _body = nullptr, bool* _haveGround = nullptr);
+		~Collidable();
 
-	void VerifyColisions();
+		void SetBodyRef(sf::RectangleShape* _body) { this->rect = _body; };
 
-protected:
-	//std::vector<entities::DrawableEntity*> entities;
-};
+	protected:
+		sf::RectangleShape* rect;
+		bool* _haveGround;
+	};
+
+	class CollisionManager
+	{
+	public:
+		CollisionManager();
+		CollisionManager(const std::vector<drawable::SingleRectangleDrawable*>& _singleBody_entities, const std::vector<drawable::MultipleRectangleDrawable*>& _multipleBodies_entities);
+		~CollisionManager();
+
+		void VerifyCollisions();
+
+	private:
+		std::vector<Collidable> singleBody_entities;
+	};
+}
+

@@ -77,9 +77,13 @@ StaticObstacle::~StaticObstacle()
 {};
 
 void StaticObstacle::Initialize()
-{};
+{
+	this->body.setTexture(&this->texture);
+};
 void StaticObstacle::Execute()
-{};
+{
+	this->body.setTexture(&this->texture);
+};
 void StaticObstacle::SelfPrint(sf::RenderWindow& window)
 {
 	window.draw(this->body);
