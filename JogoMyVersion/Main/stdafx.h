@@ -5,9 +5,9 @@
 #include <cstdint>
 #include <vector>
 #include <stack>
+#include <array>
 #include <list>
 #include <map>
-#include <array>
 #include <unordered_map>
 #include <fstream>
 

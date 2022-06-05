@@ -2,11 +2,8 @@
 
 #include "stdafx.h"
 #include "../Lists/Headers/myList.h"
-#include "../Entities/Headers/entity.h"
-#include "../Entities/Headers/instance.h"
-#include "../Entities/Obstacles/Headers/Obstacles.h"
+#include "../Entities/BaseEntities/Headers/entity.h"
 using namespace entities;
-using namespace obstacles;
 
 // Para inicializar qualquer estrutura em vector, map ou list, utilize a função Initialize atravez do vector para todo item nele. 
 class BaseStage  {
@@ -23,7 +20,5 @@ public:
 
 protected:
 	sf::RenderWindow* contextWindow;
-	MyList<DrawableEntity*> myEntities;
-
-	std::vector<BaseObstacle> hitableBounds;
+	
 };

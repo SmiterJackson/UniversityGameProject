@@ -2,11 +2,10 @@
 
 //#include "Header/stdafx.h"
 #include "stdafx.cpp"
-#include "Manegers/Headers/animation.h"
-#include "Entities/BaseEntities/Headers/entity.h"
-#include "Manegers/Headers/drawble.h"
 #include "Lists/Headers/myList.h"
+#include "Manegers/Headers/animation.h"
 #include "Entities/Characters/Headers/Hero.h"
+#include "Entities/BaseEntities/Headers/entity.h"
 #include "Entities/Obstacles/Headers/Obstacles.h"
 
 #define PLAYER1_SHEET std::string("JogoMyVersion\\Resources\\images\\sprites\\Characters\\gunner_green.png")
@@ -45,23 +44,28 @@ int main()
                                               {0, 7, 0, 48, 0.20f}};
     
     rect.move(sf::Vector2f(350.0f, 200.0f));
-    Hero hero(rect, PLAYER1_SHEET, AnimationsConstructors, 3, true, true);
+    Hero hero(rect, PLAYER1_SHEET, AnimationsConstructors, 3, 0.0f, true);
 
-    std::vector<StaticObstacle> obs = { {StaticObstacle(tiles_rect, TILE_SHEET, tiles_textureCur)},
-                                        {StaticObstacle(tiles_rect, TILE_SHEET, tiles_textureCur)}, 
-                                        {StaticObstacle(tiles_rect, TILE_SHEET, tiles_textureCur)}, 
-                                        {StaticObstacle(tiles_rect, TILE_SHEET, tiles_textureCur)}, 
-                                        {StaticObstacle(tiles_rect, TILE_SHEET, tiles_textureCur)}, 
-                                        {StaticObstacle(tiles_rect, TILE_SHEET, tiles_textureCur)}, 
-                                        {StaticObstacle(tiles_rect, TILE_SHEET, tiles_textureCur)}, 
-                                        {StaticObstacle(tiles_rect, TILE_SHEET, tiles_textureCur)}, 
-                                        {StaticObstacle(tiles_rect, TILE_SHEET, tiles_textureCur)}, 
-                                        {StaticObstacle(tiles_rect, TILE_SHEET, tiles_textureCur)}};
+    std::vector<StaticObstacle> obs = {{tiles_rect, TILE_SHEET},
+                                       {tiles_rect, TILE_SHEET}, 
+                                       {tiles_rect, TILE_SHEET}, 
+                                       {tiles_rect, TILE_SHEET}, 
+                                       {tiles_rect, TILE_SHEET}, 
+                                       {tiles_rect, TILE_SHEET}, 
+                                       {tiles_rect, TILE_SHEET}, 
+                                       {tiles_rect, TILE_SHEET}, 
+                                       {tiles_rect, TILE_SHEET}, 
+                                       {tiles_rect, TILE_SHEET}};
 
-    for (i = 0; i < obs.size(); ++i) {
-        obs[i].GetRectShape().move(sf::Vector2f(100.0f + (i * TILE_SIZE * fator), 400.0f));
+    for (i = 0; i < obs.size(); ++i)
+    {
+        obs[i].GetBody().move(sf::Vector2f(100.0f + (i * TILE_SIZE * fator), 400.0f));
         obs[i].Execute();
     }
+
+    //Hero* hero_p = &hero;
+
+    //LivingEntity* living_p = static_cast<LivingEntity*>(hero_p);
 
     sf::Clock clock;
     while(window.isOpen())
@@ -76,7 +80,7 @@ int main()
             case sf::Event::Closed:
                 window.close();
                 break;
-            case sf::Event::LostFocus:
+            /*case sf::Event::LostFocus:
                 std::cout << "Perdeu o foco !" << std::endl;
                 break;
             case sf::Event::GainedFocus:
@@ -96,7 +100,7 @@ int main()
                 break;
             case sf::Event::MouseButtonReleased:
                 std::cout << "Foi solto um botao do mouse!" << std::endl;
-                break;
+                break;*/
             default:
                 break;
             }
@@ -104,11 +108,12 @@ int main()
 
         window.clear(sf::Color(100U, 100U, 100U));
 
+        hero.Execute();
+
+
+        hero.SetElapsedTime(timediff);
         for (i = 0; i < obs.size(); ++i)
             obs[i].SelfPrint(window);
-            
-        hero.Execute();
-        hero.SetElapsedTime(timediff);
         hero.SelfPrint(window);
 
         window.display();

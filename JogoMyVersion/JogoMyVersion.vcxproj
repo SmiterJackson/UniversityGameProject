@@ -117,6 +117,7 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(SolutionDir)JogoMyVersion\Dependecies\SFML-2.5.1\lib</AdditionalLibraryDirectories>
+      <AdditionalDependencies>sfml-graphics.lib;sfml-window.lib;sfml-audio.lib;sfml-network.lib;sfml-system.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -161,9 +162,7 @@
     <ClCompile Include="Main\stdafx.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Manegers\Implementations\animation.cpp" />
-    <ClCompile Include="Manegers\Implementations\collider.cpp" />
-    <ClCompile Include="Manegers\Implementations\drawable.cpp" />
-    <ClCompile Include="Manegers\Implementations\caracteristics.cpp" />
+    <ClCompile Include="Manegers\Implementations\traits.cpp" />
     <ClCompile Include="Stages\Implementations\baseStage.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -174,9 +173,7 @@
     <ClInclude Include="Lists\Headers\myList.h" />
     <ClInclude Include="Main\stdafx.h" />
     <ClInclude Include="Manegers\Headers\animation.h" />
-    <ClInclude Include="Manegers\Headers\collider.h" />
-    <ClInclude Include="Manegers\Headers\drawble.h" />
-    <ClInclude Include="Manegers\Headers\caracteristics.h" />
+    <ClInclude Include="Manegers\Headers\traits.h" />
     <ClInclude Include="Stages\Headers\baseStage.h" />
   </ItemGroup>
   <ItemGroup>
