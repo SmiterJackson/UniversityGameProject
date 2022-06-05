@@ -60,7 +60,7 @@ void Printable::InvertTextureOrientation()
 };
 //////////////////////////////////////////////////////////////////////////////////////
 Collidable::Collidable(sf::RectangleShape& _body, const float _weight_ceffic) :
-	rect(_body), weight_ceffic(std::min(std::max(_weight_ceffic, 0.0f), 1.0f))
+	rect(_body), weight_coeffic(std::min(std::max(_weight_ceffic, 0.0f), 1.0f))
 {};
 Collidable::~Collidable()
 {};
@@ -86,26 +86,26 @@ bool Collidable::CheckCollision(sf::RectangleShape& _body)
 			// inverte os sinais dependendo dos valores de cada objeto
 			if (distanceBetween.x < 0.0f) 
 			{
-				this->rect.move(diff.x * (1.0f - weight_ceffic), 0.0f);
-				_body.move(-diff.x * weight_ceffic, 0.0f);
+				this->rect.move(diff.x * (1.0f - weight_coeffic), 0.0f);
+				_body.move(-diff.x * weight_coeffic, 0.0f);
 			}
 			else 
 			{
-				this->rect.move(-diff.x * (1.0f - weight_ceffic), 0.0f);
-				_body.move(diff.x * weight_ceffic, 0.0f);
+				this->rect.move(-diff.x * (1.0f - weight_coeffic), 0.0f);
+				_body.move(diff.x * weight_coeffic, 0.0f);
 			}
 		}
 		else
 		{
 			if (distanceBetween.y < 0.0f)
 			{
-				this->rect.move(0.0f, diff.y * (1.0f - weight_ceffic));
-				_body.move(0.0f, -diff.y * (1.0f - weight_ceffic));
+				this->rect.move(0.0f, diff.y * (1.0f - weight_coeffic));
+				_body.move(0.0f, -diff.y * (1.0f - weight_coeffic));
 			}
 			else
 			{
-				this->rect.move(0.0f, -diff.y * (1.0f - weight_ceffic));
-				_body.move(0.0f, diff.y * (1.0f - weight_ceffic));
+				this->rect.move(0.0f, -diff.y * (1.0f - weight_coeffic));
+				_body.move(0.0f, diff.y * (1.0f - weight_coeffic));
 			}
 		}
 
@@ -114,8 +114,6 @@ bool Collidable::CheckCollision(sf::RectangleShape& _body)
 
 	return false;
 };
-//////////////////////////////////////////////////////////////////////////////////////
-
 //////////////////////////////////////////////////////////////////////////////////////
 Animated::Animated() :
 	animationVec(), next_ani(0), lastUsedAni(0), elapsed_time(0.0f)

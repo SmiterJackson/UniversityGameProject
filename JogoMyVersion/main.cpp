@@ -1,18 +1,13 @@
 #pragma once
 
-//#include "Header/stdafx.h"
-#include "stdafx.cpp"
-#include "Lists/Headers/myList.h"
-#include "Manegers/Headers/animation.h"
 #include "Entities/Characters/Headers/Hero.h"
-#include "Entities/BaseEntities/Headers/entity.h"
-#include "Entities/Obstacles/Headers/Obstacles.h"
+#include "Entities/Obstacles/Headers/obstacles.h"
+using namespace obstacles;
 
 #define PLAYER1_SHEET std::string("JogoMyVersion\\Resources\\images\\sprites\\Characters\\gunner_green.png")
 #define TILE_SHEET std::string("JogoMyVersion\\Resources\\images\\backgrounds\\Tiles\\IndustrialTile_sheet.png")
 #define PLAYER_SIZE 48
 #define TILE_SIZE 32
-using namespace obstacles;
 
 // Por algum motivo desconhecido a estrutura vector está constantemente desconectando o ponteira da estrutura base drawable dos objetos
 int main()
@@ -33,9 +28,6 @@ int main()
     rect.setScale(fator, fator);
     sf::RectangleShape tiles_rect(sf::Vector2f(TILE_SIZE, TILE_SIZE));
     tiles_rect.scale(fator, fator);
-
-
-    sf::IntRect tiles_textureCur(2 * TILE_SIZE, 0, TILE_SIZE, TILE_SIZE);
     
     VecAnimaValues AnimationsConstructors =  {{0, 4, 2, 48, 0.20f, true},
                                               {0, 5, 1, 48, 0.20f, true},
@@ -63,9 +55,11 @@ int main()
         obs[i].Execute();
     }
 
-    //Hero* hero_p = &hero;
+    Hero* hero_p = &hero;
 
-    //LivingEntity* living_p = static_cast<LivingEntity*>(hero_p);
+    LivingEntity* livin_p = static_cast<LivingEntity*>(hero_p);
+
+
 
     sf::Clock clock;
     while(window.isOpen())
@@ -109,8 +103,6 @@ int main()
         window.clear(sf::Color(100U, 100U, 100U));
 
         hero.Execute();
-
-
         hero.SetElapsedTime(timediff);
         for (i = 0; i < obs.size(); ++i)
             obs[i].SelfPrint(window);

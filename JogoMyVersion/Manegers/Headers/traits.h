@@ -1,9 +1,6 @@
 #pragma once
 
-#include "stdafx.h"
 #include "animation.h"
-#include "../Entities/BaseEntities/Headers/entity.h"
-using namespace entities;
 
 namespace traits
 {
@@ -107,25 +104,24 @@ namespace traits
 
 		void SetBodyRef(const sf::RectangleShape& _body) { this->rect = _body; };
 
-		const float& GetWeightCoefficient() { return this->weight_ceffic; };
-		void SetWeightCoefficient(const float _weight_ceffic) { this->weight_ceffic = _weight_ceffic; };
+		const float& GetWeightCoefficient() { return this->weight_coeffic; };
+		void SetWeightCoefficient(const float _weight_coeffic) { this->weight_coeffic = _weight_coeffic; };
 
 		bool CheckCollision(sf::RectangleShape& _body);
 
 	protected:
 		sf::RectangleShape& rect;
-		float weight_ceffic;
+		float weight_coeffic;
 	};
 
-	class CollisionManager
+	class Collider
 	{
 	public:
-		CollisionManager();
-		~CollisionManager();
+		Collider();
+		~Collider();
 
-		void VerifyCollisions();
+	protected:
 
-	private:
 	};
 
 	typedef std::vector<AnimaData> VecAnimaValues;

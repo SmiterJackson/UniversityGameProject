@@ -1,6 +1,5 @@
 #pragma once
 
-#include "stdafx.h"
 #include "../Headers/entity.h"
 using namespace entities;
 

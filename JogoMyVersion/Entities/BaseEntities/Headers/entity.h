@@ -1,8 +1,7 @@
 #pragma once
 
-#include "stdafx.h"
 #include "instance.h"
-#include "../Manegers/Headers/traits.h"
+#include "../Manegers/Headers/traits.h" 
 using namespace traits;
 
 namespace entities

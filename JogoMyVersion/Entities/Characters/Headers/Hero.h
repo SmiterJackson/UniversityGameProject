@@ -1,9 +1,9 @@
 #pragma once
 
-#include "../Manegers/Headers/traits.h"
 #include "../Entities/BaseEntities/Headers/entity.h"
-using namespace traits;
+#include "../Manegers/Headers/traits.h"
 using namespace entities;
+using namespace traits;
 
 class Hero : public LivingEntity, public Printable, public Animated, public Slipery
 {
