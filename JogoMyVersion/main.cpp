@@ -14,6 +14,7 @@ using namespace obstacles;
 int main()
 {
     sf::RenderWindow window(sf::VideoMode(1400, 850), "Janela do Jogo");
+    sf::View Myview(sf::Vector2f(0.0f, 0.0f), sf::Vector2f(1400.0f, 850.0f));
     window.setVerticalSyncEnabled(true);
     window.setKeyRepeatEnabled(false);
 
@@ -29,12 +30,12 @@ int main()
     sf::RectangleShape tiles_rect(sf::Vector2f(TILE_SIZE * fator, TILE_SIZE * fator));    
     VecAnimaValues AnimationsConstructors =  {{0, 4, 2, 45, 48, 0.20f, true},
                                               {0, 5, 1, 45, 48, 0.20f, true},
-                                              {5, 7, 2, 45, 48, 0.20f},
+                                              {5, 7, 2, 45, 48, 0.05f},
                                               {6, 7, 1, 45, 48, 0.20f},
                                               {0, 7, 0, 45, 48, 0.20f}};
     
-    rect.move(sf::Vector2f(350.0f, 200.0f));
     Hero hero(rect, PLAYER1_SHEET, AnimationsConstructors, 3, 0.0f, true);
+    hero.GetBody().move(sf::Vector2f(0.0f, -PLAYER_SIZE * fator));
 
     std::vector<StaticObstacle> obs = {{tiles_rect, TILE_SHEET},
                                        {tiles_rect, TILE_SHEET}, 
@@ -94,7 +95,7 @@ int main()
                 break;
             case sf::Event::KeyPressed:
                 std::cout << "Foi apertado um botao do teclado!" << std::endl;
-                switch (event.type)
+                switch (event.key.code)
                 {
                 case sf::Keyboard::A:
                     hero.InvertWalkLeft();
@@ -103,10 +104,10 @@ int main()
                     hero.InvertWalkRight();
                     break;
                 case sf::Keyboard::S:
-                    hero.InvertJumping();
+                    hero.InvertCrouching();
                     break;
                 case sf::Keyboard::W:
-                    hero.InvertCrouching();
+                    hero.InvertJumping();
                     break;
                 default:
                     break;
@@ -114,7 +115,7 @@ int main()
                 break;
             case sf::Event::KeyReleased:
                 std::cout << "Foi solto um botao do teclado!" << std::endl;
-                switch (event.type)
+                switch (event.key.code)
                 {
                 case sf::Keyboard::A:
                     hero.InvertWalkLeft();
@@ -123,10 +124,10 @@ int main()
                     hero.InvertWalkRight();
                     break;
                 case sf::Keyboard::S:
-                    hero.InvertJumping();
+                    hero.InvertCrouching();
                     break;
                 case sf::Keyboard::W:
-                    hero.InvertCrouching();
+                    hero.InvertJumping();
                     break;
                 default:
                     break;
@@ -142,19 +143,26 @@ int main()
                 break;
             }
         }
-
+        // Limpar tela
         window.clear(sf::Color(100U, 100U, 100U));
 
+        // Atualizar relação de tempo para entidades
         hero.SetElapsedTime(timediff);
 
+        // Executar parâmetros e execuções de entidades
         hero.Execute();
 
+        // Após atualizar entidades executar colisões
         maneger.UpdateCollisions();
 
+        // Desenhar entidades após atualizações, e colisões
         for (i = 0; i < obs.size(); ++i)
             obs[i].SelfPrint(window);
         hero.SelfPrint(window);
 
+        // Atualizar tela
+        //Myview.setCenter();
+        window.setView(Myview);
         window.display();
     }
 

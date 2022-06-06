@@ -3,12 +3,12 @@
 #include "../Headers/Hero.h"
 using namespace sf;
 
-#define HORIZONTAL_ACCELERATION 25.0f
 #define MAX_HORIZONTAL_VELOCITY 75.0f
+#define HORIZONTAL_ACCELERATION 25.0f
 
-#define JUMP_ACCELERATION 10.0f
-//#define VERTICAL_ACCELERATION (JUMP_ACCELERATION / 10.0f)
+#define JUMP_ACCELERATION -24.0f // coeffficiente para o tamanho do pulo
 #define MAX_FALL_VELOCITY -(JUMP_ACCELERATION / 2.0f)
+#define VERTICAL_ACCELERATION -(JUMP_ACCELERATION / 16.0f) // proporção de tempo desaceleração do pulo, o mais confortável que percebi foi 16
 
 #define INVENCIBILITY_FRAMES_TIME 3.0f
 
@@ -68,18 +68,16 @@ void Hero::Execute()
 		return;
 	}
 
-	bool isA_pressed = Keyboard::isKeyPressed(Keyboard::A), isD_pressed = Keyboard::isKeyPressed(Keyboard::D);
-
-	if ((!isA_pressed && isD_pressed) || (isA_pressed && !isD_pressed) && !this->crouching)
+	if ((!this->walk_left && this->walk_right) || (this->walk_left && !this->walk_right) && !this->crouching)
 	{
 		if (this->have_ground)
 			this->next_ani = Run;
-		if (isA_pressed && this->horizontal_acc > -MAX_HORIZONTAL_VELOCITY)
+		if (this->walk_left && this->horizontal_acc > -MAX_HORIZONTAL_VELOCITY)
 		{
 			this->faceRight = false;
 			this->horizontal_acc -= HORIZONTAL_ACCELERATION * elapsed_time;
 		}
-		if (isD_pressed && this->horizontal_acc < MAX_HORIZONTAL_VELOCITY)
+		if (this->walk_right && this->horizontal_acc < MAX_HORIZONTAL_VELOCITY)
 		{
 			this->faceRight = true;
 			this->horizontal_acc += HORIZONTAL_ACCELERATION * elapsed_time;
@@ -102,7 +100,7 @@ void Hero::Execute()
 			this->horizontal_acc += HORIZONTAL_ACCELERATION * elapsed_time;
 	}
 
-	if (this->have_ground && Keyboard::isKeyPressed(Keyboard::S))
+	if (this->have_ground && this->crouching)
 	{
 		this->next_ani = Crouch;
 		this->crouching = true;
@@ -121,17 +119,17 @@ void Hero::Execute()
 
 	if (!this->have_ground)
 	{
-		if (this->vertical_acc > MAX_FALL_VELOCITY)
-			this->vertical_acc += MAX_FALL_VELOCITY * elapsed_time;
+		if (this->vertical_acc < MAX_FALL_VELOCITY)
+			this->vertical_acc += VERTICAL_ACCELERATION;
 	}
 	else
 		this->vertical_acc = 0.0f;
 
-	if (this->have_ground && Keyboard::isKeyPressed(Keyboard::W)) // Caso esteja no chão e pule, acelera para cima
+	if (this->have_ground && this->jumping) // Caso esteja no chão e pule, acelera para cima
 	{
 		this->have_ground = false;
 		this->next_ani = Jump;
-		this->vertical_acc = JUMP_ACCELERATION * elapsed_time;
+		this->vertical_acc = JUMP_ACCELERATION;
 	}
 
 	if (this->invec_current_timer > 0.0f)
