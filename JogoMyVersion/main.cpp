@@ -50,7 +50,7 @@ int main()
     for (i = 0; i < obs.size(); ++i)
     {
         obs[i].GetBody().move(sf::Vector2f(100.0f + (i * TILE_SIZE * fator), 400.0f));
-        //obs[i].Execute();
+        obs[i].Execute();
     }
 
     Hero* hero_p = &hero;
@@ -83,7 +83,7 @@ int main()
             case sf::Event::Closed:
                 window.close();
                 break;
-            /*case sf::Event::LostFocus:
+            case sf::Event::LostFocus:
                 std::cout << "Perdeu o foco !" << std::endl;
                 break;
             case sf::Event::GainedFocus:
@@ -93,17 +93,51 @@ int main()
                 std::cout << "Redimensionado !" << std::endl;
                 break;
             case sf::Event::KeyPressed:
-                std::cout << "Foi tocado um botao do teclado!" << std::endl;
+                std::cout << "Foi apertado um botao do teclado!" << std::endl;
+                switch (event.type)
+                {
+                case sf::Keyboard::A:
+                    hero.InvertWalkLeft();
+                    break;
+                case sf::Keyboard::D:
+                    hero.InvertWalkRight();
+                    break;
+                case sf::Keyboard::S:
+                    hero.InvertJumping();
+                    break;
+                case sf::Keyboard::W:
+                    hero.InvertCrouching();
+                    break;
+                default:
+                    break;
+                }
                 break;
             case sf::Event::KeyReleased:
                 std::cout << "Foi solto um botao do teclado!" << std::endl;
+                switch (event.type)
+                {
+                case sf::Keyboard::A:
+                    hero.InvertWalkLeft();
+                    break;
+                case sf::Keyboard::D:
+                    hero.InvertWalkRight();
+                    break;
+                case sf::Keyboard::S:
+                    hero.InvertJumping();
+                    break;
+                case sf::Keyboard::W:
+                    hero.InvertCrouching();
+                    break;
+                default:
+                    break;
+                }
                 break;
             case sf::Event::MouseButtonPressed:
                 std::cout << "Foi tocado um botao do mouse!" << std::endl;
                 break;
             case sf::Event::MouseButtonReleased:
                 std::cout << "Foi solto um botao do mouse!" << std::endl;
-                break;*/
+                break;
             default:
                 break;
             }

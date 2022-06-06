@@ -3,13 +3,14 @@
 #include "../Headers/Hero.h"
 using namespace sf;
 
-#define HERO_HORIZONTAL_ACCELERETION 28.0f
-#define HERO_MAX_HORIZONTAL_DESACCELERETION HERO_HORIZONTAL_ACCELERETION
-#define HERO_MAX_HORIZONTAL_ACCELERETION 140.0f
-#define HERO_VERTICAL_ACCELERETION 90.0f
-#define HERO_VERTICAL_DESACCELERETION (HERO_VERTICAL_ACCELERETION/18)
-#define HERO_MAX_FALL_VELOCITY (HERO_VERTICAL_ACCELERETION/2)
-#define HERO_INVENCIBILITY_FRAMES_TIME 3.0f
+#define HORIZONTAL_ACCELERATION 25.0f
+#define MAX_HORIZONTAL_VELOCITY 75.0f
+
+#define JUMP_ACCELERATION 10.0f
+//#define VERTICAL_ACCELERATION (JUMP_ACCELERATION / 10.0f)
+#define MAX_FALL_VELOCITY -(JUMP_ACCELERATION / 2.0f)
+
+#define INVENCIBILITY_FRAMES_TIME 3.0f
 
 Hero::Hero() :
 	LivingEntity(), Printable(), Animated(), Slipery()
@@ -56,6 +57,9 @@ void Hero::Initialize()
 	this->body.setOrigin((this->body.getSize() / 2.0f));
 	this->friction_coefficient = 0.95f;
 	this->invec_current_timer = 0.0f;
+	this->walk_right = false;
+	this->walk_left = false;
+	this->crouching = false;
 };
 void Hero::Execute()
 {	
@@ -66,48 +70,59 @@ void Hero::Execute()
 
 	bool isA_pressed = Keyboard::isKeyPressed(Keyboard::A), isD_pressed = Keyboard::isKeyPressed(Keyboard::D);
 
-	if((!isA_pressed && isD_pressed) || (isA_pressed && !isD_pressed))
+	if ((!isA_pressed && isD_pressed) || (isA_pressed && !isD_pressed) && !this->crouching)
 	{
-		if (isA_pressed && this->horizontal_acc > -HERO_MAX_HORIZONTAL_ACCELERETION)
+		if (this->have_ground)
+			this->next_ani = Run;
+		if (isA_pressed && this->horizontal_acc > -MAX_HORIZONTAL_VELOCITY)
 		{
 			this->faceRight = false;
-			if(this->have_ground)
-				this->next_ani = Run;
-			this->horizontal_acc -= HERO_HORIZONTAL_ACCELERETION * elapsed_time;
+			this->horizontal_acc -= HORIZONTAL_ACCELERATION * elapsed_time;
 		}
-		if (isD_pressed && this->horizontal_acc < HERO_MAX_HORIZONTAL_ACCELERETION)
+		if (isD_pressed && this->horizontal_acc < MAX_HORIZONTAL_VELOCITY)
 		{
 			this->faceRight = true;
-			if (this->have_ground)
-				this->next_ani = Run;
-			this->horizontal_acc += HERO_HORIZONTAL_ACCELERETION * elapsed_time;
+			this->horizontal_acc += HORIZONTAL_ACCELERATION * elapsed_time;
 		}
 	}
-	else {
+	else
+	{
 		if (this->horizontal_acc >= -0.1f || this->horizontal_acc <= 0.1f)
 		{
-			//this->horizontal_acc = 0.0f;
+			this->horizontal_acc = 0.0f;
 
 			if (this->have_ground)
 				this->next_ani = Idle;
 		}
 
 		if (this->horizontal_acc > 0.0f)
-			this->horizontal_acc -= HERO_MAX_HORIZONTAL_DESACCELERETION * elapsed_time;
+			this->horizontal_acc -= HORIZONTAL_ACCELERATION * elapsed_time;
 
 		if (this->horizontal_acc < 0.0f)
-			this->horizontal_acc += HERO_MAX_HORIZONTAL_DESACCELERETION * elapsed_time;
+			this->horizontal_acc += HORIZONTAL_ACCELERATION * elapsed_time;
 	}
 
-	if(this->have_ground && Keyboard::isKeyPressed(Keyboard::S))
+	if (this->have_ground && Keyboard::isKeyPressed(Keyboard::S))
 	{
 		this->next_ani = Crouch;
+		this->crouching = true;
+
+		if (this->horizontal_acc >= -0.1f || this->horizontal_acc <= 0.1f)
+			this->horizontal_acc = 0.0f;
+
+		if (this->horizontal_acc > 0.0f)
+			this->horizontal_acc -= HORIZONTAL_ACCELERATION * elapsed_time * 2;
+
+		if (this->horizontal_acc < 0.0f)
+			this->horizontal_acc += HORIZONTAL_ACCELERATION * elapsed_time * 2;
 	}
+	else
+		this->crouching = false;
 
 	if (!this->have_ground)
 	{
-		if (this->vertical_acc < HERO_MAX_FALL_VELOCITY)
-			this->vertical_acc += HERO_VERTICAL_DESACCELERETION * elapsed_time;
+		if (this->vertical_acc > MAX_FALL_VELOCITY)
+			this->vertical_acc += MAX_FALL_VELOCITY * elapsed_time;
 	}
 	else
 		this->vertical_acc = 0.0f;
@@ -116,7 +131,7 @@ void Hero::Execute()
 	{
 		this->have_ground = false;
 		this->next_ani = Jump;
-		this->vertical_acc = -HERO_VERTICAL_ACCELERETION * elapsed_time;
+		this->vertical_acc = JUMP_ACCELERATION * elapsed_time;
 	}
 
 	if (this->invec_current_timer > 0.0f)
@@ -135,7 +150,7 @@ void Hero::Damaged()
 	{
 		--(this->life_count);
 		this->invenc_frames = true;
-		this->invec_current_timer = HERO_INVENCIBILITY_FRAMES_TIME;
+		this->invec_current_timer = INVENCIBILITY_FRAMES_TIME;
 	}
 	
 	if (this->invec_current_timer > 0.0f)
@@ -149,19 +164,34 @@ void Hero::Died()
 {
 	this->alive = false;
 
-	if (this->horizontal_acc >= -0.1f || this->horizontal_acc <= 0.1f)
+	if (this->horizontal_acc < 0.1f && this->horizontal_acc > -0.1f)
+	{
 		this->horizontal_acc = 0.0f;
-
-	if (this->horizontal_acc > 0.0f)
-		this->horizontal_acc -= HERO_MAX_HORIZONTAL_DESACCELERETION;
-
-	if (this->horizontal_acc < 0.0f)
-		this->horizontal_acc += HERO_MAX_HORIZONTAL_DESACCELERETION;
-
-	if (!this->have_ground && this->vertical_acc > HERO_MAX_FALL_VELOCITY)
-		this->vertical_acc -= HERO_VERTICAL_DESACCELERETION;
+	}
+	else if (this->horizontal_acc < MAX_HORIZONTAL_VELOCITY)
+	{
+		this->horizontal_acc -= HORIZONTAL_ACCELERATION * this->elapsed_time;
+	}
 	else
-		this->vertical_acc = 0.0f;
+	{
+		this->horizontal_acc += HORIZONTAL_ACCELERATION * this->elapsed_time;
+	}
+
+	if (this->have_ground && this->jumping)
+	{
+		this->next_ani = Jump;
+		this->vertical_acc += JUMP_ACCELERATION * this->elapsed_time;
+	}
+	else if (!this->have_ground && this->vertical_acc > MAX_FALL_VELOCITY)
+	{
+		this->next_ani = Jump;
+		this->vertical_acc += MAX_FALL_VELOCITY * this->elapsed_time;
+	}
+	else
+	{
+		this->next_ani = Jump;
+		this->vertical_acc = 0;
+	}
 
 	this->next_ani = Death;
 	this->body.move(sf::Vector2f(this->horizontal_acc, this->vertical_acc));
@@ -175,3 +205,69 @@ void Hero::SelfPrint(sf::RenderWindow& window)
 	this->body.setTextureRect(this->animationVec[this->next_ani].update(this->elapsed_time, this->faceRight));
 	window.draw(this->body);
 };
+
+/*
+
+*/
+
+/*if (Keyboard::isKeyPressed(Keyboard::A))
+		this->walk_left = true;
+	else
+		this->walk_left = false;
+	if (Keyboard::isKeyPressed(Keyboard::D))
+		this->walk_right = true;
+	else
+		this->walk_right = false;
+	if (Keyboard::isKeyPressed(Keyboard::S))
+		this->crouching = true;
+	else
+		this->crouching = false;
+	if (Keyboard::isKeyPressed(Keyboard::W) && this->have_ground)
+		this->jumping = true;
+	else
+		this->jumping = false;
+
+	if(((this->walk_right && !this->walk_left) || (!this->walk_right && this->walk_left)) && !this->crouching)
+	{
+		if(this->have_ground)
+			this->next_ani = Run;
+
+		if(this->walk_right && this->horizontal_acc < MAX_HORIZONTAL_VELOCITY)
+			this->horizontal_acc += HORIZONTAL_ACCELERATION * this->elapsed_time;
+		else if(this->horizontal_acc > -MAX_HORIZONTAL_VELOCITY)
+			this->horizontal_acc -= HORIZONTAL_ACCELERATION * this->elapsed_time;
+	}
+	else
+	{
+		if (this->have_ground)
+			this->next_ani = Run;
+
+		if(this->horizontal_acc < 0.1f && this->horizontal_acc > -0.1f)
+			this->horizontal_acc = 0.0f;
+		else if(this->horizontal_acc < MAX_HORIZONTAL_VELOCITY)
+			this->horizontal_acc -= HORIZONTAL_ACCELERATION * this->elapsed_time;
+		else
+			this->horizontal_acc += HORIZONTAL_ACCELERATION * this->elapsed_time;
+	}
+
+	if (this->have_ground && this->jumping)
+	{
+		this->next_ani = Jump;
+		this->vertical_acc += JUMP_ACCELERATION * this->elapsed_time;
+	}
+	else if (!this->have_ground && this->vertical_acc > MAX_FALL_VELOCITY)
+	{
+		this->next_ani = Jump;
+		this->vertical_acc += MAX_FALL_VELOCITY * this->elapsed_time;
+	}
+	else
+	{
+		this->next_ani = Jump;
+		this->vertical_acc = 0;
+	}
+
+	if (this->crouching && this->have_ground)
+	{
+		this->next_ani = Crouch;
+		this->horizontal_acc = 0.0f;
+	}*/

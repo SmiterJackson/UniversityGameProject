@@ -23,6 +23,10 @@ public:
 		const float _weight_ceffic = 0.0f, const bool _have_ground = false);
 	~Hero();
 
+	const bool GetCrouching() { return this->crouching; };
+	void SetCrouching(const bool state) { this->crouching = state; };
+	void InvertCrouching() { this->crouching = !this->crouching; };
+
 	void Initialize();
 	void Execute();
 	void Damaged();
@@ -32,5 +36,5 @@ public:
 public:
 	enum animations { Idle, Run, Crouch, Jump, Death, Attack};
 	float invec_current_timer;
-	bool invenc_frames;
+	bool invenc_frames, crouching;
 };

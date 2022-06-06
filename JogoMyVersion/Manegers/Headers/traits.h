@@ -12,15 +12,27 @@ namespace traits
 		Movable(const bool _have_ground = false, const float _horizontal_acc = 0.0f, const float _vertical_acc = 0.0f);
 		~Movable();
 
-		const float GetVerticalACC() { return this->vertical_acc; };
+		const float GetVerticalAcc() { return this->vertical_acc; };
 		void SetVerticalACC(const float newVelocity) { this->vertical_acc = newVelocity; };
 
-		const float GetHorizontalACC() { return this->vertical_acc; };
+		const float GetHorizontalAcc() { return this->vertical_acc; };
 		void SetHorizontalACC(const float newVelocity) { this->vertical_acc = newVelocity; };
 
 		const bool GetHaveGround() { return this->have_ground; };
 		void SetHaveGround(const bool state) { this->have_ground = state; };
 		void InvertHaveGround() { this->have_ground = !this->have_ground; };
+
+		const bool GetWalkRight() { return this->walk_right; };
+		void SetWalkRight(const bool state) { this->walk_right = state; };
+		void InvertWalkRight() { this->walk_right = !this->walk_right; };
+
+		const bool GetWalkLeft() { return this->walk_left; };
+		void SetWalkLeft(const bool state) { this->walk_left = state; };
+		void InvertWalkLeft() { this->walk_left = !this->walk_left; };
+
+		const bool GetJumping() { return this->jumping; };
+		void SetJumping(const bool state) { this->jumping = state; };
+		void InvertJumping() { this->jumping = !this->jumping; };
 
 	public:
 		static float global_gravity;
@@ -28,7 +40,7 @@ namespace traits
 	protected:
 		float horizontal_acc;
 		float vertical_acc;
-		bool have_ground;
+		bool have_ground, walk_right, walk_left, jumping;
 	};
 
 	class Slipery {
