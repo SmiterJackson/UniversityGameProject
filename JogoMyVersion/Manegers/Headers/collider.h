@@ -16,6 +16,7 @@ public:
 
 	void UpdateCollisions();
 	bool CheckCollision(LivingEntity& item_1, BaseObstacle& item_2);
+	bool CheckNext(LivingEntity& entity, BaseObstacle& obst);
 
 	void operator+= (LivingEntity* item)
 	{

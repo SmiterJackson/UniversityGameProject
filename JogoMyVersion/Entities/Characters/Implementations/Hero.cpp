@@ -103,7 +103,11 @@ void Hero::Execute()
 	if (this->have_ground && this->crouching)
 	{
 		this->next_ani = Crouch;
-		this->crouching = true;
+
+		if (this->walk_left)
+			this->faceRight = false;
+		else
+			this->faceRight = true;
 
 		if (this->horizontal_acc >= -0.1f || this->horizontal_acc <= 0.1f)
 			this->horizontal_acc = 0.0f;
@@ -114,8 +118,6 @@ void Hero::Execute()
 		if (this->horizontal_acc < 0.0f)
 			this->horizontal_acc += HORIZONTAL_ACCELERATION * elapsed_time * 2;
 	}
-	else
-		this->crouching = false;
 
 	if (!this->have_ground)
 	{

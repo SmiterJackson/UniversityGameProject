@@ -163,6 +163,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Manegers\Implementations\animation.cpp" />
     <ClCompile Include="Manegers\Implementations\collider.cpp" />
+    <ClCompile Include="Manegers\Implementations\parallax.cpp" />
     <ClCompile Include="Manegers\Implementations\traits.cpp" />
     <ClCompile Include="Stages\Implementations\baseStage.cpp" />
   </ItemGroup>
@@ -175,6 +176,7 @@
     <ClInclude Include="Main\stdafx.h" />
     <ClInclude Include="Manegers\Headers\animation.h" />
     <ClInclude Include="Manegers\Headers\collider.h" />
+    <ClInclude Include="Manegers\Headers\parallax.h" />
     <ClInclude Include="Manegers\Headers\traits.h" />
     <ClInclude Include="Stages\Headers\baseStage.h" />
   </ItemGroup>

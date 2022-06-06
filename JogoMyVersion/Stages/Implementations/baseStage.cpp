@@ -2,37 +2,25 @@
 
 #include "../Headers/baseStage.h"
 
-BaseStage::BaseStage()
-	//DrawableEntity(), contextWindow(nullptr), myEntities(), hitableBounds()
+Stage::Stage() :
+	Printable(), contextWindow(), heros(), obstacles(), collider()
 {
 	Initialize();
 };
-BaseStage::BaseStage(const std::string& fileName, sf::RenderWindow* contextWindow)
-	//DrawableEntity(), contextWindow(contextWindow), myEntities(), hitableBounds()
+Stage::Stage(const std::string& fileName, sf::RenderWindow* contextWindow) :
+	Printable(), contextWindow(), heros(), obstacles(), collider()
 {
 	Initialize();
 };
-BaseStage::~BaseStage()
+Stage::~Stage()
 {};
 
 
-void BaseStage::Initialize()
+void Stage::Initialize()
 {
 	
 };
-void BaseStage::Execute(sf::Event& event)
-{
-	
-};
-void BaseStage::SelfPrintAll(sf::RenderWindow& window, float timeDiff)
-{
-	
-};
-void BaseStage::SelfPrintSelected(sf::RenderWindow& window, unsigned int animationKey, float timeDiff)
-{
-	
-};
-void BaseStage::ReadArchive(const std::string& fileName)
+void Stage::ReadArchive(const std::string& fileName)
 {
 	std::ifstream inStream(fileName, std::ifstream::in | std::ifstream::binary);
 	if (inStream.is_open())

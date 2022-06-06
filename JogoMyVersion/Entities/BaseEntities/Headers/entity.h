@@ -22,8 +22,20 @@ namespace entities
 		virtual void Execute() = 0;
 		virtual void Initialize() = 0;
 
+	#ifdef _DEBUG
+		void debugExecute();
+		void stringInfoUptade();
+		void PrintInfo(sf::RenderWindow& window);
+	#endif 
+
 	protected:
 		sf::RectangleShape body;
+
+	#ifdef _DEBUG
+		std::string value_as_string;
+		sf::Font font;
+		sf::Text info_pos;
+	#endif 
 	};
 
 	class CollidableEntity : public BaseEntity, public Collidable

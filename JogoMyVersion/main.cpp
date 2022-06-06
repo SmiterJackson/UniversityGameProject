@@ -3,17 +3,20 @@
 #include "Entities/Characters/Headers/Hero.h"
 #include "Entities/Obstacles/Headers/obstacles.h"
 #include "Manegers/Headers/collider.h"
+#include "Manegers/Headers/parallax.h"
 using namespace obstacles;
 
 #define PLAYER1_SHEET std::string("JogoMyVersion\\Resources\\images\\sprites\\Characters\\gunner_green.png")
 #define TILE_SHEET std::string("JogoMyVersion\\Resources\\images\\backgrounds\\Tiles\\IndustrialTile_sheet.png")
+#define BACKGROUND_SHEET std::string("JogoMyVersion\\Resources\\images\\backgrounds\\Background\\background_sheet.png") 
+#define FONT_REF std::string("JogoMyVersion\\Resources\\fonts\\hf-free-complete\\equipment-pro-v1.1\\EquipmentPro.ttf")
 #define PLAYER_SIZE 48
 #define TILE_SIZE 32
 
 // Por algum motivo desconhecido a estrutura vector está constantemente desconectando o ponteira da estrutura base drawable dos objetos
 int main()
 {
-    sf::RenderWindow window(sf::VideoMode(1400, 850), "Janela do Jogo");
+    sf::RenderWindow window(sf::VideoMode(1536, 864), "Janela do Jogo");
     sf::View Myview(sf::Vector2f(0.0f, 0.0f), sf::Vector2f(1400.0f, 850.0f));
     window.setVerticalSyncEnabled(true);
     window.setKeyRepeatEnabled(false);
@@ -38,19 +41,19 @@ int main()
     hero.GetBody().move(sf::Vector2f(0.0f, -PLAYER_SIZE * fator));
 
     std::vector<StaticObstacle> obs = {{tiles_rect, TILE_SHEET},
-                                       {tiles_rect, TILE_SHEET}, 
-                                       {tiles_rect, TILE_SHEET}, 
-                                       {tiles_rect, TILE_SHEET}, 
-                                       {tiles_rect, TILE_SHEET}, 
-                                       {tiles_rect, TILE_SHEET}, 
-                                       {tiles_rect, TILE_SHEET}, 
-                                       {tiles_rect, TILE_SHEET}, 
-                                       {tiles_rect, TILE_SHEET}, 
+                                       {tiles_rect, TILE_SHEET},
+                                       {tiles_rect, TILE_SHEET},
+                                       {tiles_rect, TILE_SHEET},
+                                       {tiles_rect, TILE_SHEET},
+                                       {tiles_rect, TILE_SHEET},
+                                       {tiles_rect, TILE_SHEET},
+                                       {tiles_rect, TILE_SHEET},
+                                       {tiles_rect, TILE_SHEET},
                                        {tiles_rect, TILE_SHEET}};
 
     for (i = 0; i < obs.size(); ++i)
     {
-        obs[i].GetBody().move(sf::Vector2f(100.0f + (i * TILE_SIZE * fator), 400.0f));
+        obs[i].GetBody().move(sf::Vector2f((-TILE_SIZE * fator * 5) + (i * TILE_SIZE * fator), 200.0f));
         obs[i].Execute();
     }
 
@@ -155,14 +158,24 @@ int main()
         // Após atualizar entidades executar colisões
         maneger.UpdateCollisions();
 
+        // Atualizar tela
+        window.setView(Myview);
+        Myview.setCenter(hero.GetConstBody().getPosition());
+
         // Desenhar entidades após atualizações, e colisões
         for (i = 0; i < obs.size(); ++i)
             obs[i].SelfPrint(window);
         hero.SelfPrint(window);
 
-        // Atualizar tela
-        //Myview.setCenter();
-        window.setView(Myview);
+#ifdef _DEBUG
+        for (i = 0; i < obs.size(); ++i) {
+            obs[i].stringInfoUptade();
+            obs[i].PrintInfo(window);
+        }
+        hero.stringInfoUptade();
+        hero.PrintInfo(window);
+#endif
+
         window.display();
     }
 

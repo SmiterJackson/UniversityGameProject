@@ -1,24 +1,30 @@
 #pragma once
 
-#include "stdafx.h"
-#include "../Lists/Headers/myList.h"
 #include "../Entities/BaseEntities/Headers/entity.h"
+#include "../Entities/Obstacles/Headers/obstacles.h"
+#include "../Entities/Characters/Headers/Hero.h"
+#include "../Manegers/Headers/collider.h"
 using namespace entities;
 
-// Para inicializar qualquer estrutura em vector, map ou list, utilize a função Initialize atravez do vector para todo item nele. 
-class BaseStage  {
-public:
-	BaseStage();
-	BaseStage(const std::string& fileName, sf::RenderWindow* contextWindow = nullptr);
-	~BaseStage();
 
+class Stage : public Printable
+{
+public:
+	Stage();
+	Stage(const std::string& fileName, sf::RenderWindow* contextWindow = nullptr);
+	~Stage();
+
+	void Execute();
+	void SelfPrint();
 	void Initialize();
-	void Execute(sf::Event& event);
+	void TreatInput(sf::Event event);
 	void ReadArchive(const std::string& fileName);
-	void SelfPrintAll(sf::RenderWindow& window, float timeDiff);
-	void SelfPrintSelected(sf::RenderWindow& window, unsigned int animationKey, float timeDiff);
 
 protected:
 	sf::RenderWindow* contextWindow;
-	
+	std::vector<Hero> heros;
+	std::vector<BaseObstacle> obstacles;
+	//std::vector<Projectile*> projectiles;
+
+	Collider collider;
 };

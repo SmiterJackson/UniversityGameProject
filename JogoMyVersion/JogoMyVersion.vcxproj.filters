@@ -45,6 +45,9 @@
     <ClCompile Include="Manegers\Implementations\collider.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Manegers\Implementations\parallax.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Main\stdafx.h">
@@ -75,6 +78,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Manegers\Headers\collider.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Manegers\Headers\parallax.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
