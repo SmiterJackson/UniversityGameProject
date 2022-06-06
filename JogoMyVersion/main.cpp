@@ -2,6 +2,7 @@
 
 #include "Entities/Characters/Headers/Hero.h"
 #include "Entities/Obstacles/Headers/obstacles.h"
+#include "Manegers/Headers/collider.h"
 using namespace obstacles;
 
 #define PLAYER1_SHEET std::string("JogoMyVersion\\Resources\\images\\sprites\\Characters\\gunner_green.png")
@@ -16,7 +17,7 @@ int main()
     window.setVerticalSyncEnabled(true);
     window.setKeyRepeatEnabled(false);
 
-    float fator = 4.0f;
+    float fator = 3.5f;
     float timediff = 0.0f;
     int animacao = 0, i = 0;
     bool direita = true;
@@ -24,16 +25,13 @@ int main()
     sf::Texture texture;
     texture.loadFromFile(PLAYER1_SHEET);
 
-    sf::RectangleShape rect(sf::Vector2f(PLAYER_SIZE, PLAYER_SIZE));
-    rect.setScale(fator, fator);
-    sf::RectangleShape tiles_rect(sf::Vector2f(TILE_SIZE, TILE_SIZE));
-    tiles_rect.scale(fator, fator);
-    
-    VecAnimaValues AnimationsConstructors =  {{0, 4, 2, 48, 0.20f, true},
-                                              {0, 5, 1, 48, 0.20f, true},
-                                              {5, 7, 2, 48, 0.20f},
-                                              {6, 7, 1, 48, 0.20f},
-                                              {0, 7, 0, 48, 0.20f}};
+    sf::RectangleShape rect(sf::Vector2f(PLAYER_SIZE * fator, PLAYER_SIZE * fator));
+    sf::RectangleShape tiles_rect(sf::Vector2f(TILE_SIZE * fator, TILE_SIZE * fator));    
+    VecAnimaValues AnimationsConstructors =  {{0, 4, 2, 45, 48, 0.20f, true},
+                                              {0, 5, 1, 45, 48, 0.20f, true},
+                                              {5, 7, 2, 45, 48, 0.20f},
+                                              {6, 7, 1, 45, 48, 0.20f},
+                                              {0, 7, 0, 45, 48, 0.20f}};
     
     rect.move(sf::Vector2f(350.0f, 200.0f));
     Hero hero(rect, PLAYER1_SHEET, AnimationsConstructors, 3, 0.0f, true);
@@ -52,14 +50,25 @@ int main()
     for (i = 0; i < obs.size(); ++i)
     {
         obs[i].GetBody().move(sf::Vector2f(100.0f + (i * TILE_SIZE * fator), 400.0f));
-        obs[i].Execute();
+        //obs[i].Execute();
     }
 
     Hero* hero_p = &hero;
+    std::vector<StaticObstacle*> obstacles_p;
+    std::vector<BaseObstacle*> baseobstacles_p;
 
-    LivingEntity* livin_p = static_cast<LivingEntity*>(hero_p);
+    for (i = 0; i < obs.size(); ++i)
+        obstacles_p.emplace_back(&obs[i]);
 
+    for (i = 0; i < obstacles_p.size(); ++i)
+        baseobstacles_p.push_back(static_cast<BaseObstacle*>(obstacles_p[i]));
 
+    Collider maneger;
+
+    for (i = 0; i < obstacles_p.size(); ++i)
+        maneger += baseobstacles_p[i];
+    
+    maneger += static_cast<LivingEntity*>(&hero);
 
     sf::Clock clock;
     while(window.isOpen())
@@ -102,8 +111,12 @@ int main()
 
         window.clear(sf::Color(100U, 100U, 100U));
 
-        hero.Execute();
         hero.SetElapsedTime(timediff);
+
+        hero.Execute();
+
+        maneger.UpdateCollisions();
+
         for (i = 0; i < obs.size(); ++i)
             obs[i].SelfPrint(window);
         hero.SelfPrint(window);

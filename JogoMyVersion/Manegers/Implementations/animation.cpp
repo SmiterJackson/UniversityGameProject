@@ -3,10 +3,10 @@
 #include "../Headers/animation.h"
 
 AnimaData::AnimaData():
-    start(0), end(0), row(0), coefficient(0), switchTime(0), repeatable(false)
+    start(0), end(0), row(0), height(0), switchTime(0), repeatable(false)
 {};
-AnimaData::AnimaData(unsigned int Start, unsigned int End, unsigned int Row, unsigned int Coefficient, float SwitchTime, bool _repeatable):
-    start(Start), end(End), row(Row), coefficient(Coefficient), switchTime(SwitchTime), repeatable(_repeatable)
+AnimaData::AnimaData(unsigned int Start, unsigned int End, unsigned int Row, unsigned int _height, unsigned int _width, float SwitchTime, bool _repeatable):
+    start(Start), end(End), row(Row), height(_height), width(_width), switchTime(SwitchTime), repeatable(_repeatable)
 {};
 AnimaData::~AnimaData()
 {
@@ -20,8 +20,8 @@ Animation::Animation(const AnimaData& Data) :
 {
     current = start;
 
-    img_token.width = Data.coefficient;
-    img_token.height = Data.coefficient;
+    img_token.width = Data.width;
+    img_token.height = Data.height;
 };
 Animation::~Animation()
 {
@@ -36,8 +36,8 @@ void Animation::Initialize(const AnimaData& Data)
 
     current = start;
 
-    img_token.width = Data.coefficient;
-    img_token.height = Data.coefficient;
+    img_token.width = Data.width;
+    img_token.height = Data.height;
 }
 void Animation::ResetAnimation()
 {

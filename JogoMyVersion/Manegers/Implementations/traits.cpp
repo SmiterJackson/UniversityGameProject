@@ -65,7 +65,41 @@ Collidable::Collidable(sf::RectangleShape& _body, const float _weight_ceffic) :
 Collidable::~Collidable()
 {};
 
-bool Collidable::CheckCollision(sf::RectangleShape& _body)
+/*bool Collidable::CheckCollision(BaseObstacle& item_2)
+{
+	sf::RectangleShape& body_1 = item_2.GetBodyRef();
+	sf::RectangleShape& body_2 = item_2.GetBody();
+
+	sf::Vector2f pos_1(body_1.getPosition());
+	sf::Vector2f pos_2(body_2.getPosition());
+
+	sf::Vector2f MinDistance(body_1.getOrigin() + body_2.getOrigin());
+	sf::Vector2f distanceBetween(abs(pos_1.x - pos_2.x), abs(pos_1.y - pos_2.y));
+
+	sf::Vector2f diff(distanceBetween.x - MinDistance.x, distanceBetween.y - MinDistance.y);
+
+	// Caso a diferença das distâncias x e y seja maior que a soma do tamanho de cada objeto, será então, denotado um contato entre os objetos
+	if (diff.x < 0.0f && diff.y < 0.0f)
+	{
+		if (diff.x < diff.y)
+		{
+			body_1.move(diff.x * item_2.GetWeightCoefficient(), 0.0f);
+			body_2.move(-diff.x * (1.0f - item_2.GetWeightCoefficient()), 0.0f);
+		}
+		else
+		{
+			body_1.move(0.0f, diff.y * item_2.GetWeightCoefficient());
+			body_2.move(0.0f, -diff.y * (1.0f - item_2.GetWeightCoefficient()));
+			item_1.InvertHaveGround();
+		}
+
+		return true;
+	}
+
+	return false;
+};*/
+
+/*bool Collidable::CheckCollision(sf::RectangleShape& _body)
 {
 	sf::Vector2f other_pos(_body.getPosition());
 	sf::Vector2f this_pos(this->rect.getPosition());
@@ -113,7 +147,7 @@ bool Collidable::CheckCollision(sf::RectangleShape& _body)
 	}
 
 	return false;
-};
+};*/
 //////////////////////////////////////////////////////////////////////////////////////
 Animated::Animated() :
 	animationVec(), next_ani(0), lastUsedAni(0), elapsed_time(0.0f)

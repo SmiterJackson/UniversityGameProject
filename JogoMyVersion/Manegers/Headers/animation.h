@@ -5,11 +5,11 @@
 class AnimaData {
 public:
     AnimaData();
-    AnimaData(unsigned int _start, unsigned int _end, unsigned int _row, unsigned int _coefficient, float _switchTime, bool _repeatable = false);
+    AnimaData(unsigned int _start, unsigned int _end, unsigned int _row, unsigned int _height, unsigned int _width, float _switchTime, bool _repeatable = false);
     ~AnimaData();
 
 public:
-    unsigned int start, end, row, coefficient;
+    unsigned int start, end, row, height, width;
     float switchTime;
     bool repeatable;
 };

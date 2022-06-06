@@ -3,10 +3,10 @@
 #include "../Headers/Hero.h"
 using namespace sf;
 
-#define HERO_HORIZONTAL_ACCELERETION 1.0f
+#define HERO_HORIZONTAL_ACCELERETION 28.0f
 #define HERO_MAX_HORIZONTAL_DESACCELERETION HERO_HORIZONTAL_ACCELERETION
-#define HERO_MAX_HORIZONTAL_ACCELERETION 10.0f
-#define HERO_VERTICAL_ACCELERETION 36.0f
+#define HERO_MAX_HORIZONTAL_ACCELERETION 140.0f
+#define HERO_VERTICAL_ACCELERETION 90.0f
 #define HERO_VERTICAL_DESACCELERETION (HERO_VERTICAL_ACCELERETION/18)
 #define HERO_MAX_FALL_VELOCITY (HERO_VERTICAL_ACCELERETION/2)
 #define HERO_INVENCIBILITY_FRAMES_TIME 3.0f
@@ -73,14 +73,14 @@ void Hero::Execute()
 			this->faceRight = false;
 			if(this->have_ground)
 				this->next_ani = Run;
-			this->horizontal_acc -= HERO_HORIZONTAL_ACCELERETION;
+			this->horizontal_acc -= HERO_HORIZONTAL_ACCELERETION * elapsed_time;
 		}
 		if (isD_pressed && this->horizontal_acc < HERO_MAX_HORIZONTAL_ACCELERETION)
 		{
 			this->faceRight = true;
 			if (this->have_ground)
 				this->next_ani = Run;
-			this->horizontal_acc += HERO_HORIZONTAL_ACCELERETION;
+			this->horizontal_acc += HERO_HORIZONTAL_ACCELERETION * elapsed_time;
 		}
 	}
 	else {
@@ -93,10 +93,10 @@ void Hero::Execute()
 		}
 
 		if (this->horizontal_acc > 0.0f)
-			this->horizontal_acc -= HERO_MAX_HORIZONTAL_DESACCELERETION;
+			this->horizontal_acc -= HERO_MAX_HORIZONTAL_DESACCELERETION * elapsed_time;
 
 		if (this->horizontal_acc < 0.0f)
-			this->horizontal_acc += HERO_MAX_HORIZONTAL_DESACCELERETION;
+			this->horizontal_acc += HERO_MAX_HORIZONTAL_DESACCELERETION * elapsed_time;
 	}
 
 	if(this->have_ground && Keyboard::isKeyPressed(Keyboard::S))
@@ -104,18 +104,20 @@ void Hero::Execute()
 		this->next_ani = Crouch;
 	}
 
+	if (!this->have_ground)
+	{
+		if (this->vertical_acc < HERO_MAX_FALL_VELOCITY)
+			this->vertical_acc += HERO_VERTICAL_DESACCELERETION * elapsed_time;
+	}
+	else
+		this->vertical_acc = 0.0f;
+
 	if (this->have_ground && Keyboard::isKeyPressed(Keyboard::W)) // Caso esteja no chão e pule, acelera para cima
 	{
 		this->have_ground = false;
 		this->next_ani = Jump;
-		this->vertical_acc = -HERO_VERTICAL_ACCELERETION;
+		this->vertical_acc = -HERO_VERTICAL_ACCELERETION * elapsed_time;
 	}
-
-	if (!this->have_ground)
-		if(this->vertical_acc < HERO_MAX_FALL_VELOCITY)
-			this->vertical_acc += HERO_VERTICAL_DESACCELERETION;
-	else
-		this->vertical_acc = 0.0f;
 
 	if (this->invec_current_timer > 0.0f)
 		this->invec_current_timer -= this->elapsed_time;

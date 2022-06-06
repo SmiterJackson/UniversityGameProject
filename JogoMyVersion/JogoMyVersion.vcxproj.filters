@@ -42,6 +42,9 @@
     <ClCompile Include="Entities\Obstacles\Implementations\obstacles.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Manegers\Implementations\collider.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Main\stdafx.h">
@@ -69,6 +72,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Entities\Obstacles\Headers\obstacles.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Manegers\Headers\collider.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

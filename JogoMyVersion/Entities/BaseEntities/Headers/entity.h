@@ -16,7 +16,7 @@ namespace entities
 
 		sf::RectangleShape& GetBody() { return this->body; };
 		const sf::RectangleShape& GetConstBody() { return this->body; };
-		void GetConstBody(const sf::RectangleShape& _body) { this->body = _body; };
+		void SetBody(const sf::RectangleShape& _body) { this->body = _body; };
 
 		// FUNCTIONS
 		virtual void Execute() = 0;

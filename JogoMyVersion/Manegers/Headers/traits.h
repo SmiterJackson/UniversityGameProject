@@ -1,6 +1,8 @@
 #pragma once
 
 #include "animation.h"
+/*#include "../Entities/Obstacles/Headers/obstacles.h"
+using namespace obstacles;*/
 
 namespace traits
 {
@@ -102,26 +104,17 @@ namespace traits
 		Collidable(sf::RectangleShape& _body, const float _weight_ceffic = 0.0f);
 		~Collidable();
 
+		sf::RectangleShape& GetBodyRef() { return this->rect; };
 		void SetBodyRef(const sf::RectangleShape& _body) { this->rect = _body; };
 
 		const float& GetWeightCoefficient() { return this->weight_coeffic; };
 		void SetWeightCoefficient(const float _weight_coeffic) { this->weight_coeffic = _weight_coeffic; };
 
-		bool CheckCollision(sf::RectangleShape& _body);
+		//bool CheckCollision(BaseObstacle& item_2);
 
 	protected:
 		sf::RectangleShape& rect;
 		float weight_coeffic;
-	};
-
-	class Collider
-	{
-	public:
-		Collider();
-		~Collider();
-
-	protected:
-
 	};
 
 	typedef std::vector<AnimaData> VecAnimaValues;
