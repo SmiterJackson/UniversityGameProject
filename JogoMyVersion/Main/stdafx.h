@@ -10,6 +10,7 @@
 #include <map>
 #include <unordered_map>
 #include <fstream>
+#include <sstream>
 
 //SFML
 #include "SFML/Window.hpp"

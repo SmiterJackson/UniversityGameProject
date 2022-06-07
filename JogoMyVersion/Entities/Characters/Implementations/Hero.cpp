@@ -3,10 +3,10 @@
 #include "../Headers/Hero.h"
 using namespace sf;
 
-#define MAX_HORIZONTAL_VELOCITY 75.0f
-#define HORIZONTAL_ACCELERATION 25.0f
+#define MAX_HORIZONTAL_VELOCITY 16.0f
+#define HORIZONTAL_ACCELERATION 6.0f
 
-#define JUMP_ACCELERATION -24.0f // coeffficiente para o tamanho do pulo
+#define JUMP_ACCELERATION -8.0f // coeffficiente para o tamanho do pulo
 #define MAX_FALL_VELOCITY -(JUMP_ACCELERATION / 2.0f)
 #define VERTICAL_ACCELERATION -(JUMP_ACCELERATION / 16.0f) // proporção de tempo desaceleração do pulo, o mais confortável que percebi foi 16
 
@@ -126,6 +126,7 @@ void Hero::Execute()
 
 	if (!this->have_ground)
 	{
+		//this->next_ani = Fall;
 		if (this->vertical_acc < MAX_FALL_VELOCITY)
 			this->vertical_acc += VERTICAL_ACCELERATION;
 	}

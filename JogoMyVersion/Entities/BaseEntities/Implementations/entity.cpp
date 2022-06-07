@@ -26,7 +26,7 @@ BaseEntity::~BaseEntity()
 void BaseEntity::debugExecute()
 {
 	this->font.loadFromFile("JogoMyVersion\\Resources\\fonts\\hf-free-complete\\equipment-pro-v1.1\\EquipmentPro.ttf");
-	this->info_pos.setCharacterSize(28);
+	this->info_pos.setCharacterSize(10);
 	this->info_pos.setFont(this->font);
 	stringInfoUptade();
 };

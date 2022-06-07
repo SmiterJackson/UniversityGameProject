@@ -1,6 +1,6 @@
 #include "../Headers/collider.h"
 
-#define TIME_VERIFICATION 0.20f
+#define TIME_VERIFICATION 0.015f
 
 Collider::Collider() :
 	livingEntities(), obstacles(), elapsed_time(0.0f), timer(0.0f)
@@ -13,32 +13,32 @@ Collider::~Collider()
 
 void Collider::UpdateCollisions()
 {
-	unsigned int i = 0, j = 0;
-	bool colision;
 	this->timer += this->elapsed_time;
 
-	for (i = 0; i < this->livingEntities.size(); ++i)
+	if (this->timer > TIME_VERIFICATION)
 	{
-		colision = false;
-		for (j = 0; j < this->obstacles.size(); ++j)
-		{
-			if(CheckCollision(*livingEntities[i], *obstacles[j])) // Verifica colisão de criaturas com obstáculos
-				livingEntities[i]->InvertHaveGround();
-		}
-	}
-	for (i = 0; i < this->livingEntities.size(); ++i)
-	{
-		colision = false;
-		for (j = 0; j < this->obstacles.size(); ++j)
-		{
-			if (CheckNext(*livingEntities[i], *obstacles[j])) // Verifica se há colisão na futura posição entre uma criatura com obstáculos, denotando uma futura queda
-				colision = true;
-		}
-		if (colision)
-			livingEntities[i]->SetHaveGround(false);
-	}
-	if(this->timer > TIME_VERIFICATION)
+		unsigned int i = 0, j = 0;
+		bool colision;
 		this->timer -= TIME_VERIFICATION;
+		
+
+		for (i = 0; i < this->livingEntities.size(); ++i)
+		{
+			colision = false;
+			for (j = 0; j < this->obstacles.size(); ++j)
+			{
+				if (CheckCollision(*livingEntities[i], *obstacles[j])) // Verifica colisão de criaturas com obstáculos
+				{
+					livingEntities[i]->SetHaveGround(true);
+					colision = true;
+				}
+			}
+			if (!colision)
+				livingEntities[i]->SetHaveGround(false);
+		}
+	}
+	/*if (this->timer > TIME_VERIFICATION)
+		this->timer -= TIME_VERIFICATION;*/
 };
 
 bool Collider::CheckCollision(LivingEntity& entity, BaseObstacle& obst)

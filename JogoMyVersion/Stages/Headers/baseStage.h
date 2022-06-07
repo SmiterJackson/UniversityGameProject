@@ -4,7 +4,6 @@
 #include "../Entities/Obstacles/Headers/obstacles.h"
 #include "../Entities/Characters/Headers/Hero.h"
 #include "../Manegers/Headers/collider.h"
-#include "../Manegers/Headers/parallax.h"
 using namespace entities;
 
 
@@ -29,13 +28,13 @@ namespace std
 class Stage : public Printable
 {
 public:
-	Stage(const sf::View& _view = sf::View(sf::Vector2f(0.0f, 0.0f), sf::Vector2f(400.0f, 400.0f)));
-	Stage(const std::string& fileName, const sf::View& _view = sf::View(sf::Vector2f(0.0f, 0.0f), sf::Vector2f(400.0f, 400.0f)));
+	Stage();
+	Stage(const std::string& fileName);
 	~Stage();
 
-	std::vector<BackGround>& GetView() { return this->views; };
-	const std::vector<BackGround>& GetConstView() { return this->views; };
-	void SetView(const std::vector<BackGround>& _views) { this->views = _views; };
+	sf::View& GetView() { return this->background; };
+	const sf::View& GetConstView() { return this->background; };
+	void SetView(sf::View& _background) { this->background = _background; };
 
 	void Initialize();
 	void Execute(float elapsedTime);
@@ -44,7 +43,7 @@ public:
 	void ReadArchive(const std::string& fileName);
 
 protected:
-	std::vector<BackGround> views;
+	sf::View background;
 	std::vector<Hero> heros;
 	std::vector<BaseObstacle*> obstacles;
 	//std::vector<Projectile*> projectiles;

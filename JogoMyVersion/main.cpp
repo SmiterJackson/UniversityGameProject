@@ -3,8 +3,6 @@
 #include "Manegers/Headers/parallax.h"
 #include "Stages/Headers/baseStage.h"
 
-#define STAGE_BACKGROUND std::string("JogoMyVersion\\Resources\\images\\backgrounds\\Background\\Background.png")
-
 int main()
 {
     sf::RenderWindow window(sf::VideoMode(1728, 972), "Janela do Jogo");
@@ -12,9 +10,7 @@ int main()
     window.setVerticalSyncEnabled(true);
     window.setKeyRepeatEnabled(false);
 
-    Stage stage(STAGE_BACKGROUND, Myview);
-
-    
+    Stage stage;
 
     float timediff = 0.0f;
     sf::Clock clock;
@@ -29,8 +25,6 @@ int main()
 
         // Limpar tela
         window.clear(sf::Color(100U, 100U, 100U));
-
-        window.setView(stage.GetConstView());
 
         // Executar a fase antes de desenha-la
         stage.Execute(timediff);

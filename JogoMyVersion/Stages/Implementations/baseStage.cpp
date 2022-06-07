@@ -2,23 +2,22 @@
 
 #include "../Headers/baseStage.h"
 
-#define PLAYER1_SHEET std::string("JogoMyVersion\\Resources\\images\\sprites\\Characters\\gunner_green.png")
-#define TILE_SHEET std::string("JogoMyVersion\\Resources\\images\\backgrounds\\Tiles\\IndustrialTile_sheet.png")
-#define BACKGROUND_SHEET std::string("JogoMyVersion\\Resources\\images\\backgrounds\\Background\\background_sheet.png")
-#define FONT_REF std::string("JogoMyVersion\\Resources\\fonts\\hf-free-complete\\equipment-pro-v1.1\\EquipmentPro.ttf")
+#define FONT_REF "JogoMyVersion\\Resources\\fonts\\hf-free-complete\\equipment-pro-v1.1\\EquipmentPro.ttf"
+#define BACKGROUND_REF "JogoMyVersion\\Resources\\images\\backgrounds\\Background\\Background.png"
+#define TILE_SHEET "JogoMyVersion\\Resources\\images\\backgrounds\\Tiles\\IndustrialTile_sheet.png"
+#define PLAYER1_SHEET "JogoMyVersion\\Resources\\images\\sprites\\Characters\\gunner_green.png"
+
 #define PLAYER_SIZE 48
 #define TILE_SIZE 32
 #define GRID_SIZE 32
-#define FATOR_TAMANHO 2.0f
-#define FATOR_TAMANHO_backgroung 3.0f
 
-Stage::Stage(const sf::View& _view) :
-	Printable(), view(_view), heros(), obstacles(), collider()
+Stage::Stage() :
+	Printable(), background(), heros(), obstacles(), collider()
 {
     Initialize();
 };
-Stage::Stage(const std::string& fileName, const sf::View& _view) :
-    Printable(fileName), view(_view), heros(), obstacles(), collider()
+Stage::Stage(const std::string& fileName) :
+    Printable(fileName), background(), heros(), obstacles(), collider()
 {
 	Initialize();
 };
@@ -30,51 +29,39 @@ void Stage::Initialize()
 {
     unsigned int i = 0;
 
-    sf::RectangleShape rect(sf::Vector2f(PLAYER_SIZE * FATOR_TAMANHO, PLAYER_SIZE * FATOR_TAMANHO));
-    sf::RectangleShape tiles_rect(sf::Vector2f(TILE_SIZE * FATOR_TAMANHO, TILE_SIZE * FATOR_TAMANHO));
+    sf::RectangleShape rect(sf::Vector2f(PLAYER_SIZE, PLAYER_SIZE));
+    sf::RectangleShape tiles_rect(sf::Vector2f(TILE_SIZE, TILE_SIZE));
 
     VecAnimaValues AnimationsConstructors = { {0, 4, 2, 45, 48, 0.20f, true},
                                               {0, 5, 1, 45, 48, 0.20f, true},
                                               {5, 7, 2, 45, 48, 0.05f},
-                                              {6, 7, 1, 45, 48, 0.20f},
+                                              {6, 6, 1, 45, 48, 1.0f},
+                                              {7, 7, 1, 45, 48, 1.0f},
                                               {0, 7, 0, 45, 48, 0.20f} };
 
+    //Criando um hero
     this->heros.emplace_back(rect, PLAYER1_SHEET, AnimationsConstructors, 3, 0.0f, true);
-    heros[0].GetBody().move(sf::Vector2f(0.0f, -PLAYER_SIZE * FATOR_TAMANHO));
+    heros[0].GetBody().move(sf::Vector2f( 400 + PLAYER_SIZE, 100 + PLAYER_SIZE));
 
-    this->obstacles = { static_cast<BaseObstacle*>(new StaticObstacle(tiles_rect, TILE_SHEET)), 
-                        static_cast<BaseObstacle*>(new StaticObstacle(tiles_rect, TILE_SHEET)),
-                        static_cast<BaseObstacle*>(new StaticObstacle(tiles_rect, TILE_SHEET)),
-                        static_cast<BaseObstacle*>(new StaticObstacle(tiles_rect, TILE_SHEET)),
-                        static_cast<BaseObstacle*>(new StaticObstacle(tiles_rect, TILE_SHEET)),
-                        static_cast<BaseObstacle*>(new StaticObstacle(tiles_rect, TILE_SHEET)),
-                        static_cast<BaseObstacle*>(new StaticObstacle(tiles_rect, TILE_SHEET)),
-                        static_cast<BaseObstacle*>(new StaticObstacle(tiles_rect, TILE_SHEET)),
-                        static_cast<BaseObstacle*>(new StaticObstacle(tiles_rect, TILE_SHEET)),
-                        static_cast<BaseObstacle*>(new StaticObstacle(tiles_rect, TILE_SHEET))};
+    //Criando blocos
+    for (int i = 0; i < 8; i++)
+        this->obstacles.push_back(static_cast<BaseObstacle*>(new StaticObstacle(tiles_rect, TILE_SHEET)));
 
+    //Posicionando os blocos, e executando-os uma vez (atualiza valores internos)
     for (i = 0; i < obstacles.size(); ++i)
     {
-        (*obstacles[i]).GetBody().move(sf::Vector2f((-TILE_SIZE * FATOR_TAMANHO * 5) + (i * TILE_SIZE * FATOR_TAMANHO), GRID_SIZE * 6));
+        (*obstacles[i]).GetBody().move(sf::Vector2f(400 + -(TILE_SIZE * 4) + (i * TILE_SIZE), 100 + GRID_SIZE * 5));
         (*obstacles[i]).Execute();
     }
 
-    /*std::vector<StaticObstacle*> obstacles_p;
-    std::vector<BaseObstacle*> baseobstacles_p;
+    // Joga o hero para dentro do colisor
+    this->collider += static_cast<LivingEntity*>(&heros[0]);
 
-    for (i = 0; i < obstacles.size(); ++i)
-        obstacles_p.emplace_back(&obstacles[i]);
-
-    for (i = 0; i < obstacles_p.size(); ++i)
-        baseobstacles_p.push_back(static_cast<BaseObstacle*>(obstacles_p[i]));
-
-    for (i = 0; i < obstacles_p.size(); ++i)
-        this->collider += baseobstacles_p[i];*/
-
+    //Joga os obstaculos locais para dentro do colisor, para que tenha referencia de cada obstaculo
     for (i = 0; i < this->obstacles.size(); ++i)
         this->collider += this->obstacles[i];
 
-    this->collider += static_cast<LivingEntity*>(&heros[0]);
+
 };
 void Stage::Execute(float elapsedTime)
 {
@@ -91,7 +78,7 @@ void Stage::Execute(float elapsedTime)
     collider.SetElapsedTime(elapsedTime);
     collider.UpdateCollisions();
 
-    this->view.setCenter(heros[0].GetBody().getPosition());
+    //this->view.setCenter(heros[0].GetBody().getPosition());
 };
 void Stage::TreatInput(sf::RenderWindow& window)
 {
@@ -133,13 +120,9 @@ void Stage::TreatInput(sf::RenderWindow& window)
 void Stage::SelfPrint(sf::RenderWindow& window)
 {
     unsigned int i = 0;
-    sf::Sprite body(this->texture);
-    body.setOrigin(body.getGlobalBounds().width / 2.0f, body.getGlobalBounds().height / 2.0f);
-    body.setPosition(0.0f, 0.0f);
-    body.setScale(FATOR_TAMANHO_backgroung, FATOR_TAMANHO_backgroung);
-    body.move(0.0f, heros[0].GetBody().getPosition().y);
+
     // Desenhar entidades após atualizações, e colisões
-    window.draw(body);
+
 
     for (i = 0; i < obstacles.size(); ++i)
         (*obstacles[i]).SelfPrint(window);

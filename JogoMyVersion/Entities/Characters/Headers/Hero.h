@@ -39,7 +39,7 @@ public:
 	std::vector<Hero*> otherPlayers;
 
 protected:
-	enum animations { Idle, Run, Crouch, Jump, Death, Attack };
+	enum animations { Idle, Run, Crouch, Jump, Fall, Death, Attack };
 	float invec_current_timer;
 	bool invenc_frames, crouching;
 	const unsigned int playerId;
