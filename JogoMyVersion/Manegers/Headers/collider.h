@@ -14,6 +14,9 @@ public:
 	Collider(const std::vector<LivingEntity*>& _livingEntities, std::vector<BaseObstacle*> _obstacles);
 	~Collider();
 
+	const float GetElapsedTime() const { return elapsed_time; };
+	void SetElapsedTime(const float _elapsed_time) { this->elapsed_time = _elapsed_time; };
+
 	void UpdateCollisions();
 	bool CheckCollision(LivingEntity& item_1, BaseObstacle& item_2);
 	bool CheckNext(LivingEntity& entity, BaseObstacle& obst);
@@ -30,4 +33,5 @@ public:
 protected:
 	std::vector<LivingEntity*> livingEntities;
 	std::vector<BaseObstacle*> obstacles;
+	float elapsed_time, timer;
 };

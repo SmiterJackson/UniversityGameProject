@@ -12,50 +12,54 @@ using namespace sf;
 
 #define INVENCIBILITY_FRAMES_TIME 3.0f
 
+unsigned int Hero::PlayersIds = 0;
+
 Hero::Hero() :
-	LivingEntity(), Printable(), Animated(), Slipery()
+	LivingEntity(), Printable(), Animated(), Slipery(), otherPlayers(), playerId(PlayersIds++)
 {
 	Initialize();
 };
 Hero::Hero(const sf::RectangleShape& _body, const sf::Texture& texture, const unsigned int _life_count, const float _weight_ceffic, const bool _have_ground) :
-	LivingEntity(_body, _weight_ceffic, _life_count, _have_ground), Printable(texture), Animated(), Slipery()
+	LivingEntity(_body, _weight_ceffic, _life_count, _have_ground), Printable(texture), Animated(), Slipery(), otherPlayers(), playerId(PlayersIds++)
 {
 	Initialize();
 };
 Hero::Hero(const sf::RectangleShape& _body, const sf::Texture& texture, const VecAnimaValues& _animations, const unsigned int _life_count, const float _weight_ceffic, const bool _have_ground) :
-	LivingEntity(_body, _weight_ceffic, _life_count, _have_ground), Printable(texture), Animated(_animations), Slipery()
+	LivingEntity(_body, _weight_ceffic, _life_count, _have_ground), Printable(texture), Animated(_animations), Slipery(), otherPlayers(), playerId(PlayersIds++)
 {
 	Initialize();
 };
 Hero::Hero(const sf::RectangleShape& _body, const sf::Texture& texture, const std::vector<Animation>& _animations, const unsigned int _life_count, const float _weight_ceffic, const bool _have_ground) :
-	LivingEntity(_body, _weight_ceffic, _life_count, _have_ground), Printable(texture), Animated(_animations), Slipery()
+	LivingEntity(_body, _weight_ceffic, _life_count, _have_ground), Printable(texture), Animated(_animations), Slipery(), otherPlayers(), playerId(PlayersIds++)
 {
 	Initialize();
 };
 Hero::Hero(const sf::RectangleShape& _body, const std::string fileName, const unsigned int _life_count, const float _weight_ceffic, const bool _have_ground) :
-	LivingEntity(_body, _weight_ceffic, _life_count, _have_ground), Printable(fileName), Animated(), Slipery()
+	LivingEntity(_body, _weight_ceffic, _life_count, _have_ground), Printable(fileName), Animated(), Slipery(), otherPlayers(), playerId(PlayersIds++)
 {
 	Initialize();
 };
 Hero::Hero(const sf::RectangleShape& _body, const std::string fileName, const VecAnimaValues& _animations, const unsigned int _life_count, const float _weight_ceffic, const bool _have_ground) :
-	LivingEntity(_body, _weight_ceffic, _life_count, _have_ground), Printable(fileName), Animated(_animations), Slipery()
+	LivingEntity(_body, _weight_ceffic, _life_count, _have_ground), Printable(fileName), Animated(_animations), Slipery(), otherPlayers(), playerId(PlayersIds++)
 {
 	Initialize();
 };
 Hero::Hero(const sf::RectangleShape& _body, const std::string fileName, const std::vector<Animation>& _animations, const unsigned int _life_count, const float _weight_ceffic, const bool _have_ground) :
-	LivingEntity(_body, _weight_ceffic, _life_count, _have_ground), Printable(fileName), Animated(_animations), Slipery()
+	LivingEntity(_body, _weight_ceffic, _life_count, _have_ground), Printable(fileName), Animated(_animations), Slipery(), otherPlayers(), playerId(PlayersIds++)
 {
 	Initialize();
 };
 Hero::~Hero()
-{};
+{
+	
+};
 
 void Hero::Initialize()
 {
 	this->next_ani = Idle;
 	this->body.setTexture(&this->texture);
 	this->body.setOrigin((this->body.getSize() / 2.0f));
-	this->friction_coefficient = 0.95f;
+	this->friction_coefficient = 1.0f;
 	this->invec_current_timer = 0.0f;
 	this->walk_right = false;
 	this->walk_left = false;
@@ -63,7 +67,8 @@ void Hero::Initialize()
 };
 void Hero::Execute()
 {	
-	if (!this->alive) {
+	if (!this->alive)
+	{
 		Died();
 		return;
 	}
@@ -195,6 +200,86 @@ void Hero::Died()
 
 	this->next_ani = Death;
 	this->body.move(sf::Vector2f(this->horizontal_acc, this->vertical_acc));
+};
+void Hero::PlayerInputHandler(const sf::Event& event)
+{
+	// Ativa as ações baseado no id de cada player para relacionar os botões do teclado
+	if(event.type == sf::Event::KeyPressed)
+		switch (event.key.code)
+		{
+		case sf::Keyboard::A:
+			if(this->playerId == 0)
+				this->InvertWalkLeft();
+			break;
+		case sf::Keyboard::D:
+			if (this->playerId == 0)
+				this->InvertWalkRight();
+			break;
+		case sf::Keyboard::S:
+			if (this->playerId == 0)
+				this->InvertCrouching();
+			break;
+		case sf::Keyboard::W:
+			if (this->playerId == 0)
+				this->InvertJumping();
+			break;
+		case sf::Keyboard::Left:
+			if (this->playerId == 1)
+				this->InvertWalkLeft();
+			break;
+		case sf::Keyboard::Right:
+			if (this->playerId == 1)
+				this->InvertWalkRight();
+			break;
+		case sf::Keyboard::Up:
+			if (this->playerId == 1)
+				this->InvertCrouching();
+			break;
+		case sf::Keyboard::Down:
+			if (this->playerId == 1)
+				this->InvertJumping();
+			break;
+		default:
+			break;
+		}
+	else
+		switch (event.key.code)
+		{
+		case sf::Keyboard::A:
+			if (this->playerId == 0)
+				this->InvertWalkLeft();
+			break;
+		case sf::Keyboard::D:
+			if (this->playerId == 0)
+				this->InvertWalkRight();
+			break;
+		case sf::Keyboard::S:
+			if (this->playerId == 0)
+				this->InvertCrouching();
+			break;
+		case sf::Keyboard::W:
+			if (this->playerId == 0)
+				this->InvertJumping();
+			break;
+		case sf::Keyboard::Left:
+			if (this->playerId == 1)
+				this->InvertWalkLeft();
+			break;
+		case sf::Keyboard::Right:
+			if (this->playerId == 1)
+				this->InvertWalkRight();
+			break;
+		case sf::Keyboard::Up:
+			if (this->playerId == 1)
+				this->InvertCrouching();
+			break;
+		case sf::Keyboard::Down:
+			if (this->playerId == 1)
+				this->InvertJumping();
+			break;
+		default:
+			break;
+		}
 };
 void Hero::SelfPrint(sf::RenderWindow& window)
 {

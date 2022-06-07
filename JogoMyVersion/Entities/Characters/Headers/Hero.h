@@ -31,10 +31,16 @@ public:
 	void Execute();
 	void Damaged();
 	void Died();
+	void PlayerInputHandler(const sf::Event& event);
 	void SelfPrint(sf::RenderWindow& window);
 
 public:
-	enum animations { Idle, Run, Crouch, Jump, Death, Attack};
+	static unsigned int PlayersIds;
+	std::vector<Hero*> otherPlayers;
+
+protected:
+	enum animations { Idle, Run, Crouch, Jump, Death, Attack };
 	float invec_current_timer;
 	bool invenc_frames, crouching;
+	const unsigned int playerId;
 };

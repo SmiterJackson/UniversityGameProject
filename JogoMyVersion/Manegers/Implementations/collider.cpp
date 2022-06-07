@@ -1,10 +1,12 @@
 #include "../Headers/collider.h"
 
+#define TIME_VERIFICATION 0.20f
+
 Collider::Collider() :
-	livingEntities(), obstacles()
+	livingEntities(), obstacles(), elapsed_time(0.0f), timer(0.0f)
 {};
 Collider::Collider(const std::vector<LivingEntity*>& _livingEntities, std::vector<BaseObstacle*> _obstacles) :
-	livingEntities(_livingEntities), obstacles(_obstacles)
+	livingEntities(_livingEntities), obstacles(_obstacles), elapsed_time(0.0f), timer(0.0f)
 {};
 Collider::~Collider()
 {};
@@ -12,21 +14,31 @@ Collider::~Collider()
 void Collider::UpdateCollisions()
 {
 	unsigned int i = 0, j = 0;
-	bool no_colision = true;
+	bool colision;
+	this->timer += this->elapsed_time;
+
 	for (i = 0; i < this->livingEntities.size(); ++i)
 	{
+		colision = false;
 		for (j = 0; j < this->obstacles.size(); ++j)
 		{
 			if(CheckCollision(*livingEntities[i], *obstacles[j])) // Verifica colisão de criaturas com obstáculos
 				livingEntities[i]->InvertHaveGround();
-
-			/*if (CheckNext(*livingEntities[i], *obstacles[j])) // Verifica se há colisão na futura posição entre uma criatura com obstáculos, denotando uma futura queda
-				no_colision = false;
-			if (no_colision)
-				livingEntities[i]->InvertHaveGround();*/
 		}
-		
-	}	
+	}
+	for (i = 0; i < this->livingEntities.size(); ++i)
+	{
+		colision = false;
+		for (j = 0; j < this->obstacles.size(); ++j)
+		{
+			if (CheckNext(*livingEntities[i], *obstacles[j])) // Verifica se há colisão na futura posição entre uma criatura com obstáculos, denotando uma futura queda
+				colision = true;
+		}
+		if (colision)
+			livingEntities[i]->SetHaveGround(false);
+	}
+	if(this->timer > TIME_VERIFICATION)
+		this->timer -= TIME_VERIFICATION;
 };
 
 bool Collider::CheckCollision(LivingEntity& entity, BaseObstacle& obst)
@@ -53,7 +65,9 @@ bool Collider::CheckCollision(LivingEntity& entity, BaseObstacle& obst)
 				entity_body.move(intersection.x * obst.GetWeightCoefficient(), 0.0f);
 				obst_body.move(-intersection.x * (1.0f - obst.GetWeightCoefficient()), 0.0f);
 			}
+		#ifdef _DEBUG
 			std::cout << "Collided 'x' asix" << std::endl;
+		#endif
 		}
 		else
 		{
@@ -67,7 +81,9 @@ bool Collider::CheckCollision(LivingEntity& entity, BaseObstacle& obst)
 				entity_body.move(0.0f, intersection.y * obst.GetWeightCoefficient());
 				obst_body.move(0.0f, -intersection.y * (1.0f - obst.GetWeightCoefficient()));
 			}
+		#ifdef _DEBUG
 			std::cout << "Collided 'y' asix" << std::endl;
+		#endif
 		}
 		return true;
 	}
@@ -77,18 +93,22 @@ bool Collider::CheckCollision(LivingEntity& entity, BaseObstacle& obst)
 
 bool Collider::CheckNext(LivingEntity& entity, BaseObstacle& obst)
 {
-	sf::RectangleShape& entity_body = entity.GetBody();
-	sf::RectangleShape& obst_body = obst.GetBody();
-
-	float delta_distance = entity_body.getPosition().y - obst_body.getPosition().y + 1;
-	float intersection = fabs(delta_distance) - (entity_body.getSize().y / 2.0f + obst_body.getSize().y / 2.0f);
-
-	// Caso a diferença das distâncias x e y seja maior que a soma do tamanho de cada objeto, será então, denotado um contato entre os objetos
-	if (intersection < 0.0f)
+	if (this->timer > TIME_VERIFICATION)
 	{
-		std::cout << "Tem colisao futura em eixo 'y'" << std::endl;
-		return true;
-	}
+		sf::RectangleShape& entity_body = entity.GetBody();
+		sf::RectangleShape& obst_body = obst.GetBody();
 
+		sf::Vector2f delta_distance(entity_body.getPosition().x * entity.GetHorizontalAcc() - obst_body.getPosition().x, entity_body.getPosition().y - obst_body.getPosition().y + 2);
+		sf::Vector2f intersection(fabs(delta_distance.x) - (entity_body.getSize().x / 2.0f + obst_body.getSize().x / 2.0f), fabs(delta_distance.y) - (entity_body.getSize().y / 2.0f + obst_body.getSize().y / 2.0f));
+
+		// Caso a diferença das distâncias x e y seja maior que a soma do tamanho de cada objeto, será então, denotado um contato entre os objetos
+		if (intersection.x < 0.0f && intersection.y < 0.0f)
+		{
+		#ifdef _DEBUG
+			std::cout << "Tem colisao futura em eixo 'y'" << std::endl;
+		#endif
+			return true;
+		}
+	}
 	return false;
 };
