@@ -48,10 +48,13 @@
     <ClCompile Include="Entities\BaseEntities\Implementations\livingEntity.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Entities\Projectiles\Implementations\projectile.cpp">
+    <ClCompile Include="Entities\Projectiles\Implementations\heroProjectile.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="game.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Entities\Projectiles\Implementations\enemyProjectile.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -89,10 +92,13 @@
     <ClInclude Include="Entities\BaseEntities\Headers\livingEntity.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Entities\Projectiles\Headers\projectile.h">
+    <ClInclude Include="Entities\Projectiles\Headers\heroProjectile.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="game.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Entities\Projectiles\Headers\enemyProjectile.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

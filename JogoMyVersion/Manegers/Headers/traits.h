@@ -37,8 +37,8 @@ namespace traits
 		const float GetVerticalAcc() { return this->vertical_acc; };
 		void SetVerticalACC(const float newVelocity) { this->vertical_acc = newVelocity; };
 
-		const float GetHorizontalAcc() { return this->vertical_acc; };
-		void SetHorizontalACC(const float newVelocity) { this->vertical_acc = newVelocity; };
+		const float GetHorizontalAcc() { return this->horizontal_acc; };
+		void SetHorizontalACC(const float newVelocity) { this->horizontal_acc = newVelocity; };
 
 		const bool GetHaveGround() { return this->have_ground; };
 		void SetHaveGround(const bool state) { this->have_ground = state; };

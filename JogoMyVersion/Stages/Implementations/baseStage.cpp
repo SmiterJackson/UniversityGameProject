@@ -16,7 +16,7 @@ Stage::Stage(sf::RenderWindow& _window) :
     Initialize(_window);
 };
 Stage::Stage(sf::RenderWindow& _window, const std::string& stage_fileName, const std::string& texture_fileName) :
-    Printable(texture_fileName), background(), heros(), obstacles(), collider(Collider::MapBounds(0, 0, this->texture.getSize().x * 2.4f, this->texture.getSize().y * 2.4f))
+    Printable(texture_fileName), background(), heros(), obstacles(), collider(Collider::MapBounds(0, 0, this->texture.getSize().x * 2.4f, this->texture.getSize().y * 2.4f - 68))
 {
 	Initialize(_window);
 };
@@ -77,9 +77,16 @@ void Stage::Execute(sf::RenderWindow& window, float elapsedTime)
     // Executar parâmetros e execuções de entidades
     for (i = 0; i < heros.GetSize(); ++i)
     {
-        heros[0]->SetElapsedTime(elapsedTime);
-        heros[0]->Execute();
+        heros[i]->SetElapsedTime(elapsedTime);
+        heros[i]->Execute();
+        if(heros[i]->GetIfAttacked())
+        {
+            this->projectiles.Push_back(HeroProjectile(heros[i]->GetBody().getPosition(), heros[i]->faceRight));
+        }
     }
+
+    for (i = 0; i < this->projectiles.GetSize(); ++i)
+        projectiles[i].Execute();
     
     // Após atualizar entidades executar colisões
     collider.SetElapsedTime(elapsedTime);
@@ -100,7 +107,7 @@ void Stage::Execute(sf::RenderWindow& window, float elapsedTime)
     if (this->heros[0]->GetBody().getPosition().y + (this->view.getSize().y / 2.0f) >= this->texture.getSize().y * 2.4f)
         viewPosOffSet.y = (this->texture.getSize().y * 2.4f) - (this->view.getSize().y / 2.0f);
 
-    acumuladorhorizontal += heros[0]->GetVerticalAcc();
+    acumuladorhorizontal += heros[0]->GetHorizontalAcc();
     if (acumuladorhorizontal > 352)
         acumuladorhorizontal = 0;
     this->background.setTextureRect(sf::IntRect(acumuladorhorizontal, 0, round(this->texture.getSize().x), round(this->texture.getSize().y)));
@@ -151,27 +158,31 @@ void Stage::SelfPrint(sf::RenderWindow& window)
 
     window.draw(this->background);
 
+    for (i = 0; i < this->projectiles.GetSize(); ++i)
+        projectiles[i].SelfPrint(window);
+
     for (i = 0; i < obstacles.GetSize(); ++i)
-        (*obstacles[i]).SelfPrint(window);
+        obstacles[i]->SelfPrint(window);
 
     for (i = 0; i < heros.GetSize(); ++i)
         heros[i]->SelfPrint(window);
 
+#ifdef _DEBUG
     for (i = 0; i < obstacles.GetSize(); ++i)
     {
-    #ifdef _DEBUG
+    
         (*obstacles[i]).stringInfoUptade();
         (*obstacles[i]).PrintInfo(window);
-    #endif
+    
     }
-
     for (i = 0; i < heros.GetSize(); ++i)
     {
-    #ifdef _DEBUG
+    
         heros[i]->stringInfoUptade();
         heros[i]->PrintInfo(window);
-    #endif
+    
     }
+#endif
 };
 void Stage::ReadArchive(const std::string& fileName)
 {

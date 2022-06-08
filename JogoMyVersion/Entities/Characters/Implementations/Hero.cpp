@@ -3,8 +3,8 @@
 #include "../Headers/Hero.h"
 using namespace sf;
 
-#define MAX_HORIZONTAL_VELOCITY 16.0f
-#define HORIZONTAL_ACCELERATION 6.0f
+#define MAX_HORIZONTAL_VELOCITY 8.0f
+#define HORIZONTAL_ACCELERATION 4.0f
 
 #define JUMP_ACCELERATION -8.0f // coeffficiente para o tamanho do pulo
 #define MAX_FALL_VELOCITY -(JUMP_ACCELERATION / 2.0f)
@@ -12,15 +12,18 @@ using namespace sf;
 
 #define INVENCIBILITY_FRAMES_TIME 3.0f
 
+#define STREAM_REF std::string("JogoMyVersion\\Resources\\images\\sprites\\Characters\\TeamGunner_By_SecretHideout_060519\\EXTRAS\\BulletStream.png")
+#define MUZZLE_REF std::string("JogoMyVersion\\Resources\\images\\sprites\\Characters\\TeamGunner_By_SecretHideout_060519\\EXTRAS\\MuzzleFlash.png")
+
 unsigned int Hero::PlayersNums = 0;
 Hero::Hero() :
-	LivingEntity(), Animated(), invec_current_timer(0.0f), invenc_frames(false), crouching(false), playerId(PlayersNums++)
+	LivingEntity(), Animated(), invec_current_timer(0.0f), invenc_frames(false), crouching(false), playerId(PlayersNums++), attacked(false)
 {
 	Initialize();
 };
 Hero::Hero(const std::string fileName, const sf::RectangleShape& _body, const VecAnimaValues& _animationMap, const unsigned int _life_count, const bool _have_ground, const float _weight_ceffic) :
-	LivingEntity(fileName, _body, _life_count, _have_ground, _weight_ceffic), Animated(_animationMap),invec_current_timer(0.0f), 
-	invenc_frames(false), crouching(false), playerId(PlayersNums++)
+	LivingEntity(fileName, _body, _life_count, _have_ground, _weight_ceffic), Animated(_animationMap), invec_current_timer(0.0f),
+	invenc_frames(false), crouching(false), playerId(PlayersNums++), attacked(false)
 {
 	Initialize();
 };
@@ -41,6 +44,11 @@ void Hero::Initialize()
 	this->walk_right = false;
 	this->walk_left = false;
 	this->crouching = false;
+
+	this->texture_muzzle.loadFromFile(MUZZLE_REF);
+	this->texture_stream.loadFromFile(STREAM_REF);
+	this->stream.setTexture(texture_stream);
+	this->muzzle.setTexture(texture_muzzle);
 };
 void Hero::Execute()
 {	
@@ -135,6 +143,10 @@ void Hero::Damaged()
 		this->invenc_frames = false;
 	}
 };
+void Hero::Attacked()
+{	
+	this->attacked = true;
+};
 void Hero::Died()
 {
 	this->alive = false;
@@ -187,11 +199,15 @@ void Hero::PlayerInputHandler(const sf::Event& event)
 			break;
 		case sf::Keyboard::S:
 			if (this->playerId == 0)
-				this->InvertCrouching();
+				this->crouching = true;
 			break;
 		case sf::Keyboard::W:
 			if (this->playerId == 0)
 				this->InvertJumping();
+			break;
+		case sf::Keyboard::V:
+			if (this->playerId == 0)
+				this->Attacked();
 			break;
 		case sf::Keyboard::Left:
 			if (this->playerId == 1)
@@ -203,11 +219,15 @@ void Hero::PlayerInputHandler(const sf::Event& event)
 			break;
 		case sf::Keyboard::Up:
 			if (this->playerId == 1)
-				this->InvertCrouching();
+				this->InvertJumping();
 			break;
 		case sf::Keyboard::Down:
 			if (this->playerId == 1)
-				this->InvertJumping();
+				this->crouching = true;
+			break;
+		case sf::Keyboard::Period:
+			if (this->playerId == 1)
+				this->Attacked();
 			break;
 		default:
 			break;
@@ -225,11 +245,15 @@ void Hero::PlayerInputHandler(const sf::Event& event)
 			break;
 		case sf::Keyboard::S:
 			if (this->playerId == 0)
-				this->InvertCrouching();
+				this->crouching = false;
 			break;
 		case sf::Keyboard::W:
 			if (this->playerId == 0)
 				this->InvertJumping();
+			break;
+		case sf::Keyboard::V:
+			if (this->playerId == 0)
+				this->attacked = false;
 			break;
 		case sf::Keyboard::Left:
 			if (this->playerId == 1)
@@ -241,11 +265,14 @@ void Hero::PlayerInputHandler(const sf::Event& event)
 			break;
 		case sf::Keyboard::Up:
 			if (this->playerId == 1)
-				this->InvertCrouching();
+				this->InvertJumping();
 			break;
 		case sf::Keyboard::Down:
 			if (this->playerId == 1)
-				this->InvertJumping();
+				this->crouching = false;
+			break;
+		case sf::Keyboard::Period:
+			this->attacked = false;
 			break;
 		default:
 			break;
@@ -259,4 +286,46 @@ void Hero::SelfPrint(sf::RenderWindow& window)
 	this->lastUsedAni = this->next_ani;
 	this->body.setTextureRect(this->animationVec[this->next_ani].update(this->elapsed_time, this->faceRight));
 	window.draw(this->body);
+
+	/*if (this->attacked && this->crouching)
+	{
+		if (this->faceRight)
+		{
+			this->muzzle.setPosition(this->body.getPosition().x + 17, this->body.getPosition().y + 5);
+			this->stream.setPosition(this->body.getPosition().x + 17, this->body.getPosition().y + 2);
+		}
+		else
+		{
+			this->muzzle.setRotation(180.0f);
+			this->stream.setRotation(180.0f);
+			this->muzzle.setPosition(this->body.getPosition().x - 17, this->body.getPosition().y + 5);
+			this->stream.setPosition(this->body.getPosition().x - 17, this->body.getPosition().y + 2);
+		}
+		
+		window.draw(this->muzzle);
+		window.draw(this->stream);
+		this->attacked = false;
+	}
+	else if (this->attacked && !this->crouching)
+	{
+
+		if (this->faceRight)
+		{
+			this->muzzle.setRotation(0.0f);
+			this->stream.setRotation(0.0f);
+			this->muzzle.setPosition(this->body.getPosition().x + 16, this->body.getPosition().y + 1);
+			this->stream.setPosition(this->body.getPosition().x + 16, this->body.getPosition().y - 2);
+		}
+		else
+		{
+			this->muzzle.setRotation(180.0f);
+			this->stream.setRotation(180.0f);
+			this->muzzle.setPosition(this->body.getPosition().x - 16, this->body.getPosition().y + 1);
+			this->stream.setPosition(this->body.getPosition().x - 16, this->body.getPosition().y - 2);
+		}
+
+		window.draw(this->muzzle);
+		window.draw(this->stream);
+		this->attacked = false;
+	}*/
 };
