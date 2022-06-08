@@ -1,26 +1,15 @@
 #pragma once
 
-#include "../Entities/BaseEntities/Headers/entity.h"
-#include "../Manegers/Headers/traits.h"
+#include "../Entities/BaseEntities/Headers/livingEntity.h"
+#include "../Lists/Headers/myList.h"
 using namespace entities;
-using namespace traits;
 
-class Hero : public LivingEntity, public Printable, public Animated, public Slipery
+class Hero : public LivingEntity, public Animated
 {
 public:
 	Hero();
-	Hero(const sf::RectangleShape& _body, const sf::Texture& texture, const unsigned int _life_count = 3, const float _weight_ceffic = 0.0f, 
-		const bool _have_ground = false);
-	Hero(const sf::RectangleShape& _body, const sf::Texture& texture, const VecAnimaValues& _animationMap, const unsigned int _life_count = 3, 
-		const float _weight_ceffic = 0.0f, const bool _have_ground = false);
-	Hero(const sf::RectangleShape& _body, const sf::Texture& texture, const std::vector<Animation>& _animationMap, const unsigned int _life_count = 3, 
-		const float _weight_ceffic = 0.0f, const bool _have_ground = false);
-	Hero(const sf::RectangleShape& _body, const std::string fileName, const unsigned int _life_count = 3, const float _weight_ceffic = 0.0f, 
-		const bool _have_ground = false);
-	Hero(const sf::RectangleShape& _body, const std::string fileName, const VecAnimaValues& _animationMap, const unsigned int _life_count = 3, 
-		const float _weight_ceffic = 0.0f, const bool _have_ground = false);
-	Hero(const sf::RectangleShape& _body, const std::string fileName, const std::vector<Animation>& _animationMap, const unsigned int _life_count = 3, 
-		const float _weight_ceffic = 0.0f, const bool _have_ground = false);
+	Hero(const std::string fileName, const sf::RectangleShape& _body, const VecAnimaValues& _animationMap, 
+		 const unsigned int _life_count = 0, const bool _have_ground = false, const float _weight_ceffic = 1.0f);
 	~Hero();
 
 	const bool GetCrouching() { return this->crouching; };
@@ -35,8 +24,7 @@ public:
 	void SelfPrint(sf::RenderWindow& window);
 
 public:
-	static unsigned int PlayersIds;
-	std::vector<Hero*> otherPlayers;
+	static unsigned int PlayersNums;
 
 protected:
 	enum animations { Idle, Run, Crouch, Jump, Fall, Death, Attack };

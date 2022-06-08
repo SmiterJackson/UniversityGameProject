@@ -16,7 +16,7 @@ Stage::Stage(sf::RenderWindow& _window) :
     Initialize(_window);
 };
 Stage::Stage(sf::RenderWindow& _window, const std::string& stage_fileName, const std::string& texture_fileName) :
-    Printable(texture_fileName), background(), heros(), obstacles(), collider()
+    Printable(texture_fileName), background(), heros(), obstacles(), collider(Collider::MapBounds(0, 0, this->texture.getSize().x * 2.4f, this->texture.getSize().y * 2.4f))
 {
 	Initialize(_window);
 };
@@ -38,7 +38,6 @@ void Stage::Initialize(sf::RenderWindow& _window)
 
     this->view.setSize(windowSize / 3.0f);
     this->view.setCenter(windowSize / 2.0f);
-    //_window.setView(view);
 
     sf::RectangleShape rect(sf::Vector2f(PLAYER_SIZE, PLAYER_SIZE));
     sf::RectangleShape tiles_rect(sf::Vector2f(TILE_SIZE, TILE_SIZE));
@@ -51,51 +50,62 @@ void Stage::Initialize(sf::RenderWindow& _window)
                                               {0, 7, 0, 45, 48, 0.20f} };
 
     //Criando um hero
-    this->heros.emplace_back(rect, PLAYER1_SHEET, AnimationsConstructors, 3, 0.0f, true);
-    heros[0].GetBody().move(sf::Vector2f( 400 + PLAYER_SIZE, 100 + PLAYER_SIZE));
-
+    this->heros += new Hero(PLAYER1_SHEET, rect, AnimationsConstructors, 3, true, 0.0f);
+    heros[0]->GetBody().move(sf::Vector2f( 400 + PLAYER_SIZE, 100 + PLAYER_SIZE));
+    heros[0]->GetBody().setOutlineThickness(2.0f);
+    heros[0]->GetBody().setOutlineColor(sf::Color(255, 0, 0));
     //Criando blocos
-    for (int i = 0; i < 8; i++)
-        this->obstacles.push_back(static_cast<BaseObstacle*>(new StaticObstacle(tiles_rect, TILE_SHEET)));
+    for (int i = 0; i < 10; i++)
+        this->obstacles += new BaseObstacle(TILE_SHEET, tiles_rect, sf::IntRect(2 * 32, 0, 32, 32));
 
-    //Posicionando os blocos, e executando-os uma vez (atualiza valores internos)
-    for (i = 0; i < obstacles.size(); ++i)
-    {
-        (*obstacles[i]).GetBody().move(sf::Vector2f(400.f + -(TILE_SIZE * 4) + (i * TILE_SIZE), 100.f + GRID_SIZE * 5));
-        (*obstacles[i]).Execute();
-    }
+    // Posicionando as plaaformas
+    for (i = 0; i < this->obstacles.GetSize(); ++i)
+        obstacles[i]->GetBody().move(sf::Vector2f(400.f + -(TILE_SIZE * 4) + (i * TILE_SIZE), 100.f + GRID_SIZE * 5));
 
     // Joga o hero para dentro do colisor
-    this->collider += static_cast<LivingEntity*>(&heros[0]);
+    this->collider += static_cast<LivingEntity*>(&(*heros[0]));
 
     //Joga os obstaculos locais para dentro do colisor, para que tenha referencia de cada obstaculo
-    for (i = 0; i < this->obstacles.size(); ++i)
+    for (i = 0; i < this->obstacles.GetSize(); ++i)
         this->collider += this->obstacles[i];
 };
 void Stage::Execute(sf::RenderWindow& window, float elapsedTime)
 {
 	unsigned int i = 0;
-    //sf::Vector2f viewPosOffSet(heros[0].GetBody().getOrigin().x - window.getSize().x / 2, heros[0].GetBody().getOrigin().y - window.getSize().y / 2);
-
+    sf::Vector2f viewPosOffSet(this->view.getSize() / 2.0f);
+    
     // Executar parâmetros e execuções de entidades
-    for (i = 0; i < heros.size(); ++i)
+    for (i = 0; i < heros.GetSize(); ++i)
     {
-        heros[i].SetElapsedTime(elapsedTime);
-        heros[i].Execute();
+        heros[0]->SetElapsedTime(elapsedTime);
+        heros[0]->Execute();
     }
     
     // Após atualizar entidades executar colisões
     collider.SetElapsedTime(elapsedTime);
     collider.UpdateCollisions();
 
-    //if (viewPosOffSet.x > (window.getSize().x / 2))
-       // viewPosOffSet.x = heros[0].GetBody().getOrigin().x;
-    //else
-       // viewPosOffSet.x = window.getSize().x / 2;
+    if (this->heros[0]->GetBody().getPosition().x > (this->view.getSize().x / 2))
+        viewPosOffSet.x = this->heros[0]->GetBody().getPosition().x;
+    else
+        viewPosOffSet.x = this->view.getSize().x / 2;
+    if (this->heros[0]->GetBody().getPosition().y > (this->view.getSize().y / 2))
+        viewPosOffSet.y = this->heros[0]->GetBody().getPosition().y;
+    else
+        viewPosOffSet.y = this->view.getSize().y / 2;
 
-    //acumuladorhorizontal += 1;
-    //this->background.setTextureRect(sf::IntRect(acumuladorhorizontal, 0, round(this->texture.getSize().x), round(this->texture.getSize().y)));
-    //this->view.setCenter(heros[0].GetBody().getPosition());
+    if(this->heros[0]->GetBody().getPosition().x + (this->view.getSize().x / 2.0f) >= this->texture.getSize().x * 2.4f)
+        viewPosOffSet.x = (this->texture.getSize().x * 2.4f) - (this->view.getSize().x / 2.0f);
+
+    if (this->heros[0]->GetBody().getPosition().y + (this->view.getSize().y / 2.0f) >= this->texture.getSize().y * 2.4f)
+        viewPosOffSet.y = (this->texture.getSize().y * 2.4f) - (this->view.getSize().y / 2.0f);
+
+    acumuladorhorizontal += heros[0]->GetVerticalAcc();
+    if (acumuladorhorizontal > 352)
+        acumuladorhorizontal = 0;
+    this->background.setTextureRect(sf::IntRect(acumuladorhorizontal, 0, round(this->texture.getSize().x), round(this->texture.getSize().y)));
+    this->view.setCenter(viewPosOffSet);
+    window.setView(view);
 };
 void Stage::TreatInput(sf::RenderWindow& window)
 {
@@ -116,12 +126,12 @@ void Stage::TreatInput(sf::RenderWindow& window)
             // Redimensionar as views
             break;
         case sf::Event::KeyPressed:
-            for (i = 0; i < this->heros.size(); ++i)
-                this->heros[i].PlayerInputHandler(event);
+            for (i = 0; i < this->heros.GetSize(); ++i)
+                this->heros[i]->PlayerInputHandler(event);
             break;
         case sf::Event::KeyReleased:
-            for (i = 0; i < this->heros.size(); ++i)
-                this->heros[i].PlayerInputHandler(event);
+            for (i = 0; i < this->heros.GetSize(); ++i)
+                this->heros[i]->PlayerInputHandler(event);
             break;
         case sf::Event::MouseButtonPressed:
             std::cout << "Foi tocado um botao do mouse!" << std::endl;
@@ -141,13 +151,13 @@ void Stage::SelfPrint(sf::RenderWindow& window)
 
     window.draw(this->background);
 
-    for (i = 0; i < obstacles.size(); ++i)
+    for (i = 0; i < obstacles.GetSize(); ++i)
         (*obstacles[i]).SelfPrint(window);
 
-    for (i = 0; i < heros.size(); ++i)
-        heros[i].SelfPrint(window);
+    for (i = 0; i < heros.GetSize(); ++i)
+        heros[i]->SelfPrint(window);
 
-    for (i = 0; i < obstacles.size(); ++i)
+    for (i = 0; i < obstacles.GetSize(); ++i)
     {
     #ifdef _DEBUG
         (*obstacles[i]).stringInfoUptade();
@@ -155,11 +165,11 @@ void Stage::SelfPrint(sf::RenderWindow& window)
     #endif
     }
 
-    for (i = 0; i < heros.size(); ++i)
+    for (i = 0; i < heros.GetSize(); ++i)
     {
     #ifdef _DEBUG
-        heros[i].stringInfoUptade();
-        heros[i].PrintInfo(window);
+        heros[i]->stringInfoUptade();
+        heros[i]->PrintInfo(window);
     #endif
     }
 };

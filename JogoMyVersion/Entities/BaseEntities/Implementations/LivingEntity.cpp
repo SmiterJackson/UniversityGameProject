@@ -1,4 +1,4 @@
-#include "../Headers/LivingEntity.h"
+#include "../Headers/livingEntity.h"
 using namespace entities;
 
 LivingEntity::LivingEntity() :

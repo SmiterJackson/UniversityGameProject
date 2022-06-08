@@ -37,8 +37,11 @@ Entity::~Entity()
 void Entity::debugExecute()
 {
 	this->font.loadFromFile("JogoMyVersion\\Resources\\fonts\\hf-free-complete\\equipment-pro-v1.1\\EquipmentPro.ttf");
-	this->info_pos.setCharacterSize(10);
+	this->info_pos.setCharacterSize(8);
 	this->info_pos.setFont(this->font);
+	info_pos.setFillColor(sf::Color(0,255,255));
+	info_pos.setOutlineThickness(0.75f);
+	info_pos.setOutlineColor(sf::Color(0, 0, 255));
 	stringInfoUptade();
 };
 void Entity::stringInfoUptade()
@@ -52,7 +55,7 @@ void Entity::stringInfoUptade()
 	this->value_as_string += ',';
 	this->value_as_string += std::to_string(lround(data.y));
 	this->value_as_string += ')';
-	this->info_pos.setString(value_as_string.c_str());
+	this->info_pos.setString(value_as_string);
 };
 void Entity::PrintInfo(sf::RenderWindow& window)
 {

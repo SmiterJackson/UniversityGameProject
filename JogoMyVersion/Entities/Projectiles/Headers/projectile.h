@@ -1,9 +1,7 @@
 #pragma once
 
 #include "../Entities/BaseEntities/Headers/entity.h"
-#include "../Manegers/Headers/traits.h"
 using namespace entities;
-using namespace traits;
 
 namespace projectiles 
 {

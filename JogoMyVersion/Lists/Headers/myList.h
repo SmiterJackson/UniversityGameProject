@@ -48,16 +48,16 @@ public:
 
 		// SETS / GETS
 		T_Type& GetItem() { return type; };
-		const T_Type& GetconstItem() const { return type; };
+		const T_Type& GetconstItem() { return type; };
 		void SetItem(const T_Type& newItem) { type = newItem; };
 
-		const ListType<T_Type>*& GetNextItem() const { return type_next; };
+		ListType<T_Type>*& GetNextItem() { return type_next; };
 		void SetNextItem(ListType<T_Type>* newNext) { type_next = newNext; };
 
-		const ListType<T_Type>*& GetPreviousItem() const { return type_previous; };
+		ListType<T_Type>*& GetPreviousItem() { return type_previous; };
 		void SetPreviousItem(ListType<T_Type>* newprevious) { type_previous = newprevious; };
 
-		void operator= (ListType<T_Type> other)
+		void operator= (const ListType<T_Type>& other)
 		{
 			this->type = other.type;
 			this->type_next = other.type_next;
@@ -116,7 +116,6 @@ public:
 		last = aux;
 		size++;
 	};
-	
 
 	// Operators overloads
 	void operator+= (const T& item)
@@ -171,7 +170,7 @@ public:
 			++i;
 		}
 	};
-	T& operator[] (unsigned int const required)
+	T& operator[] (unsigned int const required) const
 	{
 		ListType<T>* aux = first;
 		for (unsigned int i = 0; i < required; ++i)

@@ -8,59 +8,36 @@ using namespace sf;
 
 #define JUMP_ACCELERATION -8.0f // coeffficiente para o tamanho do pulo
 #define MAX_FALL_VELOCITY -(JUMP_ACCELERATION / 2.0f)
-#define VERTICAL_ACCELERATION -(JUMP_ACCELERATION / 16.0f) // proporção de tempo desaceleração do pulo, o mais confortável que percebi foi 16
+#define VERTICAL_ACCELERATION -(JUMP_ACCELERATION / 16.0f) // proporção de tempo para desaceleração do pulo, o mais confortável que percebi foi 16
 
 #define INVENCIBILITY_FRAMES_TIME 3.0f
 
-unsigned int Hero::PlayersIds = 0;
-
+unsigned int Hero::PlayersNums = 0;
 Hero::Hero() :
-	LivingEntity(), Printable(), Animated(), Slipery(), otherPlayers(), playerId(PlayersIds++)
+	LivingEntity(), Animated(), invec_current_timer(0.0f), invenc_frames(false), crouching(false), playerId(PlayersNums++)
 {
 	Initialize();
 };
-Hero::Hero(const sf::RectangleShape& _body, const sf::Texture& texture, const unsigned int _life_count, const float _weight_ceffic, const bool _have_ground) :
-	LivingEntity(_body, _weight_ceffic, _life_count, _have_ground), Printable(texture), Animated(), Slipery(), otherPlayers(), playerId(PlayersIds++)
-{
-	Initialize();
-};
-Hero::Hero(const sf::RectangleShape& _body, const sf::Texture& texture, const VecAnimaValues& _animations, const unsigned int _life_count, const float _weight_ceffic, const bool _have_ground) :
-	LivingEntity(_body, _weight_ceffic, _life_count, _have_ground), Printable(texture), Animated(_animations), Slipery(), otherPlayers(), playerId(PlayersIds++)
-{
-	Initialize();
-};
-Hero::Hero(const sf::RectangleShape& _body, const sf::Texture& texture, const std::vector<Animation>& _animations, const unsigned int _life_count, const float _weight_ceffic, const bool _have_ground) :
-	LivingEntity(_body, _weight_ceffic, _life_count, _have_ground), Printable(texture), Animated(_animations), Slipery(), otherPlayers(), playerId(PlayersIds++)
-{
-	Initialize();
-};
-Hero::Hero(const sf::RectangleShape& _body, const std::string fileName, const unsigned int _life_count, const float _weight_ceffic, const bool _have_ground) :
-	LivingEntity(_body, _weight_ceffic, _life_count, _have_ground), Printable(fileName), Animated(), Slipery(), otherPlayers(), playerId(PlayersIds++)
-{
-	Initialize();
-};
-Hero::Hero(const sf::RectangleShape& _body, const std::string fileName, const VecAnimaValues& _animations, const unsigned int _life_count, const float _weight_ceffic, const bool _have_ground) :
-	LivingEntity(_body, _weight_ceffic, _life_count, _have_ground), Printable(fileName), Animated(_animations), Slipery(), otherPlayers(), playerId(PlayersIds++)
-{
-	Initialize();
-};
-Hero::Hero(const sf::RectangleShape& _body, const std::string fileName, const std::vector<Animation>& _animations, const unsigned int _life_count, const float _weight_ceffic, const bool _have_ground) :
-	LivingEntity(_body, _weight_ceffic, _life_count, _have_ground), Printable(fileName), Animated(_animations), Slipery(), otherPlayers(), playerId(PlayersIds++)
+Hero::Hero(const std::string fileName, const sf::RectangleShape& _body, const VecAnimaValues& _animationMap, const unsigned int _life_count, const bool _have_ground, const float _weight_ceffic) :
+	LivingEntity(fileName, _body, _life_count, _have_ground, _weight_ceffic), Animated(_animationMap),invec_current_timer(0.0f), 
+	invenc_frames(false), crouching(false), playerId(PlayersNums++)
 {
 	Initialize();
 };
 Hero::~Hero()
 {
-	
+	--PlayersNums;
 };
 
 void Hero::Initialize()
 {
 	this->next_ani = Idle;
+
 	this->body.setTexture(&this->texture);
 	this->body.setOrigin((this->body.getSize() / 2.0f));
-	this->friction_coefficient = 1.0f;
+
 	this->invec_current_timer = 0.0f;
+
 	this->walk_right = false;
 	this->walk_left = false;
 	this->crouching = false;
@@ -114,14 +91,7 @@ void Hero::Execute()
 		else
 			this->faceRight = true;
 
-		if (this->horizontal_acc >= -0.1f || this->horizontal_acc <= 0.1f)
-			this->horizontal_acc = 0.0f;
-
-		if (this->horizontal_acc > 0.0f)
-			this->horizontal_acc -= HORIZONTAL_ACCELERATION * elapsed_time * 2;
-
-		if (this->horizontal_acc < 0.0f)
-			this->horizontal_acc += HORIZONTAL_ACCELERATION * elapsed_time * 2;
+			this->horizontal_acc = 0.f;
 	}
 
 	if (!this->have_ground)
@@ -147,7 +117,6 @@ void Hero::Execute()
 		this->invenc_frames = false;
 	}
 
-	this->horizontal_acc *= this->friction_coefficient;
 	this->body.move(sf::Vector2f(this->horizontal_acc, this->vertical_acc));
 };
 void Hero::Damaged()
@@ -291,69 +260,3 @@ void Hero::SelfPrint(sf::RenderWindow& window)
 	this->body.setTextureRect(this->animationVec[this->next_ani].update(this->elapsed_time, this->faceRight));
 	window.draw(this->body);
 };
-
-/*
-
-*/
-
-/*if (Keyboard::isKeyPressed(Keyboard::A))
-		this->walk_left = true;
-	else
-		this->walk_left = false;
-	if (Keyboard::isKeyPressed(Keyboard::D))
-		this->walk_right = true;
-	else
-		this->walk_right = false;
-	if (Keyboard::isKeyPressed(Keyboard::S))
-		this->crouching = true;
-	else
-		this->crouching = false;
-	if (Keyboard::isKeyPressed(Keyboard::W) && this->have_ground)
-		this->jumping = true;
-	else
-		this->jumping = false;
-
-	if(((this->walk_right && !this->walk_left) || (!this->walk_right && this->walk_left)) && !this->crouching)
-	{
-		if(this->have_ground)
-			this->next_ani = Run;
-
-		if(this->walk_right && this->horizontal_acc < MAX_HORIZONTAL_VELOCITY)
-			this->horizontal_acc += HORIZONTAL_ACCELERATION * this->elapsed_time;
-		else if(this->horizontal_acc > -MAX_HORIZONTAL_VELOCITY)
-			this->horizontal_acc -= HORIZONTAL_ACCELERATION * this->elapsed_time;
-	}
-	else
-	{
-		if (this->have_ground)
-			this->next_ani = Run;
-
-		if(this->horizontal_acc < 0.1f && this->horizontal_acc > -0.1f)
-			this->horizontal_acc = 0.0f;
-		else if(this->horizontal_acc < MAX_HORIZONTAL_VELOCITY)
-			this->horizontal_acc -= HORIZONTAL_ACCELERATION * this->elapsed_time;
-		else
-			this->horizontal_acc += HORIZONTAL_ACCELERATION * this->elapsed_time;
-	}
-
-	if (this->have_ground && this->jumping)
-	{
-		this->next_ani = Jump;
-		this->vertical_acc += JUMP_ACCELERATION * this->elapsed_time;
-	}
-	else if (!this->have_ground && this->vertical_acc > MAX_FALL_VELOCITY)
-	{
-		this->next_ani = Jump;
-		this->vertical_acc += MAX_FALL_VELOCITY * this->elapsed_time;
-	}
-	else
-	{
-		this->next_ani = Jump;
-		this->vertical_acc = 0;
-	}
-
-	if (this->crouching && this->have_ground)
-	{
-		this->next_ani = Crouch;
-		this->horizontal_acc = 0.0f;
-	}*/

@@ -1,13 +1,16 @@
 #pragma once
 
 #define BACKGROUND_REF "JogoMyVersion\\Resources\\images\\Background\\cyberpunk-street-files\\PNG\\layers\\foreground.png"
-#include "game.h"
+#include "../Stages/Headers/baseStage.h"
 
-int main()
+class Game 
 {
-    Game game;
+public:
+	Game();
+	~Game();
 
-    game.Execute();
+	void Execute();
 
-    return 0;
-}
+protected:
+
+};

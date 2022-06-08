@@ -1,10 +1,11 @@
 #pragma once
 
-#include "../Entities/BaseEntities/Headers/entity.h"
+//#include "../Entities/BaseEntities/Headers/entity.h"
 #include "../Entities/Obstacles/Headers/obstacles.h"
 #include "../Entities/Characters/Headers/Hero.h"
 #include "../Manegers/Headers/collider.h"
-using namespace entities;
+#include "../Lists//Headers/myList.h"
+//using namespace entities;
 
 
 namespace std
@@ -45,9 +46,10 @@ public:
 protected:
 	sf::View view;
 	sf::Sprite background;
-	std::vector<Hero> heros;
-	std::vector<BaseObstacle*> obstacles;
+	MyList<Hero*> heros;
+	MyList<BaseObstacle*> obstacles;
 	//std::vector<Projectile*> projectiles;
+
 	int acumuladorhorizontal;
 	Collider collider;
 };

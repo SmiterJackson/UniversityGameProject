@@ -1,25 +1,36 @@
 #pragma once
 
-#include "../Entities/BaseEntities/Headers/entity.h"
+#include "../Entities/BaseEntities/Headers/livingEntity.h"
 #include "../Entities/Obstacles/Headers/obstacles.h"
-#include "traits.h"
 using namespace obstacles;
 using namespace entities;
-using namespace traits;
 
 class Collider
 {
 public:
+	class MapBounds
+	{
+	public:
+		MapBounds();
+		MapBounds(float _leftBound, float _topBound, float _rightBound, float _bottomBound);
+		~MapBounds();
+
+	public:
+		float leftBound, topBound, rightBound, bottomBound;
+	};
+
 	Collider();
-	Collider(const std::vector<LivingEntity*>& _livingEntities, std::vector<BaseObstacle*> _obstacles);
+	Collider(const MapBounds& _mapLimits);
+	Collider(const MapBounds& _mapLimits, const std::vector<LivingEntity*>& _livingEntities, std::vector<BaseObstacle*> _obstacles);
 	~Collider();
 
 	const float GetElapsedTime() const { return elapsed_time; };
 	void SetElapsedTime(const float _elapsed_time) { this->elapsed_time = _elapsed_time; };
 
 	void UpdateCollisions();
-	bool CheckCollision(LivingEntity& item_1, BaseObstacle& item_2);
-	bool CheckNext(LivingEntity& entity, BaseObstacle& obst);
+
+	// Função Adaptada da original, pelo canal Hilze Vonck
+	bool CheckCollisionObstacles(LivingEntity& entity, BaseObstacle& obst);
 
 	void operator+= (LivingEntity* item)
 	{
@@ -31,6 +42,7 @@ public:
 	}
 
 protected:
+	const MapBounds mapLimits;
 	std::vector<LivingEntity*> livingEntities;
 	std::vector<BaseObstacle*> obstacles;
 	float elapsed_time, timer;
