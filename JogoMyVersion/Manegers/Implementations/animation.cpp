@@ -2,16 +2,17 @@
 
 #include "../Headers/animation.h"
 
-AnimaData::AnimaData():
-    start(0), end(0), row(0), height(0), switchTime(0), repeatable(false)
+Animation::AnimaData::AnimaData() :
+    start(0), end(0), row(0), height(0), width(0), switchTime(0.f), repeatable(false)
 {};
-AnimaData::AnimaData(unsigned int Start, unsigned int End, unsigned int Row, unsigned int _height, unsigned int _width, float SwitchTime, bool _repeatable):
+Animation::AnimaData::AnimaData(unsigned int Start, unsigned int End, unsigned int Row, unsigned int _height, unsigned int _width, float SwitchTime, bool _repeatable) :
     start(Start), end(End), row(Row), height(_height), width(_width), switchTime(SwitchTime), repeatable(_repeatable)
 {};
-AnimaData::~AnimaData()
+Animation::AnimaData::~AnimaData()
 {
 };
 
+// Classe Adaptada da original, pelo canal Hilze Vonck 
 Animation::Animation() :
     img_token(), start(0), end(0), row(0), current(0), time(0.0), switchTime(0.0), repeatable(false)
 {};

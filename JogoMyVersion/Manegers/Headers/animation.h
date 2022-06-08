@@ -2,20 +2,24 @@
 
 #include "stdafx.cpp"
 
-class AnimaData {
+// Classe Adaptada da original, pelo canal Hilze Vonck 
+class Animation
+{
 public:
-    AnimaData();
-    AnimaData(unsigned int _start, unsigned int _end, unsigned int _row, unsigned int _height, unsigned int _width, float _switchTime, bool _repeatable = false);
-    ~AnimaData();
+    class AnimaData
+    {
+    public:
+        AnimaData();
+        AnimaData(const unsigned int _start, const unsigned int _end, const unsigned int _row, const unsigned int _height, 
+                    const unsigned int _width, const float _switchTime, const bool _repeatable = false);
+        ~AnimaData();
 
-public:
-    unsigned int start, end, row, height, width;
-    float switchTime;
-    bool repeatable;
-};
+    public:
+        unsigned int start, end, row, height, width;
+        float switchTime;
+        bool repeatable;
+    };
 
-class Animation {
-public:
     Animation();
     Animation(const AnimaData& Data);
     ~Animation();

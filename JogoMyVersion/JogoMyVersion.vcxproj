@@ -155,10 +155,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Entities\BaseEntities\Implementations\LivingEntity.cpp" />
     <ClCompile Include="Entities\Characters\Implementations\hero.cpp" />
     <ClCompile Include="Entities\BaseEntities\Implementations\entity.cpp" />
-    <ClCompile Include="Entities\BaseEntities\Implementations\instance.cpp" />
+    <ClCompile Include="Entities\BaseEntities\Implementations\Ente.cpp" />
     <ClCompile Include="Entities\Obstacles\Implementations\obstacles.cpp" />
+    <ClCompile Include="Entities\Projectiles\Implementations\projectile.cpp" />
     <ClCompile Include="Main\stdafx.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Manegers\Implementations\animation.cpp" />
@@ -167,10 +169,12 @@
     <ClCompile Include="Stages\Implementations\baseStage.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Entities\BaseEntities\Headers\LivingEntity.h" />
     <ClInclude Include="Entities\Characters\Headers\hero.h" />
     <ClInclude Include="Entities\BaseEntities\Headers\entity.h" />
-    <ClInclude Include="Entities\BaseEntities\Headers\instance.h" />
+    <ClInclude Include="Entities\BaseEntities\Headers\Ente.h" />
     <ClInclude Include="Entities\Obstacles\Headers\obstacles.h" />
+    <ClInclude Include="Entities\Projectiles\Headers\projectile.h" />
     <ClInclude Include="Lists\Headers\myList.h" />
     <ClInclude Include="Main\stdafx.h" />
     <ClInclude Include="Manegers\Headers\animation.h" />

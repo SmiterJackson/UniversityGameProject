@@ -28,25 +28,26 @@ namespace std
 class Stage : public Printable
 {
 public:
-	Stage();
-	Stage(const std::string& fileName);
+	Stage(sf::RenderWindow& window);
+	Stage(sf::RenderWindow& window, const std::string& stage_fileName, const std::string& texture_fileName);
 	~Stage();
 
-	sf::View& GetView() { return this->background; };
-	const sf::View& GetConstView() { return this->background; };
-	void SetView(sf::View& _background) { this->background = _background; };
+	sf::View& GetView() { return this->view; };
+	const sf::View& GetConstView() { return this->view; };
+	void SetView(sf::View& _view) { this->view = _view; };
 
-	void Initialize();
-	void Execute(float elapsedTime);
+	void Initialize(sf::RenderWindow& _window);
+	void Execute(sf::RenderWindow& window, float elapsedTime);
 	void TreatInput(sf::RenderWindow& window);
 	void SelfPrint(sf::RenderWindow& window);
 	void ReadArchive(const std::string& fileName);
 
 protected:
-	sf::View background;
+	sf::View view;
+	sf::Sprite background;
 	std::vector<Hero> heros;
 	std::vector<BaseObstacle*> obstacles;
 	//std::vector<Projectile*> projectiles;
-
+	int acumuladorhorizontal;
 	Collider collider;
 };

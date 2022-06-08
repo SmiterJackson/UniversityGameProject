@@ -1,5 +1,6 @@
 #pragma once
 
+#define BACKGROUND_REF "JogoMyVersion\\Resources\\images\\Background\\cyberpunk-street-files\\PNG\\layers\\foreground.png"
 #include "Manegers/Headers/parallax.h"
 #include "Stages/Headers/baseStage.h"
 
@@ -10,7 +11,7 @@ int main()
     window.setVerticalSyncEnabled(true);
     window.setKeyRepeatEnabled(false);
 
-    Stage stage;
+    Stage stage(window, "", BACKGROUND_REF);
 
     float timediff = 0.0f;
     sf::Clock clock;
@@ -27,7 +28,7 @@ int main()
         window.clear(sf::Color(100U, 100U, 100U));
 
         // Executar a fase antes de desenha-la
-        stage.Execute(timediff);
+        stage.Execute(window, timediff);
 
         // Desenhar a fase antes de pedir ooo display
         stage.SelfPrint(window);

@@ -6,10 +6,32 @@ using namespace obstacles;*/
 
 namespace traits
 {
+	class Printable
+	{
+	public:
+		Printable();
+		Printable(const sf::Texture& texture, const bool FacesRight = true);
+		Printable(const std::string fileName, const bool FacesRight = true);
+		~Printable();
+
+		sf::Texture& GetTexture() { return this->texture; };
+		const sf::Texture& GetConstTexture() { return this->texture; };
+		void SetTexture(const sf::Texture& texture) { this->texture = texture; };
+		void SetTexture(const std::string& fileName) { this->texture.loadFromFile(fileName); };
+
+		void InvertTextureOrientation();
+
+		virtual void SelfPrint(sf::RenderWindow& window) = 0;
+
+	public:
+		sf::Texture texture;
+		bool faceRight;
+	};
+
 	class Movable
 	{
 	public:
-		Movable(const bool _have_ground = false, const float _horizontal_acc = 0.0f, const float _vertical_acc = 0.0f);
+		Movable(const bool _have_ground = false);
 		~Movable();
 
 		const float GetVerticalAcc() { return this->vertical_acc; };
@@ -43,13 +65,48 @@ namespace traits
 		bool have_ground, walk_right, walk_left, jumping;
 	};
 
+	class Collidable
+	{
+	public:
+		Collidable(sf::RectangleShape& _body, const float _weight_ceffic = 0.0f);
+		~Collidable();
+
+		const float& GetWeightCoefficient() { return this->weight_coeffic; };
+		void SetWeightCoefficient(const float _weight_coeffic) { this->weight_coeffic = _weight_coeffic; };
+
+		//bool CheckCollision(BaseObstacle& item_2);
+
+	protected:
+		sf::RectangleShape& rect;
+		float weight_coeffic;
+	};
+
+	class Alive
+	{
+	public:
+		Alive(const unsigned int life_count = 0);
+		~Alive();
+
+		const unsigned int& GetLifeCount() { return this->life_count; };
+		void SetLifeCount(const unsigned int& _life_count) { this->life_count = _life_count; };
+
+		const bool IsClassAlive() { return this->alive; };
+		void InvertLifeState();
+
+		virtual void Died() = 0;
+
+	protected:
+		unsigned int life_count;
+		bool alive;
+	};
+
 	class Slipery {
 	public:
 		Slipery(const float _coefficient = 1.0f);
 		~Slipery();
 
-		const float GetSliperyCoefficient() { return this->friction_coefficient; };
-		void GetSliperyCoefficient(const float new_coefficient) { this->friction_coefficient = new_coefficient; };
+		const float GetSliperyCoeffic() { return this->friction_coefficient; };
+		void GetSliperyCoeffic(const float new_coefficient) { this->friction_coefficient = new_coefficient; };
 
 	protected:
 		float friction_coefficient;
@@ -70,66 +127,8 @@ namespace traits
 		float surface_acceler;
 		bool dir_is_right;
 	};
-	
-	class Alive
-	{
-	public:
-		Alive(const unsigned int life_count = 0);
-		~Alive();
 
-		const unsigned int& GetLifeCount() { return this->life_count; };
-		void SetLifeCount(const unsigned int& _life_count) { this->life_count = _life_count; };
-
-		const bool IsClassAlive() { return this->alive; };
-		void InvertLifeState();
-
-	protected:
-		unsigned int life_count;
-		bool alive;
-	};
-
-	class Printable
-	{
-	public:
-		Printable();
-		Printable(const sf::Texture& texture, const bool FacesRight = true);
-		Printable(const std::string fileName, const bool FacesRight = true);
-		~Printable();
-
-		sf::Texture& GetTexture() { return this->texture; };
-		const sf::Texture& GetConstTexture() { return this->texture; };
-		void SetTexture(const sf::Texture& texture) { this->texture = texture; };
-		void SetTexture(const std::string& fileName) { this->texture.loadFromFile(fileName); };
-
-		void InvertTextureOrientation();
-
-		virtual void SelfPrint(sf::RenderWindow& window) = 0;
-
-	public:
-		sf::Texture texture;
-		bool faceRight;
-	};
-
-	class Collidable
-	{
-	public:
-		Collidable(sf::RectangleShape& _body, const float _weight_ceffic = 0.0f);
-		~Collidable();
-
-		sf::RectangleShape& GetBodyRef() { return this->rect; };
-		void SetBodyRef(const sf::RectangleShape& _body) { this->rect = _body; };
-
-		const float& GetWeightCoefficient() { return this->weight_coeffic; };
-		void SetWeightCoefficient(const float _weight_coeffic) { this->weight_coeffic = _weight_coeffic; };
-
-		//bool CheckCollision(BaseObstacle& item_2);
-
-	protected:
-		sf::RectangleShape& rect;
-		float weight_coeffic;
-	};
-
-	typedef std::vector<AnimaData> VecAnimaValues;
+	typedef std::vector<Animation::AnimaData> VecAnimaValues;
 	class Animated
 	{
 	public:
@@ -156,7 +155,7 @@ namespace traits
 			for (unsigned int i = 0; i < _animationVec.size(); ++i)
 				this->animationVec.emplace_back(_animationVec[i]);
 		}
-		void operator+= (const AnimaData& _animation)
+		void operator+= (const Animation::AnimaData& _animation)
 		{
 			this->animationVec.emplace_back(_animation);
 		}

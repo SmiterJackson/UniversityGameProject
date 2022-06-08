@@ -3,7 +3,6 @@
 #include "../Headers/baseStage.h"
 
 #define FONT_REF "JogoMyVersion\\Resources\\fonts\\hf-free-complete\\equipment-pro-v1.1\\EquipmentPro.ttf"
-#define BACKGROUND_REF "JogoMyVersion\\Resources\\images\\backgrounds\\Background\\Background.png"
 #define TILE_SHEET "JogoMyVersion\\Resources\\images\\backgrounds\\Tiles\\IndustrialTile_sheet.png"
 #define PLAYER1_SHEET "JogoMyVersion\\Resources\\images\\sprites\\Characters\\gunner_green.png"
 
@@ -11,23 +10,35 @@
 #define TILE_SIZE 32
 #define GRID_SIZE 32
 
-Stage::Stage() :
+Stage::Stage(sf::RenderWindow& _window) :
 	Printable(), background(), heros(), obstacles(), collider()
 {
-    Initialize();
+    Initialize(_window);
 };
-Stage::Stage(const std::string& fileName) :
-    Printable(fileName), background(), heros(), obstacles(), collider()
+Stage::Stage(sf::RenderWindow& _window, const std::string& stage_fileName, const std::string& texture_fileName) :
+    Printable(texture_fileName), background(), heros(), obstacles(), collider()
 {
-	Initialize();
+	Initialize(_window);
 };
 Stage::~Stage()
 {};
 
 
-void Stage::Initialize()
+void Stage::Initialize(sf::RenderWindow& _window)
 {
     unsigned int i = 0;
+    acumuladorhorizontal = 0;
+    sf::Vector2f windowSize(static_cast<sf::Vector2f>(_window.getSize()));
+
+    this->texture.setRepeated(true);
+
+    this->background.setTexture(this->texture);
+    this->background.setPosition(sf::Vector2f(0.0f, 0.0f));
+    this->background.setScale(2.4f, 2.4f);
+
+    this->view.setSize(windowSize / 3.0f);
+    this->view.setCenter(windowSize / 2.0f);
+    //_window.setView(view);
 
     sf::RectangleShape rect(sf::Vector2f(PLAYER_SIZE, PLAYER_SIZE));
     sf::RectangleShape tiles_rect(sf::Vector2f(TILE_SIZE, TILE_SIZE));
@@ -50,7 +61,7 @@ void Stage::Initialize()
     //Posicionando os blocos, e executando-os uma vez (atualiza valores internos)
     for (i = 0; i < obstacles.size(); ++i)
     {
-        (*obstacles[i]).GetBody().move(sf::Vector2f(400 + -(TILE_SIZE * 4) + (i * TILE_SIZE), 100 + GRID_SIZE * 5));
+        (*obstacles[i]).GetBody().move(sf::Vector2f(400.f + -(TILE_SIZE * 4) + (i * TILE_SIZE), 100.f + GRID_SIZE * 5));
         (*obstacles[i]).Execute();
     }
 
@@ -60,12 +71,11 @@ void Stage::Initialize()
     //Joga os obstaculos locais para dentro do colisor, para que tenha referencia de cada obstaculo
     for (i = 0; i < this->obstacles.size(); ++i)
         this->collider += this->obstacles[i];
-
-
 };
-void Stage::Execute(float elapsedTime)
+void Stage::Execute(sf::RenderWindow& window, float elapsedTime)
 {
 	unsigned int i = 0;
+    //sf::Vector2f viewPosOffSet(heros[0].GetBody().getOrigin().x - window.getSize().x / 2, heros[0].GetBody().getOrigin().y - window.getSize().y / 2);
 
     // Executar parâmetros e execuções de entidades
     for (i = 0; i < heros.size(); ++i)
@@ -78,6 +88,13 @@ void Stage::Execute(float elapsedTime)
     collider.SetElapsedTime(elapsedTime);
     collider.UpdateCollisions();
 
+    //if (viewPosOffSet.x > (window.getSize().x / 2))
+       // viewPosOffSet.x = heros[0].GetBody().getOrigin().x;
+    //else
+       // viewPosOffSet.x = window.getSize().x / 2;
+
+    //acumuladorhorizontal += 1;
+    //this->background.setTextureRect(sf::IntRect(acumuladorhorizontal, 0, round(this->texture.getSize().x), round(this->texture.getSize().y)));
     //this->view.setCenter(heros[0].GetBody().getPosition());
 };
 void Stage::TreatInput(sf::RenderWindow& window)
@@ -119,10 +136,10 @@ void Stage::TreatInput(sf::RenderWindow& window)
 };
 void Stage::SelfPrint(sf::RenderWindow& window)
 {
+    // Desenhar entidades após atualizações, e colisões
     unsigned int i = 0;
 
-    // Desenhar entidades após atualizações, e colisões
-
+    window.draw(this->background);
 
     for (i = 0; i < obstacles.size(); ++i)
         (*obstacles[i]).SelfPrint(window);
