@@ -1,5 +1,3 @@
-#pragma once
-
 #include "../Headers/entity.h"
 using namespace entities;
 
@@ -36,7 +34,7 @@ Entity::~Entity()
 #ifdef _DEBUG
 void Entity::debugExecute()
 {
-	this->font.loadFromFile("JogoMyVersion\\Resources\\fonts\\hf-free-complete\\equipment-pro-v1.1\\EquipmentPro.ttf");
+	this->font.loadFromFile("JogoMyVersion\\Resources\\fonts\\EquipmentPro.ttf");
 	this->info_pos.setCharacterSize(8);
 	this->info_pos.setFont(this->font);
 	info_pos.setFillColor(sf::Color(0,255,255));

@@ -2,11 +2,8 @@
 
 #include "../Entities/Projectiles/Headers/heroProjectile.h"
 #include "../Entities/BaseEntities/Headers/livingEntity.h"
-#include "../Manegers//Headers/traits.h"
 #include "../Lists/Headers/myList.h"
 using namespace projectiles;
-using namespace entities;
-using namespace traits;
 
 class Hero : public LivingEntity, public Animated
 {
@@ -35,9 +32,7 @@ private:
 	enum animations { Idle, Run, Crouch, Jump, Fall, Death };
 	bool invenc_frames, crouching, attacked;
 	float invec_current_timer;
-	sf::Texture texture_muzzle, texture_stream;
 	sf::Vector2f background_size;
-	sf::Sprite stream, muzzle;
 	sf::View playerPerspec;
 	const unsigned int playerId;
 };

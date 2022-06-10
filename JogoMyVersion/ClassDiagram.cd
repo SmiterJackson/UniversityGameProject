@@ -1,2 +1,109 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<ClassDiagram /> 
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="entities::LivingEntity" Collapsed="true">
+    <Position X="3.5" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAQQAAAAAEAAAAAAAAAAAAAAAAAqAAAA=</HashCode>
+      <FileName>Entities\BaseEntities\Headers\livingEntity.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="entities::Entity" Collapsed="true">
+    <Position X="3.5" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EAIAARCAAAEAAQQAAEAAAgAAASAAAAAAAAAAiACAAAA=</HashCode>
+      <FileName>Entities\BaseEntities\Headers\entity.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Hero" Collapsed="true">
+    <Position X="3.5" Y="9.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ACAAEAAACAAABYRCAAoEAAAgBIAAAAAAAAAJAAKEAAA=</HashCode>
+      <FileName>Entities\Characters\Headers\hero.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Ente" Collapsed="true">
+    <Position X="6.75" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AgAAAAAAAAAAAAQAEAAAAAAAAAAAAAAAAAEAEAAAAgA=</HashCode>
+      <FileName>Entities\BaseEntities\Headers\ente.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Game" Collapsed="true">
+    <Position X="11" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAIQAgAAAAAAAAAiAAAAEgAEAAAAAAAA=</HashCode>
+      <FileName>game.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Button" Collapsed="true">
+    <Position X="11" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AEIAQABEAAAAAAAIIAAABAAAAQAAAAgIAAAACCGEAAA=</HashCode>
+      <FileName>GUI\Buttons\Headers\button.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MyList&lt;T&gt;" Collapsed="true">
+    <Position X="12.75" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAIAAAAAAQCAAIEAAQAAAAEAAAAAAAAAAQAAEgE=</HashCode>
+      <FileName>Lists\Headers\myList.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Animation" Collapsed="true">
+    <Position X="9.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IAABAAAKAAAAAQAggAAAAQACgAAAAAAAAAggAAAEIAE=</HashCode>
+      <FileName>Manegers\Headers\animation.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Collider" Collapsed="true">
+    <Position X="12.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAIBAAQAAAAAAQAAQAAAAAAQAAAAAAYQAAA=</HashCode>
+      <FileName>Manegers\Headers\collider.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Stage" Collapsed="true">
+    <Position X="3.5" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAACAAgAEAQQAAAAAAAAAgAACAEAQAQhBEAKAIAA=</HashCode>
+      <FileName>Stages\Headers\stage.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="obstacles::BaseObstacle" Collapsed="true">
+    <Position X="5.75" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAQQCAAAAAAQQAAAAAAAAAAAAAAAAAAAAAAACAAAA=</HashCode>
+      <FileName>Entities\Obstacles\Headers\obstacles.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="projectiles::EnemyProjectile" Collapsed="true">
+    <Position X="3.5" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAQCAAAAQQAAAAAAAAAAAAAAAAAAAAAAACAAAA=</HashCode>
+      <FileName>Entities\Projectiles\Headers\enemyProjectile.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="projectiles::HeroProjectile" Collapsed="true">
+    <Position X="0.5" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>CAAAAAIAAAAAAQQCAAAAAAAAAAAAAAAAAAAAAACAAAA=</HashCode>
+      <FileName>Entities\Projectiles\Headers\heroProjectile.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="traits::Animated" Collapsed="true">
+    <Position X="6.5" Y="8" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>BAAAQAAEBEAAAAEIEAAAAQAAAAAAAAAAAAAEAAAAAIA=</HashCode>
+      <FileName>Manegers\Headers\traits.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="std::trio&lt;_type1, _type2, _type3&gt;" Collapsed="true">
+    <Position X="11" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAABAAAAAAAAAAAAAgECAAAAAAAAAQAAAAAAAAAAAAA=</HashCode>
+      <FileName>Stages\Headers\stage.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

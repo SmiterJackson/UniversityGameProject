@@ -1,8 +1,11 @@
 #include "game.h"
 
 #include "GUI/Buttons/Headers/button.h"
-#define FONT_REF std::string("JogoMyVersion\\Resources\\fonts\\hf-free-complete\\equipment-pro-v1.1\\EquipmentPro.ttf")
-#define BACKGROUND_REF "JogoMyVersion\\Resources\\images\\Background\\cyberpunk-street-files\\PNG\\cyberpunk-street.png"
+#include "../Stages/Headers/stage.h"
+
+#define FONT_REF "JogoMyVersion\\Resources\\fonts\\EquipmentPro.ttf"
+#define BACKGROUND_REF "JogoMyVersion\\Resources\\images\\background\\cyberpunk-street.png"
+
 #define GRID_SIZE_FLOAT 32.f
 #define GRID_SIZE_INT 32
 
@@ -26,7 +29,7 @@ void Game::Execute()
 
     buttons.emplace_back(new Button(Myview, sf::Vector2f(200, 100), font, "INICIAR", 16));
     buttons.emplace_back(new Button(Myview, sf::Vector2f(200, 200), font, "PULAR", 16));
-    buttons.emplace_back(new Button(Myview, sf::Vector2f(200, 300), font, "FOODA-SE", 16));
+    buttons.emplace_back(new Button(Myview, sf::Vector2f(200, 300), font, "NÃO SEI", 16));
 
     sf::RectangleShape ref;
     ref.setOutlineColor(sf::Color(255,0,0));

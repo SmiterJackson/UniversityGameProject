@@ -1,5 +1,3 @@
-#pragma once
-
 #include "../Headers/Hero.h"
 using namespace sf;
 
@@ -11,9 +9,6 @@ using namespace sf;
 #define VERTICAL_ACCELERATION -(JUMP_ACCELERATION / 16.0f) // proporção de tempo para desaceleração do pulo, o mais confortável que percebi foi 16
 
 #define INVENCIBILITY_FRAMES_TIME 3.0f
-
-#define STREAM_REF std::string("JogoMyVersion\\Resources\\images\\sprites\\Characters\\TeamGunner_By_SecretHideout_060519\\EXTRAS\\BulletStream.png")
-#define MUZZLE_REF std::string("JogoMyVersion\\Resources\\images\\sprites\\Characters\\TeamGunner_By_SecretHideout_060519\\EXTRAS\\MuzzleFlash.png")
 
 unsigned int Hero::PlayersNums = 0;
 Hero::Hero() :
@@ -84,11 +79,6 @@ void Hero::Initialize()
 	this->walk_right = false;
 	this->walk_left = false;
 	this->crouching = false;
-
-	this->texture_muzzle.loadFromFile(MUZZLE_REF);
-	this->texture_stream.loadFromFile(STREAM_REF);
-	this->stream.setTexture(texture_stream);
-	this->muzzle.setTexture(texture_muzzle);
 };
 void Hero::Execute()
 {

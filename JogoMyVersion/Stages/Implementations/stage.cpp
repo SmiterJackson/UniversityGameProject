@@ -1,13 +1,11 @@
-#pragma once
+#include "../Headers/stage.h"
 
-#include "../Headers/baseStage.h"
-
-#define FONT_REF "JogoMyVersion\\Resources\\fonts\\hf-free-complete\\equipment-pro-v1.1\\EquipmentPro.ttf"
-#define TILE_SHEET "JogoMyVersion\\Resources\\images\\backgrounds\\Tiles\\IndustrialTile_sheet.png"
-#define PLAYER1_SHEET "JogoMyVersion\\Resources\\images\\sprites\\Characters\\gunner_green.png"
-#define PLAYER2_SHEET "JogoMyVersion\\Resources\\images\\sprites\\Characters\\gunner_black.png"
-#define PLAYER3_SHEET "JogoMyVersion\\Resources\\images\\sprites\\Characters\\gunner_red.png"
-#define PLAYER4_SHEET "JogoMyVersion\\Resources\\images\\sprites\\Characters\\gunner_yellow.png"
+#define FONT_REF "JogoMyVersion\\Resources\\fonts\\EquipmentPro.ttf"
+#define TILE_SHEET "JogoMyVersion\\Resources\\images\\sprites\\IndustrialTile_sheet.png"
+#define PLAYER1_SHEET "JogoMyVersion\\Resources\\images\\sprites\\gunner_green.png"
+#define PLAYER2_SHEET "JogoMyVersion\\Resources\\images\\sprites\\gunner_black.png"
+#define PLAYER3_SHEET "JogoMyVersion\\Resources\\images\\sprites\\gunner_red.png"
+#define PLAYER4_SHEET "JogoMyVersion\\Resources\\images\\sprites\\gunner_yellow.png"
 
 #define PLAYER_SIZE 48
 #define TILE_SIZE 32
@@ -41,12 +39,12 @@ void Stage::Initialize(sf::RenderWindow& _window)
     sf::RectangleShape rect(sf::Vector2f(PLAYER_SIZE, PLAYER_SIZE));
     sf::RectangleShape tiles_rect(sf::Vector2f(TILE_SIZE, TILE_SIZE));
 
-    VecAnimaValues AnimationsConstructors = { {0, 4, 2, 45, 48, 0.20f, true},
-                                              {0, 5, 1, 45, 48, 0.20f, true},
-                                              {5, 7, 2, 45, 48, 0.05f},
-                                              {6, 6, 1, 45, 48, 1.0f},
-                                              {7, 7, 1, 45, 48, 1.0f},
-                                              {0, 7, 0, 45, 48, 0.20f} };
+    Animated::VecAnimaValues AnimationsConstructors = { {0, 4, 2, 45, 48, 0.20f, true},
+                                                      {0, 5, 1, 45, 48, 0.20f, true},
+                                                      {5, 7, 2, 45, 48, 0.05f},
+                                                      {6, 6, 1, 45, 48, 1.0f},
+                                                      {7, 7, 1, 45, 48, 1.0f},
+                                                      {0, 7, 0, 45, 48, 0.20f} };
 
     //Criando um hero
     this->heros += new Hero(windowSize, sf::Vector2f(background.getGlobalBounds().width, background.getGlobalBounds().height),

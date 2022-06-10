@@ -1,7 +1,6 @@
 #pragma once
 
 #include "ente.h"
-#include "../Manegers/Headers/traits.h" 
 using namespace traits;
 
 namespace entities

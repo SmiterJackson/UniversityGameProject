@@ -1,7 +1,6 @@
 #pragma once
 
-#include "../Manegers/Headers/traits.h"
-using namespace traits;
+#include "stdafx.h"
 
 class Button
 {
@@ -12,7 +11,7 @@ public:
 	const bool isPressed() const;
 	const std::string GetText() { return this->text.getString(); };
 
-	void update(const sf::Vector2f mousePos);
+	void update(const sf::Vector2f& mousePos);
 	void SelfPrint(sf::RenderTarget& window);
 
 public:

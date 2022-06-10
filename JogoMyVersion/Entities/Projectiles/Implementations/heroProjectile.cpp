@@ -1,7 +1,7 @@
 #include "../Headers/heroProjectile.h"
 using namespace projectiles;
 
-#define BULET_REF std::string("JogoMyVersion\\Resources\\images\\sprites\\Characters\\TeamGunner_By_SecretHideout_060519\\EXTRAS\\SpongeBullet.png")
+#define BULET_REF "JogoMyVersion\\Resources\\images\\sprites\\SpongeBullet.png"
 #define BULET_SPEED 5.f
 
 HeroProjectile::HeroProjectile(sf::Vector2f position, bool _direction) :

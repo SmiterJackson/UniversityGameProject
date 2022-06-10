@@ -1,4 +1,3 @@
-#pragma once
 #include "../Headers/button.h"
 
 #define BUTTON_TO_VIEW_PROPORCION 10.0f
@@ -33,7 +32,7 @@ const bool Button::isPressed() const
 	return false;
 }
 
-void Button::update(const sf::Vector2f mousePos)
+void Button::update(const sf::Vector2f& mousePos)
 {
 	this->button_status = BTN_IDLE;
 	

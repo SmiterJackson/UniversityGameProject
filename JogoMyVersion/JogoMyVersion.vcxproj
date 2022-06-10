@@ -164,12 +164,16 @@
     <ClCompile Include="game.cpp" />
     <ClCompile Include="Entities\Projectiles\Implementations\heroProjectile.cpp" />
     <ClCompile Include="GUI\Buttons\Implementations\button.cpp" />
+    <ClCompile Include="GUI\Interfaces\Implementations\pause.cpp" />
     <ClCompile Include="Main\stdafx.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="Manegers\Implementations\animation.cpp" />
+    <ClCompile Include="Manegers\Implementations\alive.cpp" />
+    <ClCompile Include="Manegers\Implementations\collidable.cpp" />
     <ClCompile Include="Manegers\Implementations\collider.cpp" />
-    <ClCompile Include="Manegers\Implementations\traits.cpp" />
-    <ClCompile Include="Stages\Implementations\baseStage.cpp" />
+    <ClCompile Include="Manegers\Implementations\movable.cpp" />
+    <ClCompile Include="Manegers\Implementations\printable.cpp" />
+    <ClCompile Include="Manegers\Implementations\animation.cpp" />
+    <ClCompile Include="Stages\Implementations\stage.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Entities\BaseEntities\Headers\livingEntity.h" />
@@ -181,14 +185,19 @@
     <ClInclude Include="Entities\Projectiles\Headers\heroProjectile.h" />
     <ClInclude Include="game.h" />
     <ClInclude Include="GUI\Buttons\Headers\button.h" />
+    <ClInclude Include="GUI\Interfaces\Headers\pause.h" />
     <ClInclude Include="Lists\Headers\myList.h" />
     <ClInclude Include="Main\stdafx.h" />
-    <ClInclude Include="Manegers\Headers\animation.h" />
+    <ClInclude Include="Manegers\Headers\alive.h" />
+    <ClInclude Include="Manegers\Headers\collidable.h" />
     <ClInclude Include="Manegers\Headers\collider.h" />
-    <ClInclude Include="Manegers\Headers\traits.h" />
-    <ClInclude Include="Stages\Headers\baseStage.h" />
+    <ClInclude Include="Manegers\Headers\movable.h" />
+    <ClInclude Include="Manegers\Headers\printable.h" />
+    <ClInclude Include="Manegers\Headers\animation.h" />
+    <ClInclude Include="Stages\Headers\stage.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="ClassDiagram.cd" />
     <None Include="Dependecies\Stages\Stage1.data" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
