@@ -2,7 +2,7 @@
 using namespace projectiles;
 
 #define BULET_REF std::string("JogoMyVersion\\Resources\\images\\sprites\\Characters\\TeamGunner_By_SecretHideout_060519\\EXTRAS\\SpongeBullet.png")
-#define BULET_SPEED 0.4f
+#define BULET_SPEED 5.f
 
 HeroProjectile::HeroProjectile(sf::Vector2f position, bool _direction) :
 	Entity(BULET_REF, sf::RectangleShape(sf::Vector2f(3.f, 1.f)), 0.0f), Movable(true), origin(position)
@@ -19,7 +19,7 @@ void HeroProjectile::Initialize()
 	this->body.setPosition(this->origin.x, this->origin.y + 4);
 
 	if (!this->faceRight)
-		this->body.scale(-1.0f, 1.0f);
+		this->body.scale(-1.4f, 1.4f);
 };
 void HeroProjectile::Execute()
 {

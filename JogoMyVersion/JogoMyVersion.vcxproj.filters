@@ -57,6 +57,9 @@
     <ClCompile Include="Entities\Projectiles\Implementations\enemyProjectile.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="GUI\Buttons\Implementations\button.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Main\stdafx.h">
@@ -99,6 +102,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Entities\Projectiles\Headers\enemyProjectile.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GUI\Buttons\Headers\button.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

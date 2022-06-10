@@ -38,6 +38,7 @@ public:
 
 	void Initialize(sf::RenderWindow& _window);
 	void Execute(sf::RenderWindow& window, float elapsedTime);
+	void UpdateEntities(sf::RenderWindow& window, float elapsedTime);
 	void TreatInput(sf::RenderWindow& window);
 	void SelfPrint(sf::RenderWindow& window);
 	void ReadArchive(const std::string& fileName);
@@ -48,6 +49,7 @@ protected:
 	MyList<Hero*> heros;
 	MyList<BaseObstacle*> obstacles;
 	MyList<HeroProjectile> projectiles;
+
 
 	int acumuladorhorizontal;
 	Collider collider;

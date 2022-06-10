@@ -13,20 +13,20 @@ Collider::MapBounds::~MapBounds()
 
 
 Collider::Collider() :
-	mapLimits(), livingEntities(), obstacles(), elapsed_time(0.0f), timer(0.0f)
+	mapLimits(), livingEntities(), obstacles(), timer(0.0f)
 {};
 Collider::Collider(const MapBounds& _mapLimits) :
-	mapLimits(_mapLimits), livingEntities(), obstacles(), elapsed_time(0.0f), timer(0.0f)
+	mapLimits(_mapLimits), livingEntities(), obstacles(), timer(0.0f)
 {};
 Collider::Collider(const MapBounds& _mapLimits, const std::vector<LivingEntity*>& _livingEntities, std::vector<BaseObstacle*> _obstacles) :
-	mapLimits(_mapLimits), livingEntities(_livingEntities), obstacles(_obstacles), elapsed_time(0.0f), timer(0.0f)
+	mapLimits(_mapLimits), livingEntities(_livingEntities), obstacles(_obstacles), timer(0.0f)
 {};
 Collider::~Collider()
 {};
 
-void Collider::UpdateCollisions()
+void Collider::UpdateCollisions(float _elapsed_time)
 {
-	this->timer += this->elapsed_time;
+	this->timer += _elapsed_time;
 
 	if (this->timer > TIME_VERIFICATION)
 	{
@@ -62,11 +62,12 @@ bool Collider::CheckCollisionObstacles(LivingEntity& entity, BaseObstacle& obst)
 	bool colision = false;
 
 	sf::Vector2f delta_dist(entity_pos.x - obst_body.getPosition().x, entity_pos.y - obst_body.getPosition().y);
-	sf::Vector2f intersection( fabs(delta_dist.x) - (entity_body.getSize().x / 2.0f + obst_body.getSize().x / 2.0f), fabs(delta_dist.y) - (entity_body.getSize().y / 2.0f + obst_body.getSize().y / 2.0f));
+	sf::Vector2f intersection(fabs(delta_dist.x) - (entity_body.getSize().x / 2.0f + obst_body.getSize().x / 2.0f), fabs(delta_dist.y) - 0.00001f -(entity_body.getSize().y / 2.0f + obst_body.getSize().y / 2.0f));
 
 	// Caso a diferença das distâncias x e y seja maior que a soma do tamanho de cada objeto, será então, denotado um contato entre os objetos
 	if (intersection.x < 0.0f && intersection.y < 0.0f)
 	{
+		intersection.y += 0.0001f;
 		if (intersection.x > intersection.y)
 		{
 			if (delta_dist.x > 0.0f)
@@ -79,9 +80,6 @@ bool Collider::CheckCollisionObstacles(LivingEntity& entity, BaseObstacle& obst)
 				entity_body.move(intersection.x * obst.GetWeightCoefficient(), 0.0f);
 				obst_body.move(-intersection.x * (1.0f - obst.GetWeightCoefficient()), 0.0f);
 			}
-		#ifdef _DEBUG
-			std::cout << "Collided 'x' asix" << std::endl;
-		#endif
 		}
 		else
 		{
@@ -95,9 +93,6 @@ bool Collider::CheckCollisionObstacles(LivingEntity& entity, BaseObstacle& obst)
 				entity_body.move(0.0f, intersection.y * obst.GetWeightCoefficient());
 				obst_body.move(0.0f, -intersection.y * (1.0f - obst.GetWeightCoefficient()));
 			}
-		#ifdef _DEBUG
-			std::cout << "Collided 'y' asix" << std::endl;
-		#endif
 			colision = true;
 		}
 	}
@@ -105,35 +100,22 @@ bool Collider::CheckCollisionObstacles(LivingEntity& entity, BaseObstacle& obst)
 	{
 		diff = fabs(entity_pos.x - entity.GetBody().getOrigin().x - this->mapLimits.leftBound);
 		entity.GetBody().move(diff, 0.f);
-	#ifdef _DEBUG
-		std::cout << "Out of left bound" << std::endl;
-	#endif
 	}
 	if (entity_pos.x + entity.GetBody().getOrigin().x > this->mapLimits.rightBound)
 	{
 		diff = -(fabs(entity_pos.x) + entity.GetBody().getOrigin().x - this->mapLimits.rightBound);
 		entity.GetBody().move(diff, 0.f);
-	#ifdef _DEBUG
-		std::cout << "Out of right bound" << std::endl;
-	#endif
 	}
 	if (entity_pos.y - entity.GetBody().getOrigin().y < this->mapLimits.topBound)
 	{
 		diff = fabs(entity_pos.y - entity.GetBody().getOrigin().y - this->mapLimits.leftBound);
 		entity.GetBody().move(0.f, diff);
-	#ifdef _DEBUG
-		std::cout << "Out of top bound" << std::endl;
-	#endif
 	}
-	if (entity_pos.y + entity.GetBody().getOrigin().y > this->mapLimits.bottomBound)
+	if (entity_pos.y + entity.GetBody().getOrigin().y + 0.1f > this->mapLimits.bottomBound)
 	{
-		diff = -(fabs(entity_pos.y) + entity.GetBody().getOrigin().y - this->mapLimits.bottomBound);
+		diff = -(fabs(entity_pos.y) + entity.GetBody().getOrigin().y - this->mapLimits.bottomBound - 0.1f);
 		entity.GetBody().move(0.f, diff);
-		entity.SetHaveGround(true);
 		colision = true;
-	#ifdef _DEBUG
-		std::cout << "Out of bottom bound" << std::endl;
-	#endif
 	}
 
 	return colision;

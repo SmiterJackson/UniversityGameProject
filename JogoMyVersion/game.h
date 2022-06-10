@@ -1,6 +1,5 @@
 #pragma once
 
-#define BACKGROUND_REF "JogoMyVersion\\Resources\\images\\Background\\cyberpunk-street-files\\PNG\\layers\\foreground.png"
 #include "../Stages/Headers/baseStage.h"
 
 class Game 
@@ -12,5 +11,7 @@ public:
 	void Execute();
 
 protected:
-
+	enum state { Menu = 0, Playing, Paused};
+	sf::Vector2f mouseToDesktop, mouseToWindow, mouseToView;
+	sf::Vector2i mouseToGrid;
 };

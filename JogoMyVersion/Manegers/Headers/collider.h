@@ -1,7 +1,10 @@
 #pragma once
 
+#include "../Entities/Projectiles/Headers/enemyProjectile.h"
+#include "../Entities/Projectiles/Headers/heroProjectile.h"
 #include "../Entities/BaseEntities/Headers/livingEntity.h"
 #include "../Entities/Obstacles/Headers/obstacles.h"
+using namespace projectiles;
 using namespace obstacles;
 using namespace entities;
 
@@ -24,10 +27,7 @@ public:
 	Collider(const MapBounds& _mapLimits, const std::vector<LivingEntity*>& _livingEntities, std::vector<BaseObstacle*> _obstacles);
 	~Collider();
 
-	const float GetElapsedTime() const { return elapsed_time; };
-	void SetElapsedTime(const float _elapsed_time) { this->elapsed_time = _elapsed_time; };
-
-	void UpdateCollisions();
+	void UpdateCollisions(float _elapsed_time);
 
 	// Função Adaptada da original, pelo canal Hilze Vonck
 	bool CheckCollisionObstacles(LivingEntity& entity, BaseObstacle& obst);
@@ -45,5 +45,6 @@ protected:
 	const MapBounds mapLimits;
 	std::vector<LivingEntity*> livingEntities;
 	std::vector<BaseObstacle*> obstacles;
-	float elapsed_time, timer;
+	std::vector<HeroProjectile*> heroProjectiles;
+	float timer;
 };
